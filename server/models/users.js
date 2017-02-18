@@ -11,7 +11,7 @@ module.exports = (sequelize, Datatypes) => {
       isEmail: true
     },
     password: {
-      type: Datatype.STRING,
+      type: Datatypes.STRING,
       validate: {
         min: 6
       }
@@ -21,15 +21,15 @@ module.exports = (sequelize, Datatypes) => {
       type: Datatypes.INTEGER
     }
   }, {
-      classMethods: {
-        associate: (models) => {
-          User.hasMany(models.Document, { foreignKey: 'OwnerId' });
-          User.belongsTo(models.Role, {
-            onDelete: 'CASCADE',
-            foreignKey: { allowNull: false }
-          })
-        }
+    classMethods: {
+      associate: (models) => {
+        User.hasMany(models.Document, { foreignKey: 'OwnerId' });
+        User.belongsTo(models.Role, {
+          onDelete: 'CASCADE',
+          foreignKey: { allowNull: false }
+        });
       }
-    });
+    }
+  });
   return User;
 };
