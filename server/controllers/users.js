@@ -1,5 +1,3 @@
-'use strict';
-
 import jwt from 'jsonwebtoken';
 import model from '../models';
 
@@ -121,7 +119,7 @@ class UserController {
         }
         foundUser.destroy()
           .then(res.status(201)
-            .send({ message: 'User successfully deleted' }));
+          .send({ message: 'User successfully deleted' }));
       });
   }
 }

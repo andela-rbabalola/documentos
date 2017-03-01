@@ -9,7 +9,7 @@ router.route('/')
 
 router.route('/:id')
   .get(documentController.getDocById)
-  .put(documentController.updateDoc);
-  // .delete(UserController.deleteUser);
+  .put(documentController.updateDoc)
+  .delete(documentController.deleteDoc);
 
 export default router;

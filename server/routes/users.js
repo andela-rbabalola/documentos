@@ -1,4 +1,5 @@
 import UserController from '../controllers/users';
+import documentController from '../controllers/documents';
 
 const router = require('express').Router();
 
@@ -10,5 +11,8 @@ router.route('/:id')
   .get(UserController.getUserById)
   .put(UserController.updateUserAttributes)
   .delete(UserController.deleteUser);
+
+router.route('/:id/documents')
+  .get(documentController.getDocForUser);
 
 export default router;
