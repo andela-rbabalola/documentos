@@ -15,7 +15,7 @@ class DocumentsController {
     model.Document.create(req.body)
       .then(newDocument => res.status(201)
         .send({ message: 'New document created', newDocument }))
-      // handle errors
+      // catch errors
       .catch(error => res.status(400)
         .send(error));
   }
@@ -77,7 +77,7 @@ class DocumentsController {
             .send({ message: 'Document successfully updated' }))
           // handle errors
           .catch(error => res.status(400)
-          .send(error));
+            .send(error));
       });
   }
 
@@ -94,13 +94,13 @@ class DocumentsController {
         // check if document exists before deleting
         if (!foundDoc) {
           return res.status(404)
-          .send({ message: 'Unable to delete because document is not found' });
+            .send({ message: 'Unable to delete because document is not found' });
         }
         foundDoc.destroy()
           .then(res.status(201)
-          .send({ message: 'Document successfully deleted' }))
+            .send({ message: 'Document successfully deleted' }))
           .catch(error => res.status(400)
-          .send(error));
+            .send(error));
       });
   }
 
@@ -112,14 +112,57 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static getDocForUser(req, res) {
-    // model.Document.findById(req.params.id)
     model.Document.findAll({
       where: {
         userId: req.params.id
       }
     })
       .then(documents => res.status(200)
-      .send(documents));
+        .send(documents))
+      .catch(error => res.status(400)
+        .send(error));
+  }
+
+  /**
+   * Search documents text
+   *
+   * @param {Object} req Object containing the request
+   * @param {Object} res Object containing the response
+   * @returns {Object} res object
+   */
+  static searchDocText(req, res) {
+    model.Document.findAll({
+      where: {
+        docContent: {
+          $iLike: `%${req.body.query}%`
+        }
+      }
+    })
+      .then(documents => res.status(200)
+        .send(documents))
+      .catch(error => res.status(400)
+        .send(error));
+  }
+
+  /**
+   * Search document title
+   *
+   * @param {Object} req Object containing the request
+   * @param {Object} res Object containing the response
+   * @returns {Object} res object
+   */
+  static searchDocTitle(req, res) {
+    model.Document.findAll({
+      where: {
+        title: {
+          $iLike: `%${req.body.query}%`
+        }
+      }
+    })
+      .then(documents => res.status(200)
+        .send(documents))
+      .catch(error => res.status(400)
+        .send(error));
   }
 }
 

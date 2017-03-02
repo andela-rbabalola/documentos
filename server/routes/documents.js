@@ -12,4 +12,10 @@ router.route('/:id')
   .put(documentController.updateDoc)
   .delete(documentController.deleteDoc);
 
+router.route('/searchDoc')
+  .post(documentController.searchDocText);
+
+router.route('/searchDocTitle')
+  .post(documentController.searchDocTitle);
+
 export default router;
