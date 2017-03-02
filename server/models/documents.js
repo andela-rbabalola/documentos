@@ -2,14 +2,13 @@ module.exports = (sequelize, Datatypes) => {
   const Document = sequelize.define('Document', {
     title: {
       type: Datatypes.STRING,
-      unique: true,
+      unique: false,
       allowNull: false
     },
-    text: {
+    docContent: {
       type: Datatypes.TEXT,
-      allowNull: false
+      allowNull: true
     },
-    OwnerID: Datatypes.INTEGER,
     access: {
       defaultValue: 'public',
       type: Datatypes.ENUM('public', 'private')
@@ -18,9 +17,14 @@ module.exports = (sequelize, Datatypes) => {
     classMethod: {
       associate: (models) => {
         Document.belongsTo(models.User, {
-          as: 'Owner',
+          as: 'user',
           onDelete: 'CASCADE',
-          foreignKey: { allowNull: false }
+          foreignKey: 'userId'
+        });
+        Document.belongsToMany(models.Priviledge, {
+          through: 'DocPriviledge',
+          foreignKey: 'docId',
+          as: 'documents'
         });
       }
     }
