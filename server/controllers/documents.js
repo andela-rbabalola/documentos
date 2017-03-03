@@ -124,7 +124,7 @@ class DocumentsController {
   }
 
   /**
-   * Search documents text
+   * Search document text
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
