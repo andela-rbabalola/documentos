@@ -1,4 +1,4 @@
-import documentController from '../controllers/documents';
+import documentController from '../controllers/documents.controllers';
 
 const router = require('express').Router();
 

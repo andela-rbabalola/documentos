@@ -45,9 +45,8 @@ class UserController {
           .then((newUser) => {
             const token = jwt.sign({
               UserId: newUser.id,
-              RoleId: newUser.RoleId
+              RoleId: newUser.roleId
             }, secret, { expiresIn: '3 days' });
-            console.log(res);
             return res.status(201)
               .send({ message: 'New user created', newUser, token, expiresIn: '3 days' });
           })
@@ -82,7 +81,7 @@ class UserController {
         // Create token
         const token = jwt.sign({
           UserId: oldUser.id,
-          RoleId: oldUser.RoleId
+          RoleId: oldUser.roleId
         }, secret, { expiresIn: '3 days' });
         return res.status(200)
           .send({ message: 'Signin successful', token, success: true });
@@ -108,7 +107,7 @@ class UserController {
           .send(foundUser);
         // return res.send(foundUser);
       }).catch(error => res.status(400)
-        .send(error.errors));
+        .send(error));
   }
 
   /**
@@ -118,7 +117,7 @@ class UserController {
    * @param {Object} res
    * @returns {Object} res object
    */
-  static updateUserAttributes(req, res) {
+  static updateUser(req, res) {
     // check that an id is specified
     // use authentication to ensure user really has said id
     model.User.findById(req.params.id)
@@ -133,12 +132,40 @@ class UserController {
             firstName: req.body.firstName || foundUser.firstName,
             lastName: req.body.lastName || foundUser.lastName,
             email: req.body.email || foundUser.email,
-            password: req.body.password || foundUser.password,
-            RoleId: req.body.RoleId || foundUser.RoleId
+            password: req.body.password || foundUser.password
           }).then(res.status(201)
             .send({ message: 'User successfully updated' }))
           .catch(error => res.status(400)
-            .send(error.errors));
+            .send(error));
+      });
+  }
+
+  /**
+   * Method to update a user's role
+   * Only an admin can update a user's role
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res object
+   */
+  static updateUserRole(req, res) {
+    model.User.findById(req.params.id)
+      .then((foundUser) => {
+        // check if user exists
+        if (!foundUser) {
+          return res.status(404)
+            .send({ message: 'User not found' });
+        } else if (foundUser.roleId === req.body.roleId) {
+          return res.status(409)
+            .send({ message: 'New role is the same as old role' });
+        }
+        return foundUser
+          .update({
+            roleId: req.body.roleId
+          }).then(res.status(201)
+            .send({ message: 'User role successfully updated' }))
+          .catch(error => res.status(400)
+            .send(error));
       });
   }
 
