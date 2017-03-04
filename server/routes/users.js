@@ -15,4 +15,7 @@ router.route('/:id')
 router.route('/:id/documents')
   .get(documentController.getDocForUser);
 
+router.route('/signin')
+  .post(UserController.signIn);
+
 export default router;

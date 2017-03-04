@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt-nodejs';
 import model from '../models';
 
 const secret = process.env.JWT_SECRET || 'this is the secret';
@@ -41,11 +42,50 @@ class UserController {
         }
         // create user
         model.User.create(req.body)
-          .then(newUser =>
-            res.status(201)
-              .send({ message: 'New user created', newUser }))
-              .catch(error => res.status(400)
-              .send(error.errors));
+          .then((newUser) => {
+            const token = jwt.sign({
+              UserId: newUser.id,
+              RoleId: newUser.RoleId
+            }, secret, { expiresIn: '3 days' });
+            console.log(res);
+            return res.status(201)
+              .send({ message: 'New user created', newUser, token, expiresIn: '3 days' });
+          })
+          .catch(error => res.status(400)
+            .send(error.errors));
+      });
+  }
+
+  /**
+   * Method to sign in a user
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res object
+   */
+  static signIn(req, res) {
+    model.User.findOne({
+      where: { email: req.body.email }
+    })
+      .then((oldUser) => {
+        /**
+         * if user does not exist in the database
+         * return http status code 404
+         */
+        if (!oldUser) {
+          return res.status(401)
+            .send({ message: 'Signin failed! User not found' });
+        } else if (!UserController.verifyPassword(req.body.password, oldUser.password)) {
+          return res.status(401)
+            .send({ message: 'Authentication failed! Wrong password', success: false });
+        }
+        // Create token
+        const token = jwt.sign({
+          UserId: oldUser.id,
+          RoleId: oldUser.RoleId
+        }, secret, { expiresIn: '3 days' });
+        return res.status(200)
+          .send({ message: 'Signin successful', token, success: true });
       });
   }
 
@@ -97,7 +137,7 @@ class UserController {
             RoleId: req.body.RoleId || foundUser.RoleId
           }).then(res.status(201)
             .send({ message: 'User successfully updated' }))
-            .catch(error => res.status(400)
+          .catch(error => res.status(400)
             .send(error.errors));
       });
   }
@@ -119,9 +159,23 @@ class UserController {
         }
         foundUser.destroy()
           .then(res.status(201)
-          .send({ message: 'User successfully deleted' }));
+            .send({ message: 'User successfully deleted' }));
       });
   }
+
+  /**
+   * Method to verify password
+   *
+   * @param {String} password
+   * @param {String} hashedPassword
+   * @returns {Boolean} Boolean Indicates if password matches
+   */
+  static verifyPassword(password, hashedPassword) {
+    if (!password || !hashedPassword) {
+      return false;
+    }
+    return bcrypt.compareSync(password, hashedPassword);
+  }
 }
-// find by name or subset of name ??
+
 export default UserController;
