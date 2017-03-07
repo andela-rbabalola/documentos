@@ -1,21 +1,28 @@
+import express from 'express';
 import documentController from '../controllers/documents.controllers';
+import Authentication from '../middleware/authentication';
 
-const router = require('express').Router();
+const router = express.Router();
 
 
 router.route('/')
-  .get(documentController.getDocuments)
-  .post(documentController.createDocument);
+  .get(Authentication.decodeToken, documentController.getDocuments)
+  .post(Authentication.decodeToken, documentController.createDocument);
 
 router.route('/:id')
-  .get(documentController.getDocById)
-  .put(documentController.updateDoc)
-  .delete(documentController.deleteDoc);
+  .get(Authentication.decodeToken, documentController.getDocById)
+  .put(Authentication.decodeToken, Authentication.validateUser, documentController.updateDoc)
+  .delete(Authentication.decodeToken, Authentication.validateUser, documentController.deleteDoc);
 
-router.route('/searchDoc')
-  .post(documentController.searchDocText);
+// Route to get documents for a user
+router.route('/user/:id')
+  .get(Authentication.decodeToken, Authentication.validateUser, documentController.getDocForUser);
 
-router.route('/searchDocTitle')
-  .post(documentController.searchDocTitle);
+router.route('/search')
+  .post(Authentication.decodeToken, documentController.searchDoc);
+
+// Route for a user to search their own docs
+router.route('/search/user/:id')
+  .post(Authentication.decodeToken, Authentication.validateUser, documentController.searchUserDoc);
 
 export default router;
