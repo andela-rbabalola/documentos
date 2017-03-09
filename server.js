@@ -4,6 +4,7 @@ import home from './server/routes/index';
 import userRoute from './server/routes/users.routes';
 import roleRoute from './server/routes/roles.routes';
 import documentRoute from './server/routes/documents.routes';
+import searchRoute from './server/routes/search.routes';
 
 require('dotenv').config();
 
@@ -21,6 +22,7 @@ app.use('/', home);
 app.use('/users', userRoute);
 app.use('/roles', roleRoute);
 app.use('/documents', documentRoute);
+app.use('/search', searchRoute);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

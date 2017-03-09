@@ -9,6 +9,12 @@ router.route('/')
   .get(Authentication.decodeToken, Authentication.isAdmin, UserController.getAllUsers)
   .post(UserController.createUser);
 
+// Route to search for a user
+router.route('/search')
+  .post((req, res) => {
+    res.redirect(`/search/users/?q=${req.body.query}`);
+  });
+
 router.route('/:id')
   .get(Authentication.decodeToken, Authentication.validateUser, UserController.getUserById)
   .put(Authentication.decodeToken, Authentication.validateUser, UserController.updateUser)
@@ -20,7 +26,8 @@ router.route('/:id/documents')
 router.route('/signin')
   .post(UserController.signIn);
 
-router.route('/updateRole')
+router.route('/updateRole/:id')
   .put(Authentication.decodeToken, Authentication.isAdmin, UserController.updateUserRole);
+
 
 export default router;

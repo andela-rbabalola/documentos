@@ -18,8 +18,13 @@ router.route('/:id')
 router.route('/user/:id')
   .get(Authentication.decodeToken, Authentication.validateUser, documentController.getDocForUser);
 
+// Route to search a document
+// router.route('/search')
+//   .post(Authentication.decodeToken, documentController.searchDoc);
 router.route('/search')
-  .post(Authentication.decodeToken, documentController.searchDoc);
+  .post((req, res) => {
+    res.redirect(`/search/documents/?q=${req.body.query}`);
+  });
 
 // Route for a user to search their own docs
 router.route('/search/user/:id')

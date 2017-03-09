@@ -11,7 +11,7 @@ module.exports = (sequelize, Datatypes) => {
     },
     access: {
       defaultValue: 'public',
-      type: Datatypes.ENUM('public', 'private')
+      type: Datatypes.ENUM('public', 'private', 'role')
     }
   }, {
     classMethod: {
@@ -20,11 +20,6 @@ module.exports = (sequelize, Datatypes) => {
           as: 'user',
           onDelete: 'CASCADE',
           foreignKey: 'userId'
-        });
-        Document.belongsToMany(models.Priviledge, {
-          through: 'DocPriviledge',
-          foreignKey: 'docId',
-          as: 'documents'
         });
       }
     }

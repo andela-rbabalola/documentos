@@ -192,12 +192,8 @@ class DocumentsController {
       where: {
         access: 'public',
         $or: [{
-          docContent: {
-            $iLike: `%${req.body.query}%`
-          }
-        }, {
           title: {
-            $iLike: `%${req.body.query}%`
+            $iLike: `%${req.query.q}%`
           }
         }]
       }

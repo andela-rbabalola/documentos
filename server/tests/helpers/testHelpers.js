@@ -13,7 +13,7 @@ class testHelper {
 
   static defaultRole() {
     return {
-      title: 'user'
+      title: 'guest'
     };
   }
 }

@@ -105,7 +105,6 @@ class UserController {
         }
         res.status(200)
           .send(foundUser);
-        // return res.send(foundUser);
       }).catch(error => res.status(400)
         .send(error));
   }
@@ -149,23 +148,32 @@ class UserController {
    * @returns {Object} res object
    */
   static updateUserRole(req, res) {
-    model.User.findById(req.params.id)
-      .then((foundUser) => {
-        // check if user exists
-        if (!foundUser) {
+    // first check roles table to ensure roleId in body exists
+    model.Role.findById(req.body.roleId)
+      .then((foundRole) => {
+        // check if role exists
+        if (!foundRole) {
           return res.status(404)
-            .send({ message: 'User not found' });
-        } else if (foundUser.roleId === req.body.roleId) {
-          return res.status(409)
-            .send({ message: 'New role is the same as old role' });
+            .send({ message: 'Unable to update to role that does not exist' });
         }
-        return foundUser
-          .update({
-            roleId: req.body.roleId
-          }).then(res.status(201)
-            .send({ message: 'User role successfully updated' }))
-          .catch(error => res.status(400)
-            .send(error));
+        // If role is found check for user and update accordingly
+        model.User.findById(req.params.id)
+          .then((foundUser) => {
+            if (!foundUser) {
+              return res.status(404)
+                .send({ message: 'User not found' });
+            } else if (foundUser.roleId === req.body.roleId) {
+              return res.status(400)
+                .send({ message: 'Old role is the same as new role' });
+            }
+            return foundUser
+              .update({
+                roleId: req.body.roleId
+              }).then(res.status(201)
+                .send({ message: 'User role successfully updated' }))
+              .catch(error => res.status(400)
+                .send(error));
+          });
       });
   }
 
@@ -188,6 +196,38 @@ class UserController {
           .then(res.status(201)
             .send({ message: 'User successfully deleted' }));
       });
+  }
+
+  /**
+   * Method to search for a user
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res object
+   */
+  static searchForUser(req, res) {
+    console.log(req.query);
+    model.User.findAll({
+      where: {
+        $or: [{
+          firstName: {
+            $iLike: `%${req.query.q}%`
+          }
+        }, {
+          lastName: {
+            $iLike: `%${req.query.q}%`
+          }
+        }, {
+          email: {
+            $iLike: `%${req.query.q}%`
+          }
+        }]
+      }
+    })
+      .then(documents => res.status(200)
+        .send(documents))
+      .catch(error => res.status(400)
+        .send(error));
   }
 
   /**
