@@ -1,6 +1,13 @@
 import faker from 'faker';
 
+/**
+ * Helper class to populate database
+ */
 class testHelper {
+  /**
+   * Creates a dummy users
+   * @returns {obj} - Object with dummy user details
+   */
   static user() {
     return {
       firstName: faker.name.firstName(),

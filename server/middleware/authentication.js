@@ -43,7 +43,7 @@ class Authentication {
    */
   static validateUser(req, res, next) {
     // We convert the UserId to string because it is a number
-    if (req.params.id !== req.decoded.UserId.toString()) {
+    if (req.params.id !== req.decoded.UserId.toString() && (req.decoded.RoleId !== 1)) {
       return res.status(401)
         .send({ success: false, message: 'You are not authorized to see this user' });
     }

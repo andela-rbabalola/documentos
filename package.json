@@ -19,6 +19,7 @@
     "chai": "^3.5.0",
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
+     "faker": "^4.1.0",
     "jsonwebtoken": "^7.3.0",
     "nodemon": "^1.11.0",
     "pg": "^6.1.2",
@@ -37,7 +38,6 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
-    "faker": "^4.1.0",
     "logger": "0.0.1",
     "mocha": "^3.2.0"
   }

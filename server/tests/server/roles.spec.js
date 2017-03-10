@@ -3,8 +3,6 @@ import supertest from 'supertest';
 import app from '../../../server';
 import testHelper from '../helpers/testHelpers';
 
-console.log('ENV name', process.env.NODE_ENV);
-
 const server = supertest.agent(app);
 const expect = chai.expect;
 
@@ -54,7 +52,7 @@ describe('Roles Test Suite', () => {
         });
     });
 
-    it('Non-admin should be unable to create a role', (done) => {
+    it('Should ensure non-admin is unable to create a role', (done) => {
       server.post('/roles/')
         .set({ 'x-access-token': regularDetails.token })
         .send(newRole)
@@ -186,6 +184,48 @@ describe('Roles Test Suite', () => {
         .expect(403)
         .end((err, res) => {
           expect(res.body.message).to.equal('Admin role can not be updated');
+          done();
+        });
+    });
+  });
+
+  describe('Delete Role', () => {
+    it('Should allow only admin to delete a role', (done) => {
+      server.delete('/roles/3')
+        .set({ 'x-access-token': adminDetails.token })
+        .expect(201)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Role successfully deleted');
+          done();
+        });
+    });
+
+    it('Should not allow non admin to delete a role', (done) => {
+      server.delete('/roles/3')
+        .set({ 'x-access-token': regularDetails.token })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Only admins have access to this route');
+          done();
+        });
+    });
+
+    it('Should fail if role does not exist', (done) => {
+      server.delete('/roles/100')
+        .set({ 'x-access-token': adminDetails.token })
+        .expect(404)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Unable to delete because role is not found');
+          done();
+        });
+    });
+
+    it('Should ensure admin role cannot be deleted', (done) => {
+      server.delete('/roles/1')
+        .set({ 'x-access-token': adminDetails.token })
+        .expect(403)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Admin role can not be deleted');
           done();
         });
     });

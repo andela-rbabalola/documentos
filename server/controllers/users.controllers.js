@@ -51,7 +51,7 @@ class UserController {
               .send({ message: 'New user created', newUser, token, expiresIn: '3 days' });
           })
           .catch(error => res.status(400)
-            .send(error.errors));
+            .send({ error: error, message: 'An error occurred creating the user' }));
       });
   }
 
@@ -206,7 +206,6 @@ class UserController {
    * @returns {Object} res object
    */
   static searchForUser(req, res) {
-    console.log(req.query);
     model.User.findAll({
       where: {
         $or: [{

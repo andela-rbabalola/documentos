@@ -82,7 +82,7 @@ class RolesController {
    */
   static deleteRole(req, res) {
     // Ensure admin role can't be deleted
-    if (req.params.id === 1) {
+    if (req.params.id === '1') {
       return res.status(403)
         .send({ message: 'Admin role can not be deleted' });
     }
