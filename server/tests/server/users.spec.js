@@ -252,7 +252,6 @@ describe('Users Test Suite', () => {
       });
 
       it('Should allow the admin to delete a user', (done) => {
-        console.log('regular', regularDetails);
         server.delete(`/users/${regularDetails.newUser.id}`)
           .set({ 'x-access-token': adminDetails.token })
           .end((err, res) => {
@@ -261,16 +260,14 @@ describe('Users Test Suite', () => {
           });
       });
 
-      // it('Should not allow a non admin to delete a user', (done) => {
-      //   console.log('Test', testDetails);
-      //   console.log('Regular', regularDetails);
-      //   server.delete(`/users/${testDetails.newUser.id}`)
-      //     .set({ 'x-access-token': regularDetails.token })
-      //     .end((err, res) => {
-      //       expect(res.body.message).to.equal('Only admins have access to this route');
-      //       done();
-      //     });
-      // });
+      it('Should not allow a non admin to delete a user', (done) => {
+        server.delete(`/users/${testDetails.newUser.id}`)
+          .set({ 'x-access-token': testDetails.token })
+          .end((err, res) => {
+            expect(res.body.message).to.equal('Only admins have access to this route');
+            done();
+          });
+      });
     });
   });
 });
