@@ -111,7 +111,7 @@ class RolesController {
     // Ensure admin role can't be updated
     if (req.params.id === '1') {
       return res.status(403)
-        .send({ message: 'Admin role can not be updated' });
+        .send({ message: 'SuperAdmin role can not be updated' });
     }
 
     // check that title is unique

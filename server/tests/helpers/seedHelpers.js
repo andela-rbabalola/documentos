@@ -25,7 +25,7 @@ class seedHelper {
   }
 
   /**
-   * Populate db with initial users
+   * Populate users table with initial users
    */
   static populateUsers() {
     const defaultUsers = [
@@ -47,6 +47,9 @@ class seedHelper {
     return model.User.bulkCreate(defaultUsers);
   }
 
+  /**
+   * Populate documents table with initial users
+   */
   static populateDocs() {
     const defaultDocs = [
       {
@@ -71,18 +74,33 @@ class seedHelper {
     return model.Document.bulkCreate(defaultDocs);
   }
 
+  /**
+   * Returns a new role object
+   */
   static initialRoles() {
     const defaultRoles = [
+      {
+        title: 'SuperAdmin'
+      },
       {
         title: 'Admin'
       },
       {
         title: 'User'
+      },
+      {
+        title: 'Guest'
       }
     ];
     return model.Role.bulkCreate(defaultRoles);
   }
 
+  /**
+   * Method to hash a password
+   *
+   * @param {String} - password
+   * @returns {String} - hashedPassword
+   */
   static hashPassword(password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(10));
   }

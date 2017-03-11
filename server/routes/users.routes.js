@@ -18,7 +18,7 @@ router.route('/search')
 router.route('/:id')
   .get(Authentication.decodeToken, Authentication.validateUser, UserController.getUserById)
   .put(Authentication.decodeToken, Authentication.validateUser, UserController.updateUser)
-  .delete(Authentication.decodeToken, Authentication.isAdmin, UserController.deleteUser);
+  .delete(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.deleteUser);
 
 router.route('/:id/documents')
   .get(Authentication.decodeToken, Authentication.validateUser, documentController.getDocForUser);
@@ -30,6 +30,6 @@ router.route('/updateRole/:id')
   .put(Authentication.decodeToken, Authentication.isAdmin, UserController.updateUserRole);
 
 router.route('/createadmin')
-  .post(Authentication.decodeToken, Authentication.isAdmin, UserController.createAdmin);
+  .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);
 
 export default router;

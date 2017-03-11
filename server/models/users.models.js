@@ -22,7 +22,7 @@ module.exports = (sequelize, Datatypes) => {
     },
     roleId: {
       type: Datatypes.INTEGER,
-      defaultValue: 2
+      defaultValue: 3
     },
   }, {
     classMethods: {

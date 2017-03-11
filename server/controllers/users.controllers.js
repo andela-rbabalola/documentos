@@ -34,9 +34,9 @@ class UserController {
    */
   static createAdmin(req, res) {
     // abstract this
-    if (req.body.roleId !== '1') {
+    if (req.body.roleId !== '2') {
       return res.status(400)
-        .send({ message: 'All admins must have a roleId of 1' });
+        .send({ message: 'Admin must have a roleId of 2' });
     }
     model.User.findOne({
       where: { email: req.body.email }
