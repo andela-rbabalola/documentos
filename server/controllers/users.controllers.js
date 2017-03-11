@@ -238,7 +238,7 @@ class UserController {
    */
   static deleteUser(req, res) {
     if (req.params.id === '1') {
-      return res.status(403).send({ message: 'The admin cannot be deleted' });
+      return res.status(403).send({ message: 'The SuperAdmin cannot be deleted' });
     }
     model.User.findById(req.params.id)
       .then((foundUser) => {

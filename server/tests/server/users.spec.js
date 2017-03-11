@@ -7,6 +7,7 @@ const server = supertest.agent(app);
 const expect = chai.expect;
 const testUser = testHelper.user();
 
+let superAdminDetails;
 let adminDetails;
 let regularDetails;
 let testDetails;
@@ -17,16 +18,21 @@ describe('Users Test Suite', () => {
       .type('form')
       .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
       .end((err, res) => {
-        adminDetails = res.body;
-        server.post('/users')
-          .send(testHelper.user())
+        superAdminDetails = res.body;
+        server.post('/users/signin')
+          .send({ email: 'rotimi@gmail.com', password: 'rotimi123' })
           .end((err, res) => {
-            regularDetails = res.body;
+            adminDetails = res.body;
             server.post('/users')
               .send(testHelper.user())
               .end((err, res) => {
-                testDetails = res.body;
-                done();
+                regularDetails = res.body;
+                server.post('/users')
+                  .send(testHelper.user())
+                  .end((err, res) => {
+                    testDetails = res.body;
+                    done();
+                  });
               });
           });
       });
@@ -59,13 +65,13 @@ describe('Users Test Suite', () => {
         });
     });
 
-    it('Should give new users a default role (id=2, user)', (done) => {
+    it('Should give new users a default role (id=3, User)', (done) => {
       server.post('/users')
         .send(testHelper.userWithoutRole())
         .expect(201)
         .end((err, res) => {
           expect(res.body.newUser).to.have.property('roleId');
-          expect(res.body.newUser.roleId).to.equal(2);
+          expect(res.body.newUser.roleId).to.equal(3);
           done();
         });
     });
@@ -116,7 +122,7 @@ describe('Users Test Suite', () => {
         });
     });
 
-    it('Should not return password on login', (done) => {
+    it('Should not return the password on login', (done) => {
       const user = testHelper.user();
       server.post('/users')
         .type('form')
@@ -153,7 +159,17 @@ describe('Users Test Suite', () => {
           });
       });
 
-      it('Should allow admin to see all users', (done) => {
+      it('Should allow the SuperAdmin to see all users', (done) => {
+        server.get('/users')
+          .set({ 'x-access-token': superAdminDetails.token })
+          .end((err, res) => {
+            expect(res.status).to.equal(200);
+            expect(res.body).to.be.instanceOf(Array);
+            done();
+          });
+      });
+
+      it('Should allow an Admin to see all users', (done) => {
         server.get('/users')
           .set({ 'x-access-token': adminDetails.token })
           .end((err, res) => {
@@ -163,7 +179,19 @@ describe('Users Test Suite', () => {
           });
       });
 
-      it('Should allow the admin to see a specific user', (done) => {
+      it('Should allow the SuperAdmin to see a specific user', (done) => {
+        server.get('/users/4')
+          .set({ 'x-access-token': superAdminDetails.token })
+          .end((err, res) => {
+            expect(res.body).to.have.property('firstName');
+            expect(res.body).to.have.property('lastName');
+            expect(res.body).to.have.property('email');
+            expect(res.body).to.have.property('password');
+            done();
+          });
+      });
+
+      it('Should allow an Admin to see a specific user', (done) => {
         server.get('/users/4')
           .set({ 'x-access-token': adminDetails.token })
           .end((err, res) => {
@@ -197,8 +225,19 @@ describe('Users Test Suite', () => {
     });
 
     describe('Updating a user', () => {
-      it('Should allow admin to update any user', (done) => {
+      it('Should allow the SuperAdmin to update a user', (done) => {
         server.put('/users/4')
+          .set({ 'x-access-token': superAdminDetails.token })
+          .send({ firstName: 'updated name' })
+          .expect(201)
+          .end((err, res) => {
+            expect(res.body.message).to.equal('User successfully updated');
+            done();
+          });
+      });
+
+      it('Should allow an admin to update a user', (done) => {
+        server.put('/users/5')
           .set({ 'x-access-token': adminDetails.token })
           .send({ firstName: 'updated name' })
           .expect(201)
@@ -208,7 +247,7 @@ describe('Users Test Suite', () => {
           });
       });
 
-      it('Should not allow a non admin to update another user', (done) => {
+      it('Should not allow a regular user to update another user', (done) => {
         server.put(`/users/${regularDetails.newUser.id + 1}`)
           .set({ 'x-access-token': regularDetails.token })
           .send({ firstName: 'updated name' })
@@ -242,9 +281,9 @@ describe('Users Test Suite', () => {
     });
 
     describe('Deleting a user', () => {
-      it('Should allow the admin to delete a user', (done) => {
+      it('Should allow the SuperAdmin to delete a user', (done) => {
         server.delete(`/users/${regularDetails.newUser.id}`)
-          .set({ 'x-access-token': adminDetails.token })
+          .set({ 'x-access-token': superAdminDetails.token })
           .end((err, res) => {
             expect(res.body.message).to.equal('User successfully deleted');
             done();
@@ -252,20 +291,20 @@ describe('Users Test Suite', () => {
       });
 
       // problem test??
-      it('Should not allow a non admin to delete a user', (done) => {
-        server.delete(`/users/${testDetails.newUser.id}`)
-          .set({ 'x-access-token': testDetails.token })
+      it('Should not allow an admin to delete a user', (done) => {
+        server.delete(`/users/${regularDetails.newUser.id}`)
+          .set({ 'x-access-token': adminDetails.token })
           .end((err, res) => {
-            expect(res.body.message).to.equal('Only admins have access to this route');
+            expect(res.body.message).to.equal('You do not have superadmin rights');
             done();
           });
       });
 
-      it('Should ensure admin cannot be deleted', (done) => {
+      it('Should ensure SuperAdmin cannot be deleted', (done) => {
         server.delete('/users/1')
-          .set({ 'x-access-token': adminDetails.token })
+          .set({ 'x-access-token': superAdminDetails.token })
           .end((err, res) => {
-            expect(res.body.message).to.equal('The admin cannot be deleted');
+            expect(res.body.message).to.equal('The SuperAdmin cannot be deleted');
             done();
           });
       });

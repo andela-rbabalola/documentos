@@ -190,7 +190,7 @@ describe('Roles Test Suite', () => {
     it('Should fail if role does not exist', (done) => {
       server.put('/roles/100')
         .set({ 'x-access-token': superAdminDetails.token })
-        .send({ title: 'new role' })
+        .send({ title: 'new updated role' })
         .expect(404)
         .end((err, res) => {
           expect(res.body.message).to.equal('Unable to update because role 100 is not found');
@@ -215,15 +215,15 @@ describe('Roles Test Suite', () => {
         .send({ title: 'New SuperAdmin' })
         .expect(403)
         .end((err, res) => {
-          expect(res.body.message).to.equal('Admin role can not be updated');
+          expect(res.body.message).to.equal('SuperAdmin role can not be updated');
           done();
         });
     });
   });
 
   describe('Delete Role', () => {
-    it('Should allow only admin to delete a role', (done) => {
-      server.delete('/roles/3')
+    it('Should allow only the SuperAdmin to delete a role', (done) => {
+      server.delete('/roles/5')
         .set({ 'x-access-token': superAdminDetails.token })
         .expect(201)
         .end((err, res) => {
@@ -232,12 +232,12 @@ describe('Roles Test Suite', () => {
         });
     });
 
-    it('Should not allow non admin to delete a role', (done) => {
-      server.delete('/roles/3')
+    it('Should not allow an admin to delete a role', (done) => {
+      server.delete('/roles/5')
         .set({ 'x-access-token': adminDetails.token })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.message).to.equal('Only admins have access to this route');
+          expect(res.body.message).to.equal('You do not have superadmin rights');
           done();
         });
     });
@@ -252,13 +252,12 @@ describe('Roles Test Suite', () => {
         });
     });
 
-    it('Should ensure admin role cannot be deleted', (done) => {
+    it('Should ensure SuperAdmin role cannot be deleted', (done) => {
       server.delete('/roles/1')
         .set({ 'x-access-token': superAdminDetails.token })
         .expect(403)
         .end((err, res) => {
-          // expect(res.body.message).to.equal('Admin role can not be deleted');
-          console.log(res.body);
+          expect(res.body.message).to.equal('SuperAdmin role can not be deleted');
           done();
         });
     });

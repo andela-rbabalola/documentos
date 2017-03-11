@@ -84,7 +84,7 @@ class RolesController {
     // Ensure admin role can't be deleted
     if (req.params.id === '1') {
       return res.status(403)
-        .send({ message: 'Admin role can not be deleted' });
+        .send({ message: 'SuperAdmin role can not be deleted' });
     }
     model.Role.findById(req.params.id)
       .then((foundRole) => {
