@@ -12,6 +12,26 @@ let regularDetails;
 let testDetails;
 
 describe('Users Test Suite', () => {
+  before((done) => {
+    server.post('/users/signin')
+      .type('form')
+      .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
+      .end((err, res) => {
+        adminDetails = res.body;
+        server.post('/users')
+          .send(testHelper.user())
+          .end((err, res) => {
+            regularDetails = res.body;
+            server.post('/users')
+              .send(testHelper.user())
+              .end((err, res) => {
+                testDetails = res.body;
+                done();
+              });
+          });
+      });
+  });
+
   describe('Authentication', () => {
     it('Should create a user given valid details', (done) => {
       server.post('/users')
@@ -35,6 +55,17 @@ describe('Users Test Suite', () => {
         .expect(409)
         .end((err, res) => {
           expect(res.body.message.includes('already exists')).to.equal(true);
+          done();
+        });
+    });
+
+    it('Should give new users a default role (id=2, user)', (done) => {
+      server.post('/users')
+        .send(testHelper.userWithoutRole())
+        .expect(201)
+        .end((err, res) => {
+          expect(res.body.newUser).to.have.property('roleId');
+          expect(res.body.newUser.roleId).to.equal(2);
           done();
         });
     });
@@ -67,6 +98,7 @@ describe('Users Test Suite', () => {
         });
     });
 
+    // problem test
     it('Should issue a token to user on successful login', (done) => {
       const user = testHelper.user();
       server.post('/users')
@@ -111,28 +143,7 @@ describe('Users Test Suite', () => {
     });
 
     // test for password length in models
-
     describe('Get Users', () => {
-      before((done) => {
-        server.post('/users/signin')
-          .type('form')
-          .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
-          .end((err, res) => {
-            adminDetails = res.body;
-            server.post('/users')
-              .send(testHelper.user())
-              .end((err, res) => {
-                regularDetails = res.body;
-                server.post('/users')
-                  .send(testHelper.user())
-                  .end((err, res) => {
-                    testDetails = res.body;
-                    done();
-                  });
-              });
-          });
-      });
-
       it('Should require token to see all users', (done) => {
         server.get('/users')
           .end((err, res) => {
@@ -231,26 +242,6 @@ describe('Users Test Suite', () => {
     });
 
     describe('Deleting a user', () => {
-      before((done) => {
-        server.post('/users/signin')
-          .type('form')
-          .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
-          .end((err, res) => {
-            adminDetails = res.body;
-            server.post('/users')
-              .send(testHelper.user())
-              .end((err, res) => {
-                regularDetails = res.body;
-                server.post('/users')
-                  .send(testHelper.user())
-                  .end((err, res) => {
-                    testDetails = res.body;
-                    done();
-                  });
-              });
-          });
-      });
-
       it('Should allow the admin to delete a user', (done) => {
         server.delete(`/users/${regularDetails.newUser.id}`)
           .set({ 'x-access-token': adminDetails.token })
@@ -260,11 +251,21 @@ describe('Users Test Suite', () => {
           });
       });
 
+      // problem test??
       it('Should not allow a non admin to delete a user', (done) => {
         server.delete(`/users/${testDetails.newUser.id}`)
           .set({ 'x-access-token': testDetails.token })
           .end((err, res) => {
             expect(res.body.message).to.equal('Only admins have access to this route');
+            done();
+          });
+      });
+
+      it('Should ensure admin cannot be deleted', (done) => {
+        server.delete('/users/1')
+          .set({ 'x-access-token': adminDetails.token })
+          .end((err, res) => {
+            expect(res.body.message).to.equal('The admin cannot be deleted');
             done();
           });
       });

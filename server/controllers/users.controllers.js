@@ -4,6 +4,8 @@ import model from '../models';
 
 const secret = process.env.JWT_SECRET || 'this is the secret';
 
+// ABSTRACT YOUR FUNCTIONS INTO HELPER FUNCTIONS TO ENSURE SRP
+
 /**
  * This class handles routing logic for user routes
  */
@@ -185,6 +187,9 @@ class UserController {
    * @returns {Object} res object
    */
   static deleteUser(req, res) {
+    if (req.params.id === '1') {
+      return res.status(403).send({ message: 'The admin cannot be deleted' });
+    }
     model.User.findById(req.params.id)
       .then((foundUser) => {
         // check if user exists

@@ -18,6 +18,10 @@ module.exports = (sequelize, Datatypes) => {
         min: 6
       }
     },
+    roleId: {
+      type: Datatypes.INTEGER,
+      defaultValue: 2
+    },
   }, {
     classMethods: {
       associate: (models) => {

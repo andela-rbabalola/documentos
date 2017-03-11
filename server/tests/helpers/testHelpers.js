@@ -18,6 +18,19 @@ class testHelper {
     };
   }
 
+  /**
+   * Creates a dummy users without a role
+   * @returns {obj} - Object with dummy user details
+   */
+  static userWithoutRole() {
+    return {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password()
+    };
+  }
+
   static defaultRole() {
     return {
       title: 'guest'
