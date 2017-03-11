@@ -29,5 +29,7 @@ router.route('/signin')
 router.route('/updateRole/:id')
   .put(Authentication.decodeToken, Authentication.isAdmin, UserController.updateUserRole);
 
+router.route('/createadmin')
+  .post(Authentication.decodeToken, Authentication.isAdmin, UserController.createAdmin);
 
 export default router;
