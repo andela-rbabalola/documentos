@@ -45,7 +45,7 @@ class Authentication {
     // We convert the UserId to string because it is a number
     if (req.params.id !== req.decoded.UserId.toString() && (req.decoded.RoleId > 2)) {
       return res.status(401)
-        .send({ success: false, message: 'You are not authorized to see this user' });
+        .send({ success: false, message: 'Unauthorized access' });
     }
     next();
   }

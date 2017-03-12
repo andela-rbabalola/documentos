@@ -93,13 +93,16 @@ class DocumentsController {
         if (!foundDoc) {
           return res.status(404)
             .send({ message: 'Document to be updated not found' });
+        } else if (foundDoc.userId !== req.decoded.UserId && (req.decoded.RoleId > 2)) {
+          return res.status(401)
+            .send({ message: 'You are not authorized to update this document' });
         }
         return foundDoc
           .update({
             title: req.body.title || foundDoc.title,
             text: req.body.text || foundDoc.text
           }).then(res.status(201)
-            .send({ message: 'Document successfully updated' }))
+            .send({ message: 'Document successfully updated', foundDoc }))
           // handle errors
           .catch(error => res.status(400)
             .send(error));

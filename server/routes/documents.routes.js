@@ -11,8 +11,8 @@ router.route('/')
 
 router.route('/:id')
   .get(Authentication.decodeToken, documentController.getDocById)
-  .put(Authentication.decodeToken, Authentication.validateUser, documentController.updateDoc)
-  .delete(Authentication.decodeToken, Authentication.validateUser, documentController.deleteDoc);
+  .put(Authentication.decodeToken, documentController.updateDoc)
+  .delete(Authentication.decodeToken, documentController.deleteDoc);
 
 // Route to get documents for a user
 router.route('/user/:id')

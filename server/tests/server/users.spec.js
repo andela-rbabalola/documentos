@@ -218,7 +218,7 @@ describe('Users Test Suite', () => {
           .set({ 'x-access-token': regularDetails.token })
           .end((err, res) => {
             expect(res.status).to.equal(401);
-            expect(res.body.message).to.equal('You are not authorized to see this user');
+            expect(res.body.message).to.equal('Unauthorized access');
             done();
           });
       });
@@ -253,7 +253,7 @@ describe('Users Test Suite', () => {
           .send({ firstName: 'updated name' })
           .expect(401)
           .end((err, res) => {
-            expect(res.body.message).to.equal('You are not authorized to see this user');
+            expect(res.body.message).to.equal('Unauthorized access');
             done();
           });
       });

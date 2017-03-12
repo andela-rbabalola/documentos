@@ -10,6 +10,9 @@ let superAdminDetails;
 let adminDetails;
 let regularDetails;
 let testDetails;
+let document;
+let allPublicDocuments;
+let allDocuments;
 
 describe('Documents Test Suite', () => {
   before((done) => {
@@ -32,6 +35,26 @@ describe('Documents Test Suite', () => {
                     testDetails = res.body;
                     done();
                   });
+              });
+          });
+      });
+  });
+
+  before((done) => {
+    server.post('/documents')
+      .set({ 'x-access-token': superAdminDetails.token })
+      .send(testHelper.dummyDocumentWithArg('private', 1))
+      .end((err, res) => {
+        document = res.body;
+        server.get('/documents')
+          .set({ 'x-access-token': regularDetails.token })
+          .end((err, res) => {
+            allPublicDocuments = res.body;
+            server.get('/documents')
+              .set({ 'x-access-token': superAdminDetails.token })
+              .end((err, res) => {
+                allDocuments = res.body;
+                done();
               });
           });
       });
@@ -89,30 +112,6 @@ describe('Documents Test Suite', () => {
   });
 
   describe('Get document', () => {
-    let document;
-    let allPublicDocuments;
-    let allDocuments;
-
-    before((done) => {
-      server.post('/documents')
-        .set({ 'x-access-token': superAdminDetails.token })
-        .send(testHelper.dummyDocumentWithArg('private', 1))
-        .end((err, res) => {
-          document = res.body;
-          server.get('/documents')
-            .set({ 'x-access-token': regularDetails.token })
-            .end((err, res) => {
-              allPublicDocuments = res.body;
-              server.get('/documents')
-                .set({ 'x-access-token': superAdminDetails.token })
-                .end((err, res) => {
-                  allDocuments = res.body;
-                  done();
-                });
-            });
-        });
-    });
-
     it('Should return all documents to the SuperAdmin', (done) => {
       expect(Array.isArray(allDocuments)).to.equal(true);
       expect(allDocuments.length).to.be.greaterThan(allPublicDocuments.length);
@@ -146,7 +145,7 @@ describe('Documents Test Suite', () => {
         });
     });
 
-    it('Should return a private document only to its owner', (done) => {
+    it('Should return a private document to its owner', (done) => {
       server.get(`/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': testDetails.token })
         .expect(401)
@@ -186,6 +185,55 @@ describe('Documents Test Suite', () => {
           expect(typeof res.body).to.equal('object');
           expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('Document with id 1000 not found');
+          done();
+        });
+    });
+  });
+
+  describe('Update Document', () => {
+    before((done) => {
+      server.post('/documents')
+        .set({ 'x-access-token': regularDetails.token })
+        .send(testHelper.dummyDocumentWithArg('private', regularDetails.newUser.id))
+        .end((err, res) => {
+          document = res.body;
+          done();
+        });
+    });
+
+    it('Should allow the owner of a document to edit it', (done) => {
+      server.put(`/documents/${document.newDocument.id}`)
+        .set({ 'x-access-token': regularDetails.token })
+        .send({ title: 'New title' })
+        .expect(200)
+        .end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body.message).to.equal('Document successfully updated');
+          expect(res.body.foundDoc.title).to.equal('New title');
+          done();
+        });
+    });
+
+    it('Should not allow you to edit a document you don\'t own', (done) => {
+      server.put(`/documents/${document.newDocument.id}`)
+        .set({ 'x-access-token': testDetails.token })
+        .send({ title: 'Doc title updated' })
+        .expect(403)
+        .end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body.message).to.equal('You are not authorized to update this document');
+          done();
+        });
+    });
+
+    it('Should fail if the document does not exist', (done) => {
+      server.put('/documents/100')
+        .set({ 'x-access-token': regularDetails.token })
+        .send({ title: 'doc title updated' })
+        .expect(404)
+        .end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body.message).to.equal('Document to be updated not found');
           done();
         });
     });
