@@ -27,7 +27,7 @@ router.route('/signin')
   .post(UserController.signIn);
 
 router.route('/updateRole/:id')
-  .put(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.updateUserRole);
+  .put(Authentication.decodeToken, Authentication.isAdmin, UserController.updateUserRole);
 
 router.route('/createadmin')
   .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);

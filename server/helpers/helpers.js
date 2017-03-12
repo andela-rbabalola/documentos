@@ -5,26 +5,42 @@ import model from '../models';
  */
 class Helpers {
   /**
-   * Method to check if a user already exists
+   * Method to check the roleId in a request
+   * Ensure it is equal to 2
    *
    * @param {Object} req
    * @param {Object} res
    * @returns {Object} res object
    */
-  static checkIfUserExists(req, res) {
-    model.User.findOne({
-      where: { email: req.body.email }
-    })
-      .then((oldUser) => {
-        /**
-         * if user already exists in the database
-         * return http status code 409
-         */
-        if (oldUser) {
-          return res.status(409)
-            .send({ message: `${req.body.email} already exists` });
-        }
-      });
+  static checkRoleId(req) {
+    return req.body.roleId !== 2;
+  }
+
+  /**
+   * Method to ensure a role cannot be
+   * specified when a user is created
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res object
+   */
+  static ensureNoRole(req) {
+    return req.body.roleId;
+  }
+
+  /**
+   * Method to ensure the super admin can't
+   * be deleted
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res object
+   */
+  static isSuperAdmin(req, where) {
+    // if (where === 'params') {
+    //   return req.params.id === '1';
+    // }
+    return (where === 'params') ? req.params.id === '1' : req.body.roleId === 1;
   }
 }
 

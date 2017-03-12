@@ -1,5 +1,7 @@
 import model from '../models';
 
+// IMPsLEMENT ROLE ACCESS
+
 /**
  * Class to handle routing logic for documents
  */
@@ -24,14 +26,12 @@ class DocumentsController {
    * Method to get documents
    * The SuperAdmin and Admin can see all documents
    * while ordinary users see only public and role documents
-   * IMPLEMENT ROLE ACCESS
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
    * @returns {Object} res object
    */
   static getDocuments(req, res) {
-    // check if the user is an admin - admins have a roleId of 1
     if (req.decoded.RoleId < 2) {
       model.Document.findAll({
         order: '"createdAt" DESC',
@@ -68,7 +68,7 @@ class DocumentsController {
         if (!foundDoc) {
           return res.status(404)
             .send({ message: `Document with id ${req.params.id} not found` });
-        } else if (foundDoc.access === 'private' && req.decoded.RoleId !== 1) {
+        } else if (foundDoc.access === 'private' && req.decoded.RoleId > 2) {
           return res.status(401)
             .send({ message: 'This document is private' });
         }

@@ -5,8 +5,6 @@ import Helpers from '../helpers/helpers';
 
 const secret = process.env.JWT_SECRET || 'this is the secret';
 
-// ABSTRACT YOUR FUNCTIONS INTO HELPER FUNCTIONS TO ENSURE SRP
-
 /**
  * This class handles routing logic for user routes
  */
@@ -26,18 +24,19 @@ class UserController {
   /**
    * Method to create a new admin
    * This method is only accessible to the admin
-   * All admins must have a roleId of 1
+   * All admins must have a roleId of 2
    *
    * @param {Object} req
    * @param {Object} res
    * @returns {Object} res object
    */
   static createAdmin(req, res) {
-    // abstract this
-    if (req.body.roleId !== '2') {
+    // Check roleId of request
+    if (Helpers.checkRoleId(req, res)) {
       return res.status(400)
         .send({ message: 'Admin must have a roleId of 2' });
     }
+
     model.User.findOne({
       where: { email: req.body.email }
     })
@@ -66,8 +65,7 @@ class UserController {
   }
 
   /**
-   * Method to create a user, fix this function when create admin is done
-   * Ensure user can't specify his role
+   * Ensure user can't specify a role
    *
    * @param {Object} req
    * @param {Object} res
@@ -75,11 +73,12 @@ class UserController {
    */
   static createUser(req, res) {
     // ensure user cannot specify his role
-    if (req.body.roleId) {
+    if (Helpers.ensureNoRole(req, res)) {
       return res.status(403).send({
         message: 'You cannot specify your role'
       });
     }
+
     model.User.findOne({
       where: { email: req.body.email }
     })
@@ -200,6 +199,10 @@ class UserController {
    * @returns {Object} res object
    */
   static updateUserRole(req, res) {
+    if (Helpers.isSuperAdmin(req, 'body', res)) {
+      return res.status(403)
+        .send({ message: 'You cannot update to the SuperAdmin Role' });
+    }
     // first check roles table to ensure roleId in body exists
     model.Role.findById(req.body.roleId)
       .then((foundRole) => {
@@ -237,9 +240,12 @@ class UserController {
    * @returns {Object} res object
    */
   static deleteUser(req, res) {
-    if (req.params.id === '1') {
-      return res.status(403).send({ message: 'The SuperAdmin cannot be deleted' });
+    // Ensure the super admin can't be deleted
+    if (Helpers.isSuperAdmin(req, 'params', res)) {
+      return res.status(403)
+        .send({ message: 'The SuperAdmin cannot be deleted' });
     }
+
     model.User.findById(req.params.id)
       .then((foundUser) => {
         // check if user exists

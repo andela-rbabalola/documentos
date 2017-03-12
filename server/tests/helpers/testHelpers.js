@@ -18,7 +18,7 @@ class testHelper {
   }
 
   /**
-   * Creates a dummy users without a role
+   * Returns a dummy users without a role
    * @returns {obj} - Object with dummy user details
    */
   static userWithoutRole() {
@@ -27,6 +27,20 @@ class testHelper {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
       password: faker.internet.password()
+    };
+  }
+
+  /**
+   * Returns a dummy users with a role
+   * @returns {obj} - Object with dummy user details
+   */
+  static userWithRole(roleId) {
+    return {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      roleId
     };
   }
 
