@@ -42,6 +42,13 @@ class seedHelper {
         email: 'rotimi@gmail.com',
         password: seedHelper.hashPassword('rotimi123'),
         roleId: 2
+      },
+      {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'johndoe@gmail.com',
+        password: seedHelper.hashPassword('johndoe123'),
+        roleId: 3
       }
     ];
     return model.User.bulkCreate(defaultUsers);
@@ -65,10 +72,22 @@ class seedHelper {
         access: 'private'
       },
       {
-        userId: 1,
+        userId: 3,
         title: faker.lorem.word(),
         docContent: faker.lorem.sentence(3),
         access: 'public'
+      },
+      {
+        userId: 3,
+        title: faker.lorem.word(),
+        docContent: faker.lorem.sentence(3),
+        access: 'role'
+      },
+      {
+        userId: 1,
+        title: faker.lorem.word(),
+        docContent: faker.lorem.sentence(3),
+        access: 'private'
       }
     ];
     return model.Document.bulkCreate(defaultDocs);

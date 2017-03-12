@@ -17,7 +17,7 @@ class DocumentsController {
         .send({ message: 'New document created', newDocument }))
       // catch errors
       .catch(error => res.status(400)
-        .send(error));
+        .send({ error, message: 'An error occured creating the document' }));
   }
 
   /**
@@ -64,10 +64,7 @@ class DocumentsController {
         if (!foundDoc) {
           return res.status(404)
             .send({ message: `Document with id ${req.body.id} not found` });
-        } else if (foundDoc.access === 'private' && (foundDoc.userId.toString() === req.params.id)) {
-          return res.status(200)
-            .send(foundDoc);
-        } else if (foundDoc.access === 'private') {
+        } else if (foundDoc.access === 'private' && req.decoded.RoleId > 2) {
           return res.status(401)
             .send({ message: 'This document is private' });
         }
@@ -142,7 +139,7 @@ class DocumentsController {
       }
     })
       .then((documents) => {
-        if (!documents.length) {
+        if (!documents) {
           return res.status(404)
             .send({ message: 'No match found for query' });
         }

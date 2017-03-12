@@ -30,6 +30,46 @@ class testHelper {
     };
   }
 
+  /**
+   * Creates a dummy document
+   * @returns {obj} - Object with dummy user details
+   */
+  static dummyDocument() {
+    return {
+      title: faker.lorem.word(),
+      docContent: faker.lorem.paragraph(),
+      access: 'public',
+      userId: 1
+    };
+  }
+
+  /**
+   * Creates a dummy document without permission specified
+   * @returns {obj} - Object with dummy user details
+   */
+  static dummyDocumentNoPermission() {
+    return {
+      title: faker.lorem.word(),
+      docContent: faker.lorem.paragraph(),
+      userId: 1
+    };
+  }
+
+  /**
+   * Creates a dummy document given arguments
+   * @param {String} access - string specifying access type for doc
+   * @param {Integer} userId - Integer specifying owner of document
+   * @returns {obj} - Object with dummy user details
+   */
+  static dummyDocumentWithArg(access, userId) {
+    return {
+      title: faker.lorem.word(),
+      docContent: faker.lorem.paragraph(),
+      access,
+      userId
+    };
+  }
+
   static defaultRole() {
     return {
       title: 'new role'
