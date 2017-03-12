@@ -22,7 +22,9 @@ class DocumentsController {
 
   /**
    * Method to get documents
-   * Admins can see all documents while ordinary users see just public documents
+   * The SuperAdmin and Admin can see all documents
+   * while ordinary users see only public and role documents
+   * IMPLEMENT ROLE ACCESS
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
@@ -30,8 +32,10 @@ class DocumentsController {
    */
   static getDocuments(req, res) {
     // check if the user is an admin - admins have a roleId of 1
-    if (req.decoded.RoleId === 1) {
-      model.Document.findAll({}).then(documents => res.status(200)
+    if (req.decoded.RoleId < 2) {
+      model.Document.findAll({
+        order: '"createdAt" DESC',
+      }).then(documents => res.status(200)
         .send(documents))
         .catch(error => res.status(400)
           .send(error));
@@ -63,8 +67,8 @@ class DocumentsController {
         // check if document exists
         if (!foundDoc) {
           return res.status(404)
-            .send({ message: `Document with id ${req.body.id} not found` });
-        } else if (foundDoc.access === 'private' && req.decoded.RoleId > 2) {
+            .send({ message: `Document with id ${req.params.id} not found` });
+        } else if (foundDoc.access === 'private' && req.decoded.RoleId !== 1) {
           return res.status(401)
             .send({ message: 'This document is private' });
         }

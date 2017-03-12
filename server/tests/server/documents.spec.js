@@ -90,12 +90,58 @@ describe('Documents Test Suite', () => {
 
   describe('Get document', () => {
     let document;
+    let allPublicDocuments;
+    let allDocuments;
+
     before((done) => {
       server.post('/documents')
         .set({ 'x-access-token': superAdminDetails.token })
         .send(testHelper.dummyDocumentWithArg('private', 1))
         .end((err, res) => {
           document = res.body;
+          server.get('/documents')
+            .set({ 'x-access-token': regularDetails.token })
+            .end((err, res) => {
+              allPublicDocuments = res.body;
+              server.get('/documents')
+                .set({ 'x-access-token': superAdminDetails.token })
+                .end((err, res) => {
+                  allDocuments = res.body;
+                  done();
+                });
+            });
+        });
+    });
+
+    it('Should return all documents to the SuperAdmin', (done) => {
+      expect(Array.isArray(allDocuments)).to.equal(true);
+      expect(allDocuments.length).to.be.greaterThan(allPublicDocuments.length);
+      allDocuments.forEach((doc) => {
+        expect(doc).to.have.property('access');
+        expect(doc).to.have.property('userId');
+        expect(doc).to.have.property('docContent');
+      });
+      done();
+    });
+
+    it('Should return only public documents to a regular user', (done) => {
+      expect(Array.isArray(allPublicDocuments)).to.equal(true);
+      expect(allPublicDocuments.length).to.be.lessThan(allDocuments.length);
+      allPublicDocuments.forEach((doc) => {
+        expect(doc).to.have.property('access');
+        expect(doc.access).to.equal('public');
+      });
+      done();
+    });
+
+    it('Should return all documents starting from the most recent', (done) => {
+      server.get('/documents')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .expect(200).end((err, res) => {
+          if (err) return done(err);
+          expect(Array.isArray(res.body)).to.equal(true);
+          expect(res.body[0].id).not.to.equal(1);
+          expect(res.body[0].createdAt).to.be.greaterThan(res.body[1].createdAt);
           done();
         });
     });
@@ -105,20 +151,41 @@ describe('Documents Test Suite', () => {
         .set({ 'x-access-token': testDetails.token })
         .expect(401)
         .end((err, res) => {
-          expect(typeof res.body).to.equal('object');
           expect(res.body.message).to.equal('This document is private');
           done();
         });
     });
 
     it('Should get all documents for a specific user', (done) => {
-      server.get(`documents/user/${regularDetails.newUser.id}`)
+      server.get(`/documents/user/${regularDetails.newUser.id}`)
         .set({ 'x-access-token': regularDetails.token })
         .expect(200)
         .end((err, res) => {
-          console.log('response', res);
           expect(Array.isArray(res.body)).to.equal(true);
-          expect(res.body[0].OwnerId).to.equal(regularDetails.user.id);
+          expect(res.body[0].userId).to.equal(regularDetails.newUser.id);
+          done();
+        });
+    });
+
+    it('Should return a private document to the SuperAdmin', (done) => {
+      server.get(`/documents/${document.newDocument.id}`)
+        .set({ 'x-access-token': superAdminDetails.token })
+        .expect(200).end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body.access).to.equal('private');
+          expect(res.body.title).to.equal(document.newDocument.title);
+          done();
+        });
+    });
+
+    it('Should fail if a document does not exist', (done) => {
+      server.get('/documents/1000')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .expect(404)
+        .end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal('Document with id 1000 not found');
           done();
         });
     });

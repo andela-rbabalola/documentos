@@ -51,7 +51,7 @@ class testHelper {
     return {
       title: faker.lorem.word(),
       docContent: faker.lorem.paragraph(),
-      userId: 1
+      userId: 4
     };
   }
 
