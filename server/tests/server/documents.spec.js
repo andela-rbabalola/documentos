@@ -238,4 +238,39 @@ describe('Documents Test Suite', () => {
         });
     });
   });
+
+  describe('Delete documents', () => {
+    it('Should not allow you to delete a document you don\'t own', (done) => {
+      server.delete(`/documents/${document.newDocument.id}`)
+        .set({ 'x-access-token': testDetails.token })
+        .expect(401)
+        .end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body.message).to.equal('You are not authorized to delete this document');
+          done();
+        });
+    });
+
+    it('Should fail if document does not exist', (done) => {
+      server.delete('/documents/100')
+        .set({ 'x-access-token': regularDetails.token })
+        .expect(404)
+        .end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body.message).to.equal('Unable to delete because document is not found');
+          done();
+        });
+    });
+
+    it('Should delete a document', (done) => {
+      server.delete(`/documents/${document.newDocument.id}`)
+        .set({ 'x-access-token': superAdminDetails.token })
+        .expect(201)
+        .end((err, res) => {
+          expect(typeof res.body).to.equal('object');
+          expect(res.body.message).to.equal('Document successfully deleted');
+          done();
+        });
+    });
+  });
 });

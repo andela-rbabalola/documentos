@@ -307,20 +307,9 @@ describe('Users Test Suite', () => {
         });
     });
 
-    it('Should allow the SuperAdmin to update a user', (done) => {
-      server.put('/users/5')
-        .set({ 'x-access-token': adminDetails.token })
-        .send({ firstName: 'updated name' })
-        .expect(201)
-        .end((err, res) => {
-          expect(res.body.message).to.equal('User successfully updated');
-          done();
-        });
-    });
-
     it('Should prevent updating to the SuperAdmin role', (done) => {
       server.put('/users/updateRole/5')
-        .set({ 'x-access-token': adminDetails.token })
+        .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 1 })
         .expect(201)
         .end((err, res) => {
@@ -328,6 +317,40 @@ describe('Users Test Suite', () => {
           done();
         });
     });
+
+    it('Should allow the SuperAdmin to update a user\'s role', (done) => {
+      server.put('/users/updateRole/5')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send({ roleId: 2 })
+        .expect(201)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('User role successfully updated');
+          done();
+        });
+    });
+
+    it('Should prevent an admin from updating a user\'s role', (done) => {
+      server.put('/users/updateRole/5')
+        .set({ 'x-access-token': adminDetails.token })
+        .send({ roleId: 2 })
+        .expect(201)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('You do not have superadmin rights');
+          done();
+        });
+    });
+
+    it('Should fail if role to update to does not exist', (done) => {
+      server.put('/users/updateRole/5')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send({ roleId: 10 })
+        .expect(404)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Unable to update to role that does not exist');
+          done();
+        });
+    });
+
 
     it('Should not allow a regular user to update another user', (done) => {
       server.put(`/users/${regularDetails.newUser.id + 1}`)

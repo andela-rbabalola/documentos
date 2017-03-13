@@ -19,8 +19,6 @@ router.route('/user/:id')
   .get(Authentication.decodeToken, Authentication.validateUser, documentController.getDocForUser);
 
 // Route to search a document
-// router.route('/search')
-//   .post(Authentication.decodeToken, documentController.searchDoc);
 router.route('/search')
   .post((req, res) => {
     res.redirect(`/search/documents/?q=${req.body.query}`);
