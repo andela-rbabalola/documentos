@@ -11,9 +11,10 @@ class Helpers {
    * @param {Object} req
    * @param {Object} res
    * @returns {Object} res object
+   * Use parse int here and in other places
    */
   static checkRoleId(req) {
-    return req.body.roleId !== 2;
+    return req.body.roleId !== '2';
   }
 
   /**
