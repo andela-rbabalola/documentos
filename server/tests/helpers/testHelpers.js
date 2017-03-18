@@ -89,6 +89,12 @@ class testHelper {
       title: 'new role'
     };
   }
+
+  static anotherRole() {
+    return {
+      title: 'test role'
+    };
+  }
 }
 
 export default testHelper;
