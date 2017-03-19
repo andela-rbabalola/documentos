@@ -4,7 +4,7 @@ import Authentication from '../middleware/authentication';
 
 const router = express.Router();
 
-
+// pagination too
 router.route('/')
   .get(Authentication.decodeToken, documentController.getDocuments)
   .post(Authentication.decodeToken, documentController.createDocument);
