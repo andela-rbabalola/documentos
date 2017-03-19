@@ -5,5 +5,11 @@ node_js:
   - "4.5.0"
   - "6.9.5"
 
+services:
+  - postgresql
+
 before_script:
-- npm install
+  - psql -c 'create database documentos_test;' -U postgres
+
+script:
+  - npm test
