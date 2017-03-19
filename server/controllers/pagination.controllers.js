@@ -1,9 +1,9 @@
 import model from '../models';
 
 /**
- * Handles pagination for getting all users
+ * Handles pagination
  */
-class UserPagination {
+class Pagination {
   /**
    * Gets all users with pagination
    *
@@ -12,13 +12,15 @@ class UserPagination {
    * @returns {Object} res object
    */
   static getUserPagination(req, res) {
+    req.query.limit = (req.query.limit > 0) ? req.query.limit : 3;
+    req.query.offset = (req.query.offset > 0) ? req.query.offset : 0;
     model.User.findAll({
-      offset: req.query.offset,
-      limit: req.query.limit
+      limit: req.query.limit,
+      offset: req.query.offset
     })
       .then(users => res.status(200)
         .send(users));
   }
 }
 
-export default UserPagination;
+export default Pagination;
