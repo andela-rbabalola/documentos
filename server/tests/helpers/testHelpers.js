@@ -44,6 +44,38 @@ class testHelper {
     };
   }
 
+  static userNoFirstName() {
+    return {
+      lastName: faker.name.lastName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+  }
+
+  static userNoLastName() {
+    return {
+      firstName: faker.name.firstName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+    };
+  }
+
+  static userNoEmail() {
+    return {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      password: faker.internet.password(),
+    };
+  }
+
+  static userNoPassword() {
+    return {
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
+      email: faker.internet.email()
+    };
+  }
+
   /**
    * Creates a dummy document
    * @returns {obj} - Object with dummy user details
