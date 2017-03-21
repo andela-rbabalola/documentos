@@ -4,9 +4,7 @@
   "description": "A full stack document management system",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all --parallel start:server open:src",
-    "start:server": "nodemon server.js --exec babel-node",
-    "open:src": "babel-node client/tools/srcServer.js",
+    "start": "babel-node server.js",
     "test": "NODE_ENV=test npm run db:test:seed && npm run thetest",
     "thetest": "NODE_ENV=test mocha ./server/tests/**/*.spec.js --timeout 20000 --compilers js:babel-register",
     "db:migrate:test:undo": "NODE_ENV=test sequelize db:migrate:undo:all",
@@ -35,10 +33,12 @@
     "open": "0.0.5",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-redux": "^5.0.3",
-    "react-router": "^4.0.0",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2",
+    "react-materialize": "^0.18.1",
+    "react-native": "^0.42.3",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.4.0",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-immutable-state-invariant": "^2.0.0",
@@ -46,6 +46,7 @@
     "sequelize": "^3.30.2",
     "sequelize-cli": "^2.5.1",
     "supertest": "^3.0.0",
+    "url-loader": "^0.5.8",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0"
@@ -60,11 +61,14 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-2": "^6.22.0",
     "babel-register": "^6.23.0",
+    "css-loader": "^0.27.3",
     "eslint": "^3.15.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.0",
-    "mocha": "^3.2.0"
+    "file-loader": "^0.10.1",
+    "mocha": "^3.2.0",
+    "style-loader": "^0.14.1"
   }
 }
