@@ -5,8 +5,8 @@ nav {
   background-color: deepskyblue;
 }
 
-.api-form {
-  margin-top: 0px;
+footer.page-footer {
+  background-color: deepskyblue;
 }
 
 img {
@@ -15,6 +15,10 @@ img {
   padding-right: 50px;
   margin-right: 50px;
   float: left;
+}
+
+.about {
+  padding-right: 20px;
 }
 
 .myForm {
