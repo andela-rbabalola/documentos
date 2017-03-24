@@ -17,10 +17,6 @@ img {
   float: left;
 }
 
-.about {
-  padding-right: 20px;
-}
-
 .myForm {
   display: inline-block;
   margin-top: 20px;
@@ -30,4 +26,25 @@ img {
 
 .btn {
   background-color: deepskyblue;
+}
+
+.text-editor {
+  margin-top: 50px;
+  margin-left: 50px;
+  width: 800px;
+}
+
+.input-field {
+  width: 200px;
+  margin-left: 50px;
+}
+
+#text {
+  width: 200px;
+  margin-left: 30px;
+}
+
+#create-doc {
+  margin-top: 100px;
+  margin-left: 300px;
 }

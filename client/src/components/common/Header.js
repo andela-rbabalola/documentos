@@ -7,7 +7,8 @@ const Header = () => (
     <div className="nav-wrapper">
       <IndexLink to="/" className="brand-logo">Documentos</IndexLink>
       <ul id="nav-mobile" className="right hide-on-med-and-down">
-        <Link to="/about"><li className="about">About</li></Link>
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/logout">Logout</Link></li>
       </ul>
     </div>
   </nav>
