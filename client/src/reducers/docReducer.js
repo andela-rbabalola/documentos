@@ -9,6 +9,11 @@ export default function docReducer(state = initialState, action) {
       ];
     case types.LOAD_DOCS_SUCCESS:
       return Object.assign({}, state, { documents: action.docs });
+    case types.GET_DOCUMENT:
+      console.log('action ', action);
+      console.log('state ', state);
+      console.log('new state ', Object.assign({}, state, { currentDoc: state.documents[action.id] }));
+      return Object.assign({}, state, { currentDoc: state.documents[action.id] });
     default:
       return state;
   }

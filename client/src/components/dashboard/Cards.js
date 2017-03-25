@@ -1,7 +1,27 @@
 import React, { PropTypes } from 'react';
-import TextEditor from './TextEditor';
+import { connect } from 'react-redux';
+// import TextEditor from './TextEditor';
+import Edit from './Edit';
+import * as docActions from '../../actions/docActions';
 
 class Cards extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showEditor: false,
+      docId: null
+    };
+    this.editDocument = this.editDocument.bind(this);
+  }
+
+  editDocument(event) {
+    event.preventDefault();
+    console.log('show editor ', this.state.showEditor);
+    this.setState({ showEditor: !this.state.showEditor });
+    this.props.dispatch(docActions.getDoc(this.props.id));
+  }
+
   render() {
     return (
       <div className="row">
@@ -16,7 +36,9 @@ class Cards extends React.Component {
                 <ul>
                   <li><a
                     href="#modal1"
-                    className="btn-floating blue">
+                    id={this.props.id}
+                    className="btn-floating blue"
+                    onClick={this.editDocument}>
                     <i className="fa fa-pencil-square-o" aria-hidden="true" /></a></li>
                   <li><a className="btn-floating red darken-1">
                     <i className="fa fa-trash-o" aria-hidden="true" /></a></li>
@@ -26,6 +48,7 @@ class Cards extends React.Component {
             <div className="card-content">
               <p>{this.props.document.docContent}</p>
             </div>
+            {this.state.showEditor ? <Edit /> : null}
           </div>
         </div>
       </div>
@@ -33,8 +56,18 @@ class Cards extends React.Component {
   }
 }
 
+
 Cards.propTypes = {
-  document: PropTypes.array.isRequired
+  document: PropTypes.object.isRequired,
+  id: PropTypes.number.isRequired,
+  dispatch: PropTypes.func.isRequired
 };
 
-export default Cards;
+const mapStateToProps = (state, ownProps) => {
+  return {
+    currentDoc: state.currentDoc
+  };
+};
+
+export default connect(mapStateToProps)(Cards);
+

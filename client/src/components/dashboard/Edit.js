@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import * as docActions from '../../actions/docActions';
 
 
-class TextEditor extends React.Component {
+class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,11 +38,10 @@ class TextEditor extends React.Component {
 
   onClick(event) {
     event.preventDefault();
-    this.props.dispatch(docActions.createDocument(this.state));
+    // this.props.dispatch(docActions.createDocument(this.state));
   }
 
   onChange(event) {
-    console.log(event.target.value)
     this.setState({ title: event.target.value });
   }
 
@@ -59,18 +58,18 @@ class TextEditor extends React.Component {
                     <input
                       id="text"
                       type="text"
-                      value=""
+                      defaultValue={this.props.currentDoc.title}
                       name="title"
                       className="validate"
                       onChange={this.onChange} />
-                    <label htmlFor="text" id="text">Title</label>
+                    {this.props.currentDoc.title ? null : <label htmlFor="text" id="text">Title</label>}
                   </div>
                 </div>
               </form>
             </div>
             <div className="col s6">
               <div className="input-field col s8">
-                <select value={this.state.select} id="selectMe">
+                <select value={this.props.currentDoc.access} id="selectMe">
                   <option value="">Choose an access type</option>
                   <option value="public">Public</option>
                   <option value="private">Private</option>
@@ -85,14 +84,14 @@ class TextEditor extends React.Component {
                 tag="textarea"
                 config={this.config}
                 id="doc-content"
-                model={this.state.docContent}
+                model={this.props.currentDoc.docContent}
                 onModelChange={this.handleModelChange} />
             </div>
             <div className="modal-footer">
               <a
                 className="waves-effect waves-light btn modal-action modal-close"
                 id="create-doc"
-                onClick={this.onClick}>SUBMIT</a>
+                onClick={this.onClick}>UPDATE</a>
             </div>
           </div>
         </div>
@@ -101,14 +100,15 @@ class TextEditor extends React.Component {
   }
 }
 
-TextEditor.propTypes = {
-  dispatch: React.PropTypes.func.isRequired
+Edit.propTypes = {
+  dispatch: React.PropTypes.func.isRequired,
+  currentDoc: React.PropTypes.object.isRequired
 };
 
 
 function mapStateToProps(state, ownProps) {
   return {
-    documents: state.documents
+    currentDoc: state.manageDocs.currentDoc
   };
 }
 
@@ -118,4 +118,4 @@ function mapStateToProps(state, ownProps) {
 //   };
 // }
 
-export default connect(mapStateToProps)(TextEditor);
+export default connect(mapStateToProps)(Edit);

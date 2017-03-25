@@ -14,9 +14,9 @@ class DashBoard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showEditor: false
+      createEditor: false
     };
-    this.onClick = this.onClick.bind(this);
+    this.createDoc = this.createDoc.bind(this);
   }
 
   componentDidMount() {
@@ -25,15 +25,16 @@ class DashBoard extends React.Component {
 
   displayDocs(document, index) {
     return (
-      <div className="col s4">
-        <Cards document={document} />
+      <div className="col s4" key={index}>
+        <Cards document={document} id={index} />
       </div>
     );
   }
 
-  onClick(event) {
+  createDoc(event) {
     event.preventDefault();
-    this.setState({ showEditor: !this.state.showEditor });
+    console.log(this.state.createEditor);
+    this.setState({ createEditor: !this.state.createEditor });
   }
   render() {
     return (
@@ -41,12 +42,12 @@ class DashBoard extends React.Component {
         <div className="fixed-action-btn horizontal">
           <a
             className="btn-floating btn-large red"
-            onClick={this.onClick}
+            onClick={this.createDoc}
             href="#modal1">
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </a>
         </div>
-        {this.state.showEditor ? <TextEditor /> : null}
+        {this.state.createEditor ? <TextEditor /> : null}
         <div className="row">
           {this.props.documents.map(this.displayDocs)}
         </div>

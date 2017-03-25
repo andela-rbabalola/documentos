@@ -16,20 +16,25 @@ export function loadDocsSuccess(docs) {
 }
 
 export function createDocument(document) {
-  return (dispatch) => {
-    return axios.post('/documents', document).then((res) => {
-      console.log(res.data);
-    });
-  };
+  return dispatch => axios.post('/documents', document).then((res) => {
+    console.log(res.data);
+  });
 }
 
 // create action for error handling
 export function loadDocuments() {
-  return (dispatch) => {
-    return axios.get('/documents').then((res) => {
-      console.log('hello', res);
-      dispatch(loadDocsSuccess(res.data));
-    });
+  return dispatch => axios.get('/documents', {
+    headers: {
+      'x-access-token': localStorage.getItem('JWT') } }).then((res) => {
+        console.log('hello', res);
+        dispatch(loadDocsSuccess(res.data));
+      });
+}
+
+export function getDoc(id) {
+  return {
+    type: types.GET_DOCUMENT,
+    id
   };
 }
 
