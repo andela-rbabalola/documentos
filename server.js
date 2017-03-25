@@ -27,11 +27,6 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/src/index.html'));
-});
-
-app.use('/', home);
 app.use('/users', userRoute);
 app.use('/roles', roleRoute);
 app.use('/documents', documentRoute);
@@ -40,6 +35,10 @@ app.use('/search', searchRoute);
 // app.listen(port, () => {
 //   console.log(`Server listening on port ${port}`);
 // });
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './client/src/index.html'));
+});
 
 app.listen(port, (err) => {
   if (err) {

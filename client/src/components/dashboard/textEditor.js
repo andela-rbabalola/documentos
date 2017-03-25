@@ -3,7 +3,7 @@ import React from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
 import * as docActions from '../../actions/docActions';
 
 
@@ -38,7 +38,6 @@ class TextEditor extends React.Component {
 
   onClick(event) {
     event.preventDefault();
-    console.log(this.state);
     this.props.dispatch(docActions.createDocument(this.state));
   }
 
@@ -101,6 +100,7 @@ class TextEditor extends React.Component {
 }
 
 TextEditor.propTypes = {
+  dispatch: React.PropTypes.func.isRequired
 };
 
 
@@ -116,5 +116,4 @@ function mapStateToProps(state, ownProps) {
 //   };
 // }
 
-// export default connect(mapStateToProps, { createDocument })(createDocument);
 export default connect(mapStateToProps)(TextEditor);

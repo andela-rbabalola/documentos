@@ -48,3 +48,14 @@ img {
   margin-top: 20px;
   margin-left: 250px;
 }
+
+.card {
+  margin-top: 30px;
+  margin-left: 15px;
+  width: 300px;
+  height: 200px;
+}
+
+.show-docs {
+  position: relative !important;
+}

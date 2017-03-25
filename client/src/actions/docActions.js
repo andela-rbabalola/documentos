@@ -8,6 +8,13 @@ export function setDocument(document) {
   };
 }
 
+export function loadDocsSuccess(docs) {
+  return {
+    type: types.LOAD_DOCS_SUCCESS,
+    docs
+  };
+}
+
 export function createDocument(document) {
   return (dispatch) => {
     return axios.post('/documents', document).then((res) => {
@@ -15,3 +22,22 @@ export function createDocument(document) {
     });
   };
 }
+
+// create action for error handling
+export function loadDocuments() {
+  return (dispatch) => {
+    return axios.get('/documents').then((res) => {
+      console.log('hello', res);
+      dispatch(loadDocsSuccess(res.data));
+    });
+  };
+}
+
+// loadDocument action
+// after getting doc
+//    dispatch(loadDocumentSuccess(doc))
+
+
+//    loadDocumentSuccess(doc){
+//   retrun {type: document}
+// }

@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import signin from './signinReducer';
-import createDoc from './docReducer';
+import manageDocs from './docReducer';
 
 // ADD REDUCER FOR DOCS
 
 const rootReducer = combineReducers({
   signin,
-  createDoc
+  manageDocs
 });
 
 export default rootReducer;
