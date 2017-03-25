@@ -1,7 +1,10 @@
 /* eslint require-jsdoc: "off"  */
 import React from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
-import initialState from '../../reducers/initialState';
+import jwt from 'jsonwebtoken';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as docActions from '../../actions/docActions';
 
 
 class TextEditor extends React.Component {
@@ -11,7 +14,7 @@ class TextEditor extends React.Component {
       title: '',
       docContent: '',
       access: '',
-      select: ''
+      userId: jwt.decode(localStorage.getItem('JWT')).UserId
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);
@@ -30,12 +33,13 @@ class TextEditor extends React.Component {
   }
 
   handleChange(event, index, value) {
-    this.setState({ select: event.target.value });
+    this.setState({ access: event.target.value });
   }
 
   onClick(event) {
     event.preventDefault();
     console.log(this.state);
+    this.props.dispatch(docActions.createDocument(this.state));
   }
 
   onChange(event) {
@@ -45,37 +49,36 @@ class TextEditor extends React.Component {
   render() {
     return (
       <div>
-        <div className="row">
-          <div className="col s6">
-            <form className="col s6">
-              <div className="row">
-                <div className="input-field col s12">
-                  <input
-                    id="text"
-                    type="text"
-                    name="title"
-                    className="validate"
-                    onChange={this.onChange} />
-                  <label htmlFor="text" id="text">Title</label>
+        <div id="modal1" className="modal">
+          <h4 className="center">Document</h4>
+          <div className="row">
+            <div className="col s6">
+              <form className="col s6">
+                <div className="row">
+                  <div className="input-field col s12">
+                    <input
+                      id="text"
+                      type="text"
+                      name="title"
+                      className="validate"
+                      onChange={this.onChange} />
+                    <label htmlFor="text" id="text">Title</label>
+                  </div>
                 </div>
+              </form>
+            </div>
+            <div className="col s6">
+              <div className="input-field col s8">
+                <select value={this.state.select} id="selectMe">
+                  <option value="">Choose an access type</option>
+                  <option value="public">Public</option>
+                  <option value="private">Private</option>
+                  <option value="role">Role</option>
+                </select>
               </div>
-            </form>
-          </div>
-          <div className="col s6">
-            <div className="input-field col s5">
-              <select value={this.state.select} id="selectMe">
-                <option value="">Choose an access type</option>
-                <option value="Public">Public</option>
-                <option value="Private">Private</option>
-                <option value="Role">Role</option>
-              </select>
             </div>
           </div>
-        </div>
-        <div id="modal1" className="modal">
           <div className="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
             <div className="text-editor" id="editor">
               <FroalaEditor
                 tag="textarea"
@@ -83,16 +86,13 @@ class TextEditor extends React.Component {
                 id="doc-content"
                 model={this.state.docContent}
                 onModelChange={this.handleModelChange} />
-              <div>
-              </div>
-              <div className="modal-footer">
-                <a href="#!" className="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-              </div>
             </div>
-            <a
-              className="waves-effect waves-light btn"
-              id="create-doc"
-              onClick={this.onClick}>CREATE</a>
+            <div className="modal-footer">
+              <a
+                className="waves-effect waves-light btn modal-action modal-close"
+                id="create-doc"
+                onClick={this.onClick}>SUBMIT</a>
+            </div>
           </div>
         </div>
       </div>
@@ -100,4 +100,21 @@ class TextEditor extends React.Component {
   }
 }
 
-export default TextEditor;
+TextEditor.propTypes = {
+};
+
+
+function mapStateToProps(state, ownProps) {
+  return {
+    documents: state.documents
+  };
+}
+
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     actions: bindActionCreators(docActions, dispatch)
+//   };
+// }
+
+// export default connect(mapStateToProps, { createDocument })(createDocument);
+export default connect(mapStateToProps)(TextEditor);
