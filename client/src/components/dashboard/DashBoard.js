@@ -13,9 +13,6 @@ import * as docActions from '../../actions/docActions';
 class DashBoard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      createEditor: false
-    };
     this.createDoc = this.createDoc.bind(this);
   }
 
@@ -33,8 +30,6 @@ class DashBoard extends React.Component {
 
   createDoc(event) {
     event.preventDefault();
-    console.log(this.state.createEditor);
-    this.setState({ createEditor: !this.state.createEditor });
   }
   render() {
     return (
@@ -43,11 +38,11 @@ class DashBoard extends React.Component {
           <a
             className="btn-floating btn-large red"
             onClick={this.createDoc}
-            href="#modal1">
+            href="#createModal">
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </a>
         </div>
-        {this.state.createEditor ? <TextEditor /> : null}
+        <TextEditor />
         <div className="row">
           {this.props.documents.map(this.displayDocs)}
         </div>

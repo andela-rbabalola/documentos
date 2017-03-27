@@ -35,7 +35,7 @@ class Cards extends React.Component {
                 </a>
                 <ul>
                   <li><a
-                    href="#modal1"
+                    href="#editModal"
                     id={this.props.id}
                     className="btn-floating blue"
                     onClick={this.editDocument}>

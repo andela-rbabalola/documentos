@@ -30,6 +30,7 @@ class TextEditor extends React.Component {
 
   handleModelChange(docContent) {
     this.setState({ docContent });
+    console.log('docContent ', this.state);
   }
 
   handleChange(event, index, value) {
@@ -42,14 +43,14 @@ class TextEditor extends React.Component {
   }
 
   onChange(event) {
-    console.log(event.target.value)
     this.setState({ title: event.target.value });
+    console.log(event.target.value);
   }
 
   render() {
     return (
       <div>
-        <div id="modal1" className="modal">
+        <div id="createModal" className="modal">
           <h4 className="center">Document</h4>
           <div className="row">
             <div className="col s6">

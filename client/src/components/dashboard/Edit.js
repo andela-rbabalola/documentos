@@ -26,10 +26,7 @@ class Edit extends React.Component {
     $('select').material_select();
     $('#selectMe').on('change', this.handleChange);
     $('.modal').modal();
-  }
-
-  handleModelChange(docContent) {
-    this.setState({ docContent });
+    $('#doc-content').froalaEditor('html.set', 'My custom paragraph.');
   }
 
   handleChange(event, index, value) {
@@ -45,10 +42,15 @@ class Edit extends React.Component {
     this.setState({ title: event.target.value });
   }
 
+  handleModelChange(docContent) {
+    this.setState({ docContent });
+    console.log('state docContent ', this.state);
+  }
+
   render() {
     return (
       <div>
-        <div id="modal1" className="modal">
+        <div id="editModal" className="modal">
           <h4 className="center">Document</h4>
           <div className="row">
             <div className="col s6">
@@ -85,7 +87,8 @@ class Edit extends React.Component {
                 config={this.config}
                 id="doc-content"
                 model={this.props.currentDoc.docContent}
-                onModelChange={this.handleModelChange} />
+                onModelChange={this.handleModelChange}
+                onChange={this.updateDoc} />
             </div>
             <div className="modal-footer">
               <a
