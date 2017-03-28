@@ -30,7 +30,6 @@ class TextEditor extends React.Component {
 
   handleModelChange(docContent) {
     this.setState({ docContent });
-    console.log('docContent ', this.state);
   }
 
   handleChange(event, index, value) {
@@ -43,8 +42,8 @@ class TextEditor extends React.Component {
   }
 
   onChange(event) {
+    event.preventDefault();
     this.setState({ title: event.target.value });
-    console.log(event.target.value);
   }
 
   render() {
@@ -60,7 +59,6 @@ class TextEditor extends React.Component {
                     <input
                       id="text"
                       type="text"
-                      value=""
                       name="title"
                       className="validate"
                       onChange={this.onChange} />

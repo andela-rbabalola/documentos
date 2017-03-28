@@ -1,12 +1,12 @@
 import axios from 'axios';
 import * as types from './actionTypes';
 
-export function setDocument(document) {
-  return {
-    type: types.CREATE_DOC_SUCCESS,
-    document
-  };
-}
+// export function createDocumentSuccess(data) {
+//   return {
+//     type: types.CREATE_DOC_SUCCESS,
+//     data
+//   };
+// }
 
 export function loadDocsSuccess(docs) {
   return {
@@ -15,20 +15,27 @@ export function loadDocsSuccess(docs) {
   };
 }
 
-export function createDocument(document) {
-  return dispatch => axios.post('/documents', document).then((res) => {
-    console.log(res.data);
-  });
-}
 
 // create action for error handling
 export function loadDocuments() {
   return dispatch => axios.get('/documents', {
     headers: {
       'x-access-token': localStorage.getItem('JWT') } }).then((res) => {
-        console.log('hello', res);
         dispatch(loadDocsSuccess(res.data));
       });
+}
+
+export function createDocument(document) {
+  return dispatch => axios.post('/documents', document).then((res) => {
+    // call loadDocuments so that we load the documents
+    // again after creating a document
+    // check if the documents exists before creating
+    if (res.data.newDocument) {
+      loadDocuments();
+    } else {
+      // handle failure cases here
+    }
+  });
 }
 
 export function getDoc(id) {
@@ -37,12 +44,3 @@ export function getDoc(id) {
     id
   };
 }
-
-// loadDocument action
-// after getting doc
-//    dispatch(loadDocumentSuccess(doc))
-
-
-//    loadDocumentSuccess(doc){
-//   retrun {type: document}
-// }

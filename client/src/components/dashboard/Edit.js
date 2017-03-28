@@ -14,6 +14,7 @@ class Edit extends React.Component {
       title: '',
       docContent: '',
       access: '',
+      model: Object.assign({}, props.currentDoc).docContent,
       userId: jwt.decode(localStorage.getItem('JWT')).UserId
     };
     this.handleChange = this.handleChange.bind(this);
@@ -36,14 +37,15 @@ class Edit extends React.Component {
   onClick(event) {
     event.preventDefault();
     // this.props.dispatch(docActions.createDocument(this.state));
+    // handle updating a document
   }
 
   onChange(event) {
     this.setState({ title: event.target.value });
   }
 
-  handleModelChange(docContent) {
-    this.setState({ docContent });
+  handleModelChange(model) {
+    this.setState({ model });
     console.log('state docContent ', this.state);
   }
 
@@ -86,9 +88,8 @@ class Edit extends React.Component {
                 tag="textarea"
                 config={this.config}
                 id="doc-content"
-                model={this.props.currentDoc.docContent}
-                onModelChange={this.handleModelChange}
-                onChange={this.updateDoc} />
+                model={this.state.model}
+                onModelChange={this.handleModelChange} />
             </div>
             <div className="modal-footer">
               <a

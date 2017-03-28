@@ -58,7 +58,7 @@ DashBoard.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    documents: state.manageDocs.documents
+    documents: state.documents.documents
   };
 }
 

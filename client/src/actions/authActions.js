@@ -5,7 +5,7 @@ import setAuthorizationToken from '../utils/setAuthorization';
 
 export function setCurrentUser(user) {
   return {
-    type: types.SET_CURRENT_USER,
+    type: types.LOGIN_SUCCESS,
     user
   };
 }
