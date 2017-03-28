@@ -6,18 +6,15 @@ import 'froala-editor/js/froala_editor.pkgd.min';
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'font-awesome/css/font-awesome.css';
-import TextEditor from './TextEditor';
+import TextEditor from './textEditor';
 import Cards from './Cards';
 import * as docActions from '../../actions/docActions';
+import * as userActions from '../../actions/userActions';
 
 class DashBoard extends React.Component {
   constructor(props) {
     super(props);
     this.createDoc = this.createDoc.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.dispatch(docActions.loadDocuments());
   }
 
   displayDocs(document, index) {
@@ -26,6 +23,14 @@ class DashBoard extends React.Component {
         <Cards document={document} id={index} />
       </div>
     );
+  }
+
+  componentDidMount() {
+    // Get documents
+    this.props.dispatch(docActions.loadDocuments());
+    // Get user's details
+    // this.props.dispatch(localStorage.getItem('JWT'));
+    this.props.dispatch(userActions.setUserInState(localStorage.getItem('JWT')));
   }
 
   createDoc(event) {
@@ -57,8 +62,9 @@ DashBoard.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
+  console.log('state', state);
   return {
-    documents: state.documents.documents
+    documents: state.documents.allDocuments
   };
 }
 

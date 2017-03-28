@@ -27,13 +27,15 @@ export function loadDocuments() {
 
 export function createDocument(document) {
   return dispatch => axios.post('/documents', document).then((res) => {
-    // call loadDocuments so that we load the documents
-    // again after creating a document
-    // check if the documents exists before creating
+    /**
+     * call loadDocuments so that we load the documents again
+     * after creating a document check if the documents exists
+     * before creating
+     */
     if (res.data.newDocument) {
       loadDocuments();
     } else {
-      // handle failure cases here
+      // handle failure cases
     }
   });
 }

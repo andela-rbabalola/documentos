@@ -46,7 +46,6 @@ class Edit extends React.Component {
 
   handleModelChange(model) {
     this.setState({ model });
-    console.log('state docContent ', this.state);
   }
 
   render() {
@@ -112,7 +111,7 @@ Edit.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    currentDoc: state.manageDocs.currentDoc
+    currentDoc: state.documents.currentDoc
   };
 }
 

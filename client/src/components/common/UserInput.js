@@ -3,15 +3,14 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 import docImage from '../../images/dms.jpg';
-import { login } from '../../actions/authActions';
+import { login } from '../../actions/userActions';
 
 class UserInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       user: {},
-      errors: {},
-      isLoading: false
+      errors: {}
     };
 
     this.onClick = this.onClick.bind(this);
@@ -23,13 +22,10 @@ class UserInput extends React.Component {
     event.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
-      this.props.login(this.state).then(
+      this.props.login(this.state.user).then(
         res => this.context.router.push('/dashboard'),
         err => toastr.error('Username or password is wrong')
       );
-    } else {
-      toastr.error(this.state.errors.error);
-      return null;
     }
   }
 
@@ -87,7 +83,7 @@ class UserInput extends React.Component {
               </div>
               <div className="input-field col s12">
                 <h6 className="left small">Do not have an account yet?
-                  <Link to="/signup">Sign up</Link></h6>
+                  <Link to="/signup"> Sign up</Link></h6>
               </div>
             </div>
           </form>

@@ -96,7 +96,8 @@ class UserController {
           .then((newUser) => {
             const token = jwt.sign({
               UserId: newUser.id,
-              RoleId: newUser.roleId
+              RoleId: newUser.roleId,
+              email: newUser.email
             }, secret, { expiresIn: '3 days' });
             return res.status(201)
               .send({ message: 'New user created', newUser, token, expiresIn: '3 days' });
@@ -132,10 +133,11 @@ class UserController {
         // Create token
         const token = jwt.sign({
           UserId: oldUser.id,
-          RoleId: oldUser.roleId
+          RoleId: oldUser.roleId,
+          email: oldUser.email
         }, secret, { expiresIn: '3 days' });
         return res.status(200)
-          .send({ message: 'Signin successful', token, success: true });
+          .send({ message: 'Signin successful', token, email: oldUser.email, success: true });
       });
   }
 
