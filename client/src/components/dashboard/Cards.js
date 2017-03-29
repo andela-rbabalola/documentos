@@ -45,7 +45,7 @@ class Cards extends React.Component {
               </div>
             </div>
             <div className="card-content">
-              <p>{this.props.document.docContent}</p>
+              <p>{this.props.document.title}</p>
             </div>
             {this.state.showEditor ? <Edit /> : null}
           </div>

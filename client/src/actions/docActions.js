@@ -8,29 +8,22 @@ export function loadDocsSuccess(docs) {
   };
 }
 
-
 // create action for error handling
 export function loadDocuments() {
   return dispatch => axios.get('/documents', {
     headers: {
-      'x-access-token': localStorage.getItem('JWT') } }).then((res) => {
-        dispatch(loadDocsSuccess(res.data));
-      });
+      'x-access-token': localStorage.getItem('JWT')
+    }
+  }).then((res) => {
+    dispatch(loadDocsSuccess(res.data));
+  });
 }
 
 export function createDocument(document) {
-  return dispatch => axios.post('/documents', document).then((res) => {
-    /**
-     * call loadDocuments so that we load the documents again
-     * after creating a document check if the documents exists
-     * before creating
-     */
-    console.log('response', res.data);
-    if (res.data.newDocument) {
-      dispatch(loadDocuments());
-    } else {
-      // handle failure cases
-    }
+  return dispatch => axios.post('/documents', document).then(() => {
+    dispatch(loadDocuments());
+  }).catch((err) => {
+    throw (err);
   });
 }
 

@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 // import { bindActionCreators } from 'redux';
-import * as docActions from '../../actions/docActions';
+import { createDocument } from '../../actions/docActions';
 
 
 class TextEditor extends React.Component {
@@ -33,15 +33,24 @@ class TextEditor extends React.Component {
     this.setState({ docContent });
   }
 
-  handleChange(event, index, value) {
+  handleChange(event) {
     this.setState({ access: event.target.value });
   }
 
   onClick(event) {
     event.preventDefault();
-    console.log('state', this.state);
-    this.props.dispatch(docActions.createDocument(this.state));
-    toastr.success('Document created');
+    // validate first
+    if (this.state.title === '' || this.state.access === '') {
+      toastr.error('Please enter the required fields');
+    } else {
+      this.props
+        .createDocument(this.state)
+        .then(() => {
+          toastr.success('Document created');
+        }).catch(() => {
+          toastr.error('An error occured creating the document');
+        });
+    }
   }
 
   onChange(event) {
@@ -104,7 +113,7 @@ class TextEditor extends React.Component {
 }
 
 TextEditor.propTypes = {
-  dispatch: React.PropTypes.func.isRequired
+  createDocument: React.PropTypes.func.isRequired
 };
 
 
@@ -120,4 +129,4 @@ function mapStateToProps(state, ownProps) {
 //   };
 // }
 
-export default connect(mapStateToProps)(TextEditor);
+export default connect(null, { createDocument })(TextEditor);
