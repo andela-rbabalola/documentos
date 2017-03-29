@@ -10,8 +10,8 @@
     "db:migrate:test:undo": "NODE_ENV=test sequelize db:migrate:undo:all",
     "db:migrate:test": "NODE_ENV=test sequelize db:migrate",
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helpers/seedHelpers",
-    "cover": "babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha server/tests/**/*.spec.js",
-    "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
+    "cover": "babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha ./server/tests/**/*.spec.js",
+    "coveralls": "npm test -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "author": "Rotimi Babalola",
   "license": "ISC",
