@@ -35,6 +35,14 @@ export function loadDocuments() {
   });
 }
 
+export function deleteDocument(id) {
+  return dispatch => axios.delete(`/documents/${id}`).then(() => {
+    dispatch(loadDocuments());
+  }).catch((err) => {
+    throw (err);
+  });
+}
+
 export function createDocument(document) {
   return dispatch => axios.post('/documents', document).then(() => {
     dispatch(loadDocuments());

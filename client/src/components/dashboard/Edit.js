@@ -2,6 +2,7 @@
 import React from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
 import jwt from 'jsonwebtoken';
+import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { updateDocument } from '../../actions/docActions';
 
@@ -29,6 +30,18 @@ class Edit extends React.Component {
     $('#doc-content').froalaEditor('html.set', 'My custom paragraph.');
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log('next', nextProps);
+    if (this.props.currentDoc.id !== nextProps.currentDoc.id) {
+      this.setState({
+        title: Object.assign({}, nextProps.currentDoc).title,
+        docContent: Object.assign({}, nextProps.currentDoc).docContent,
+        access: Object.assign({}, nextProps.currentDoc).access,
+        docId: nextProps.currentDoc.id
+      });
+    }
+  }
+
   handleChange(event) {
     this.setState({ access: event.target.value });
   }
@@ -36,7 +49,13 @@ class Edit extends React.Component {
   // event handler to update the document
   onClick(event) {
     event.preventDefault();
-    this.props.updateDocument(this.state);
+    this.props
+      .updateDocument(this.state)
+      .then(() => {
+        toastr.success('Document successfully updated');
+      }).catch(() => {
+        toastr.error('An error occured updating the document');
+      });
   }
 
   onChange(event) {
@@ -60,18 +79,17 @@ class Edit extends React.Component {
                     <input
                       id="text-edit"
                       type="text"
-                      defaultValue={this.props.currentDoc.title}
+                      defaultValue={this.state.title}
                       name="title"
                       className="validate"
                       onChange={this.onChange} />
-                    {this.props.currentDoc.title ? null : <label htmlFor="text" id="default-text">Title</label>}
                   </div>
                 </div>
               </form>
             </div>
             <div className="col s6">
               <div className="input-field col s8">
-                <select value={this.props.currentDoc.access} id="selectMe-edit">
+                <select value={this.state.access} id="selectMe-edit">
                   <option value="">Choose an access type</option>
                   <option value="public">Public</option>
                   <option value="private">Private</option>

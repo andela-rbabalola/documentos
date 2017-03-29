@@ -12,12 +12,18 @@ class Cards extends React.Component {
       showEditor: false,
     };
     this.editDocument = this.editDocument.bind(this);
+    this.deleteDocument = this.deleteDocument.bind(this);
   }
 
   editDocument(event) {
     event.preventDefault();
     this.setState({ showEditor: !this.state.showEditor });
     this.props.dispatch(docActions.getDoc(this.props.id));
+  }
+
+  deleteDocument(event) {
+    event.preventDefault();
+    this.props.dispatch(docActions.deleteDocument(this.props.document.id));
   }
 
   render() {
@@ -38,7 +44,9 @@ class Cards extends React.Component {
                     className="btn-floating blue"
                     onClick={this.editDocument}>
                     <i className="fa fa-pencil-square-o" aria-hidden="true" /></a></li>
-                  <li><a className="btn-floating red darken-1">
+                  <li><a
+                    onClick={this.deleteDocument}
+                    className="btn-floating red darken-1">
                     <i className="fa fa-trash-o" aria-hidden="true" /></a></li>
                 </ul>
               </div>
@@ -63,7 +71,7 @@ Cards.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    currentDoc: state.currentDoc
+    currentDoc: state.documents.currentDoc
   };
 };
 
