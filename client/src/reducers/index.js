@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import users from './userReducer';
 import documents from './docReducer';
-import flashMessages from './flashMessages';
+import flashMessages from './flashReducer';
 
 // ADD REDUCER FOR DOCS
 

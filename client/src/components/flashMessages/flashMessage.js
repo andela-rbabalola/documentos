@@ -20,12 +20,14 @@ class FlashMessage extends React.Component {
             id="card-alert"
             className={classnames('card', {
               green: type === 'success',
-              red: type === 'error'
+              pink: type === 'error'
             })}>
             <div className="card-content white-text">
               <p>{text}</p>
-              <button type="button"
-                onClick={this.onClick} className="close right">
+              <button
+                type="button"
+                onClick={this.onClick}
+                className="close right">
                 <span>&times;</span>
               </button>
             </div>
