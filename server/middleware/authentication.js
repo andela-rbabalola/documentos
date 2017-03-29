@@ -16,7 +16,7 @@ class Authentication {
    * @returns {Object} res object
    */
   static decodeToken(req, res, next) {
-    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const token = req.body.token || req.headers.authorization || req.headers['x-access-token'];
     // If a token is not supplied, return an error
     if (!token) {
       return res.status(401)

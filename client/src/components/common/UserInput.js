@@ -24,7 +24,7 @@ class UserInput extends React.Component {
       this.setState({ errors: {}, isLoading: true });
       this.props.login(this.state.user).then(
         res => this.context.router.push('/dashboard'),
-        err => toastr.error('Username or password is wrong')
+        err => toastr.error('Incorrect login details')
       );
     }
   }

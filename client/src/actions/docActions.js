@@ -1,13 +1,6 @@
 import axios from 'axios';
 import * as types from './actionTypes';
 
-// export function createDocumentSuccess(data) {
-//   return {
-//     type: types.CREATE_DOC_SUCCESS,
-//     data
-//   };
-// }
-
 export function loadDocsSuccess(docs) {
   return {
     type: types.LOAD_DOCS_SUCCESS,
@@ -32,8 +25,9 @@ export function createDocument(document) {
      * after creating a document check if the documents exists
      * before creating
      */
+    console.log('response', res.data);
     if (res.data.newDocument) {
-      loadDocuments();
+      dispatch(loadDocuments());
     } else {
       // handle failure cases
     }

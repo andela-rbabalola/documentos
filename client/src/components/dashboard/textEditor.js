@@ -3,6 +3,7 @@ import React from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
+import toastr from 'toastr';
 // import { bindActionCreators } from 'redux';
 import * as docActions from '../../actions/docActions';
 
@@ -13,8 +14,8 @@ class TextEditor extends React.Component {
     this.state = {
       title: '',
       docContent: '',
-      access: ''
-      // userId: jwt.decode(localStorage.getItem('JWT')).UserId
+      access: '',
+      userId: jwt.decode(localStorage.getItem('JWT')).UserId
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);
@@ -38,7 +39,9 @@ class TextEditor extends React.Component {
 
   onClick(event) {
     event.preventDefault();
+    console.log('state', this.state);
     this.props.dispatch(docActions.createDocument(this.state));
+    toastr.success('Document created');
   }
 
   onChange(event) {

@@ -14,7 +14,6 @@ import * as userActions from '../../actions/userActions';
 class DashBoard extends React.Component {
   constructor(props) {
     super(props);
-    this.createDoc = this.createDoc.bind(this);
   }
 
   displayDocs(document, index) {
@@ -33,10 +32,6 @@ class DashBoard extends React.Component {
     }
   }
 
-  createDoc(event) {
-    event.preventDefault();
-    // handle this
-  }
   render() {
     return (
       <div>
@@ -48,7 +43,8 @@ class DashBoard extends React.Component {
             <i className="fa fa-pencil-square-o" aria-hidden="true" />
           </a>
         </div>
-        <TextEditor />
+        {/* Render the TextEditor component only when a user is signed in*/}
+        {localStorage.getItem('JWT') ? <TextEditor /> : null}
         <div className="row">
           {this.props.documents.map(this.displayDocs)}
         </div>
