@@ -31,7 +31,6 @@ class Edit extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('next', nextProps);
     if (this.props.currentDoc.id !== nextProps.currentDoc.id) {
       this.setState({
         title: Object.assign({}, nextProps.currentDoc).title,

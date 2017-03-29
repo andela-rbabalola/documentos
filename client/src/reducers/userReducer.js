@@ -8,7 +8,7 @@ export default function userReducer(state = initialState.manageUser, action) {
       return Object.assign({}, state,
         {
           user: action.user
-        }, { isAuthenticated: !isEmpty(action.user) });
+        }, { isAuthenticated: !isEmpty(action.user), isSuperAdmin: action.isSuperAdmin });
     case types.SIGNUP_SUCCESS:
       return Object.assign({}, state,
         {
@@ -22,8 +22,9 @@ export default function userReducer(state = initialState.manageUser, action) {
     case types.LOGOUT_USER:
       return Object.assign({}, state,
         {
+          user: {},
           currentUser: {},
-        }, { isAuthenticated: false });
+        }, { isAuthenticated: action.isAuthenticated, isSuperAdmin: action.isSuperAdmin });
     case types.REAUTHENTICATE:
       return Object.assign({}, state, { isAuthenticated: action.isAuthenticated });
     default:

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import TextEditor from './TextEditor';
+import toastr from 'toastr';
 import Edit from './Edit';
 import * as docActions from '../../actions/docActions';
 
@@ -23,7 +23,12 @@ class Cards extends React.Component {
 
   deleteDocument(event) {
     event.preventDefault();
-    this.props.dispatch(docActions.deleteDocument(this.props.document.id));
+    this.props.dispatch(docActions
+      .deleteDocument(this.props.document.id)).then(() => {
+        toastr.success('Document successfully deleted');
+      }).catch(() => {
+        toastr.error('You cannot delete this document');
+      });
   }
 
   render() {
