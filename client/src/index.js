@@ -14,12 +14,8 @@ import '../../node_modules/material-icons/css/material-icons.css';
 import './styles/styles.css';
 
 const store = configureStore();
-console.log('store', store.getState());
-console.log('local', typeof localStorage.getItem('isAuthenticated'));
 if ((localStorage.getItem('isAuthenticated')) === 'true') {
-  // dispatch action here
-  // state.user.isAuthenticated = true;
-  console.log('I got here');
+  // If the user is already authenticated, dispatch this action
   store.dispatch(reauthenticate());
 }
 

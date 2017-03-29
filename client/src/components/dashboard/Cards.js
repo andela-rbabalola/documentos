@@ -17,7 +17,6 @@ class Cards extends React.Component {
 
   editDocument(event) {
     event.preventDefault();
-    console.log('show editor ', this.state.showEditor);
     this.setState({ showEditor: !this.state.showEditor });
     this.props.dispatch(docActions.getDoc(this.props.id));
   }

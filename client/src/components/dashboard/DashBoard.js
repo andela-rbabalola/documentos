@@ -64,7 +64,6 @@ DashBoard.propTypes = {
 };
 
 function mapStateToProps(state, ownProps) {
-  console.log('state', state);
   return {
     documents: state.documents.allDocuments,
     isAuthenticated: state.users.isAuthenticated
