@@ -100,7 +100,8 @@ class DocumentsController {
         return foundDoc
           .update({
             title: req.body.title || foundDoc.title,
-            text: req.body.text || foundDoc.text
+            docContent: req.body.docContent || foundDoc.docContent,
+            access: req.body.access || foundDoc.access
           }).then(res.status(201)
             .send({ message: 'Document successfully updated', foundDoc }))
           // handle errors

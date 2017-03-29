@@ -8,6 +8,22 @@ export function loadDocsSuccess(docs) {
   };
 }
 
+export function getDoc(id) {
+  return {
+    type: types.GET_DOCUMENT,
+    id
+  };
+}
+
+// updated is an object containing the updated document
+export function updateDocumentSuccess(updated) {
+  return {
+    type: types.UPDATE_DOC_SUCCESS,
+    updated
+  };
+}
+
+
 // create action for error handling
 export function loadDocuments() {
   return dispatch => axios.get('/documents', {
@@ -27,9 +43,11 @@ export function createDocument(document) {
   });
 }
 
-export function getDoc(id) {
-  return {
-    type: types.GET_DOCUMENT,
-    id
-  };
+export function updateDocument(updatedDocument) {
+  return dispatch => axios.put(`/documents/${updatedDocument.docId}`, updatedDocument).then(() => {
+    dispatch(loadDocuments());
+  }).catch((err) => {
+    throw (err);
+  });
 }
+

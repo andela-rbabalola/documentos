@@ -10,7 +10,6 @@ class Cards extends React.Component {
     super(props);
     this.state = {
       showEditor: false,
-      docId: null
     };
     this.editDocument = this.editDocument.bind(this);
   }
