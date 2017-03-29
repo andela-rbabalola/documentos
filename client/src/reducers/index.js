@@ -2,12 +2,12 @@ import { combineReducers } from 'redux';
 import users from './userReducer';
 import documents from './docReducer';
 import flashMessages from './flashReducer';
-
-// ADD REDUCER FOR DOCS
+import roles from './rolesReducer';
 
 const rootReducer = combineReducers({
   users,
   documents,
+  roles,
   flashMessages
 });
 

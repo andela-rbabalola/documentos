@@ -19,9 +19,14 @@ import './styles/styles.css';
 const store = configureStore();
 if ((localStorage.getItem('isAuthenticated')) === 'true') {
   // If the user is already authenticated, dispatch this action
-  store.dispatch(reauthenticate());
-  setAuthorizationToken(localStorage.getItem('JWT'));
-  axios.defaults.headers.common['x-access-token'] = localStorage.jwtToken;
+  if ((localStorage.getItem('SuperAdmin')) === 'true') {
+    const isSuperAdmin = true;
+    store.dispatch(reauthenticate(isSuperAdmin));
+  } else {
+    store.dispatch(reauthenticate());
+    setAuthorizationToken(localStorage.getItem('JWT'));
+    axios.defaults.headers.common['x-access-token'] = localStorage.jwtToken;
+  }
 }
 
 render(

@@ -24,10 +24,17 @@ export function setUserSuccess(userDetails) {
   };
 }
 
-export function reauthenticateUser() {
+export function reauthenticateUser(isSuperAdmin) {
+  if (isSuperAdmin === undefined) {
+    return {
+      type: types.REAUTHENTICATE,
+      isAuthenticated: true
+    };
+  }
   return {
     type: types.REAUTHENTICATE,
-    isAuthenticated: true
+    isAuthenticated: true,
+    isSuperAdmin
   };
 }
 
@@ -51,6 +58,9 @@ export function login(user) {
       const token = res.data.token;
       axios.defaults.headers.common['x-access-token'] = token;
       localStorage.setItem('JWT', token);
+      if (jwt.decode(token).RoleId === 1) {
+        localStorage.setItem('SuperAdmin', true);
+      }
       localStorage.setItem('isAuthenticated', true);
       axios.defaults.headers.common['x-access-token'] = localStorage.getItem('JWT');
       dispatch(loginUserSuccess({
@@ -61,9 +71,14 @@ export function login(user) {
   };
 }
 
-export function reauthenticate() {
+// isSuperAdmin is a boolean indicating if the user is a superadmin or not
+export function reauthenticate(isSuperAdmin) {
   return (dispatch) => {
-    dispatch(reauthenticateUser());
+    if (isSuperAdmin === undefined) {
+      dispatch(reauthenticateUser());
+    } else {
+      dispatch(reauthenticateUser(isSuperAdmin));
+    }
   };
 }
 
@@ -91,9 +106,8 @@ export function setUserInState(token) {
 
 export function logout() {
   return (dispatch) => {
-    // remove token from user's system
-    localStorage.removeItem('JWT');
-    localStorage.removeItem('isAuthenticated');
+    // clear local storage
+    localStorage.clear();
     // remove user details from state
     dispatch(logoutSuccess());
     // we also need to clear docs from state too

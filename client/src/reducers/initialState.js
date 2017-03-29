@@ -3,6 +3,9 @@ export default {
     user: {},
     isAuthenticated: false
   },
-  documents: { allDocuments: [] }
+  documents: { allDocuments: [] },
+  manageRoles: {
+    allRoles: []
+  }
 };
 

@@ -26,7 +26,11 @@ export default function userReducer(state = initialState.manageUser, action) {
           currentUser: {},
         }, { isAuthenticated: action.isAuthenticated, isSuperAdmin: action.isSuperAdmin });
     case types.REAUTHENTICATE:
-      return Object.assign({}, state, { isAuthenticated: action.isAuthenticated });
+      console.log('action', action);
+      return Object.assign({}, state, {
+        isAuthenticated: action.isAuthenticated,
+        isSuperAdmin: action.isSuperAdmin
+      });
     default:
       return state;
   }
