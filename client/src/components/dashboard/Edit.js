@@ -25,19 +25,21 @@ class Edit extends React.Component {
 
   componentDidMount() {
     $('select').material_select();
-    $('#selectMe').on('change', this.handleChange);
+    $('#selectMe-edit').on('change', this.handleChange);
     $('.modal').modal();
     $('#doc-content').froalaEditor('html.set', 'My custom paragraph.');
   }
 
-  handleChange(event, index, value) {
+  handleChange(event) {
     this.setState({ access: event.target.value });
   }
 
+  // event handler to update the document
   onClick(event) {
     event.preventDefault();
     // this.props.dispatch(docActions.createDocument(this.state));
     // handle updating a document
+    console.log('state', this.state);
   }
 
   onChange(event) {
@@ -45,7 +47,7 @@ class Edit extends React.Component {
   }
 
   handleModelChange(model) {
-    this.setState({ model });
+    this.setState({ docContent: model });
   }
 
   render() {
@@ -59,20 +61,20 @@ class Edit extends React.Component {
                 <div className="row">
                   <div className="input-field col s12">
                     <input
-                      id="text"
+                      id="text-edit"
                       type="text"
                       defaultValue={this.props.currentDoc.title}
                       name="title"
                       className="validate"
                       onChange={this.onChange} />
-                    {this.props.currentDoc.title ? null : <label htmlFor="text" id="text">Title</label>}
+                    {this.props.currentDoc.title ? null : <label htmlFor="text" id="default-text">Title</label>}
                   </div>
                 </div>
               </form>
             </div>
             <div className="col s6">
               <div className="input-field col s8">
-                <select value={this.props.currentDoc.access} id="selectMe">
+                <select value={this.props.currentDoc.access} id="selectMe-edit">
                   <option value="">Choose an access type</option>
                   <option value="public">Public</option>
                   <option value="private">Private</option>
@@ -82,18 +84,18 @@ class Edit extends React.Component {
             </div>
           </div>
           <div className="modal-content">
-            <div className="text-editor" id="editor">
+            <div className="text-editor" id="update-editor">
               <FroalaEditor
                 tag="textarea"
                 config={this.config}
-                id="doc-content"
+                id="old-content"
                 model={this.state.model}
                 onModelChange={this.handleModelChange} />
             </div>
             <div className="modal-footer">
               <a
                 className="waves-effect waves-light btn modal-action modal-close"
-                id="create-doc"
+                id="edit-doc"
                 onClick={this.onClick}>UPDATE</a>
             </div>
           </div>
@@ -114,11 +116,5 @@ function mapStateToProps(state, ownProps) {
     currentDoc: state.documents.currentDoc
   };
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: bindActionCreators(docActions, dispatch)
-//   };
-// }
 
 export default connect(mapStateToProps)(Edit);
