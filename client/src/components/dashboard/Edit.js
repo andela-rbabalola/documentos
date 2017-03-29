@@ -11,9 +11,9 @@ class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
+      title: Object.assign({}, props.currentDoc).title,
       docContent: '',
-      access: '',
+      access: Object.assign({}, props.currentDoc).access,
       model: Object.assign({}, props.currentDoc).docContent,
       userId: jwt.decode(localStorage.getItem('JWT')).UserId
     };
@@ -40,6 +40,7 @@ class Edit extends React.Component {
     // this.props.dispatch(docActions.createDocument(this.state));
     // handle updating a document
     console.log('state', this.state);
+    console.log('props ', this.props);
   }
 
   onChange(event) {
