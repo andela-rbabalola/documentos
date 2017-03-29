@@ -23,18 +23,32 @@ export function setUserSuccess(userDetails) {
   };
 }
 
+export function reauthenticateUser() {
+  return {
+    type: types.REAUTHENTICATE,
+    isAuthenticated: true
+  };
+}
+
 export function login(user) {
   return (dispatch) => {
     return axios.post('/users/signin', user).then((res) => {
       const token = res.data.token;
       axios.defaults.headers.common['x-access-token'] = token;
       localStorage.setItem('JWT', token);
+      localStorage.setItem('isAuthenticated', true);
       axios.defaults.headers.common['x-access-token'] = localStorage.getItem('JWT');
       dispatch(loginUserSuccess({
         userInfo: jwt.decode(token),
         email: res.data.email
       }));
     });
+  };
+}
+
+export function reauthenticate() {
+  return (dispatch) => {
+    dispatch(reauthenticateUser());
   };
 }
 
@@ -54,8 +68,23 @@ export function signup(newUser) {
   };
 }
 
+export function logoutSuccess() {
+  return {
+    type: types.LOGOUT_USER
+  };
+}
+
 export function setUserInState(token) {
   return (dispatch) => {
     dispatch(setUserSuccess(jwt.decode(token)));
+  };
+}
+
+export function logout() {
+  return (dispatch) => {
+    // remove token from user's system
+    localStorage.removeItem('JWT');
+    localStorage.removeItem('isAuthenticated');
+    dispatch(logoutSuccess);
   };
 }

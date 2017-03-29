@@ -13,8 +13,8 @@ class TextEditor extends React.Component {
     this.state = {
       title: '',
       docContent: '',
-      access: '',
-      userId: jwt.decode(localStorage.getItem('JWT')).UserId
+      access: ''
+      // userId: jwt.decode(localStorage.getItem('JWT')).UserId
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);

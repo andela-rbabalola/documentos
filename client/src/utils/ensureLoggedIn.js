@@ -6,6 +6,7 @@ export default function (ComposedComponent) {
   class Authenticate extends React.Component {
     componentWillMount() {
       if (!this.props.isAuthenticated) {
+        console.log('props ', this.props);
         this.props.addFlashMessage({
           type: 'error',
           text: 'You need to signin first'
@@ -30,13 +31,14 @@ export default function (ComposedComponent) {
   Authenticate.propTypes = {
     isAuthenticated: React.PropTypes.bool.isRequired,
     addFlashMessage: React.PropTypes.func.isRequired
-  }
+  };
 
   Authenticate.contextTypes = {
     router: React.PropTypes.object.isRequired
-  }
+  };
 
   function mapStateToProps(state) {
+    console.log('state logged in', state.users.isAuthenticated);
     return {
       isAuthenticated: state.users.isAuthenticated
     };

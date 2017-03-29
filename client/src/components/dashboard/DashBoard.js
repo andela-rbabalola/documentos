@@ -26,15 +26,16 @@ class DashBoard extends React.Component {
   }
 
   componentDidMount() {
-    // Get documents
-    this.props.dispatch(docActions.loadDocuments());
-    // Get user's details
-    // this.props.dispatch(localStorage.getItem('JWT'));
-    this.props.dispatch(userActions.setUserInState(localStorage.getItem('JWT')));
+   // Ensure user is authenticated before loading uer details
+    if (this.props.isAuthenticated) {
+      this.props.dispatch(docActions.loadDocuments());
+      this.props.dispatch(userActions.setUserInState(localStorage.getItem('JWT')));
+    }
   }
 
   createDoc(event) {
     event.preventDefault();
+    // handle this
   }
   render() {
     return (
@@ -58,13 +59,15 @@ class DashBoard extends React.Component {
 
 DashBoard.propTypes = {
   documents: PropTypes.array.isRequired,
-  dispatch: PropTypes.func.isRequired
+  dispatch: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
   console.log('state', state);
   return {
-    documents: state.documents.allDocuments
+    documents: state.documents.allDocuments,
+    isAuthenticated: state.users.isAuthenticated
   };
 }
 
