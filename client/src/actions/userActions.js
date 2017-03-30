@@ -52,6 +52,12 @@ export function clearUserDocs() {
   };
 }
 
+export function clearCurrentRole() {
+  return {
+    type: types.CLEAR_CURRENT_ROLE
+  };
+}
+
 export function login(user) {
   return (dispatch) => {
     return axios.post('/users/signin', user).then((res) => {
@@ -112,5 +118,7 @@ export function logout() {
     dispatch(logoutSuccess());
     // we also need to clear docs from state too
     dispatch(clearUserDocs());
+    // clear current role
+    dispatch(clearCurrentRole());
   };
 }

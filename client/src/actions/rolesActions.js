@@ -25,3 +25,11 @@ export function getRoles() {
     dispatch(getRolesSuccess(res.data));
   });
 }
+
+export function updateRole(updatedRole) {
+  return dispatch => axios.put(`/roles/${updatedRole.roleId}`, updatedRole).then(() => {
+    dispatch(getRoles());
+  }).catch((err) => {
+    throw (err);
+  });
+}

@@ -11,12 +11,12 @@ class UserRoleModal extends React.Component {
 
   componentDidMount() {
     $('.modal').modal();
-    this.props.dispatch(roleActions.getRole(1));
+    // this.props.dispatch(roleActions.getRole(1));
   }
 
   render() {
     const data = this.props.currentRole.users;
-    // Column definitions for table
+    // Column definitions for the react-table
     const columns = [{
       header: 'id',
       accessor: 'id'
@@ -40,8 +40,7 @@ class UserRoleModal extends React.Component {
             <div className="modal-footer">
               <a
                 className="waves-effect waves-light btn modal-action modal-close"
-                id="edit-doc"
-                onClick="">CLOSE</a>
+                id="view-users">CLOSE</a>
             </div>
           </div>
         </div>
@@ -51,12 +50,11 @@ class UserRoleModal extends React.Component {
 }
 
 UserRoleModal.propTypes = {
-  currentRole: React.PropTypes.string.isRequired,
+  currentRole: React.PropTypes.object.isRequired,
   dispatch: React.PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
-  // console.log('users ', state.roles.currentRole.users);
   return {
     currentRole: state.roles.currentRole
   };

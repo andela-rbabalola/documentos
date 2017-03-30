@@ -7,6 +7,8 @@ export default function rolesReducer(state = initialState.manageRoles, action) {
       return Object.assign({}, state, { allRoles: action.allRoles });
     case types.GET_A_ROLE_SUCCESS:
       return Object.assign({}, state, { currentRole: state.allRoles[action.index] });
+    case types.CLEAR_CURRENT_ROLE:
+      return Object.assign({}, state, { currentRole: [] });
     default:
       return state;
   }

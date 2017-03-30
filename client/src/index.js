@@ -23,6 +23,8 @@ if ((localStorage.getItem('isAuthenticated')) === 'true') {
   if ((localStorage.getItem('SuperAdmin')) === 'true') {
     const isSuperAdmin = true;
     store.dispatch(reauthenticate(isSuperAdmin));
+    setAuthorizationToken(localStorage.getItem('JWT'));
+    axios.defaults.headers.common['x-access-token'] = localStorage.jwtToken;
   } else {
     store.dispatch(reauthenticate());
     setAuthorizationToken(localStorage.getItem('JWT'));

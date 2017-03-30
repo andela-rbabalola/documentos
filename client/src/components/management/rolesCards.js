@@ -2,24 +2,44 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 import UserRoleModal from './UsersRoleModal';
-import * as roleActions from '../../actions/rolesActions';
+// import * as roleActions from '../../actions/rolesActions';
+import { updateRole, getRole } from '../../actions/rolesActions';
 
 class RolesCard extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      title: Object.assign({}, props.currentRole).title,
+      roleId: undefined
+    };
 
     this.onClick = this.onClick.bind(this);
+    this.editRole = this.editRole.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  editRole(event) {
+    event.preventDefault();
+    this.props.getRole(this.props.id);
+    this.setState({ title: this.props.currentRole.title });
+  }
+
+  onChange(event) {
+    this.setState({ title: event.target.value, roleId: this.props.currentRole.id });
   }
 
   onClick(event) {
     event.preventDefault();
-    // Dispatch action to get the current role
-    this.props.dispatch(roleActions.getRole(this.props.id));
+    this.props
+      .updateRole(this.state).then(() => {
+        toastr.success('Role updated successfully');
+      }).catch(() => {
+        toastr.error('An error occured');
+      });
   }
 
   componentDidMount() {
     $('.modal').modal();
-    // this.props.dispatch(roleActions.getRole(1));
   }
 
   render() {
@@ -38,12 +58,38 @@ class RolesCard extends React.Component {
                   <i className="fa fa-eye" aria-hidden="true" /> View Users with this role</a>
               </span>
               <div>
+                {/* Modal to show users that have a role */}
                 <UserRoleModal />
               </div>
             </div>
             <div className="card-action">
-              <a href="#" className="white-text">
+              <a
+                id={this.props.id}
+                href="#edit-modal"
+                onClick={this.editRole}
+                className="white-text">
                 <i className="fa fa-pencil-square-o" aria-hidden="true" /> Edit Role</a>
+              <div id="edit-modal" className="modal">
+                <div className="modal-content">
+                  <h5>Edit this role</h5>
+                  <div className="input-field col s6">
+                    <span>Old value: {this.props.currentRole.title}</span>
+                    <input
+                      id="text-edit2"
+                      type="text"
+                      name="title"
+                      className="validate"
+                      defaultValue=""
+                      onChange={this.onChange} />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <a
+                    className="waves-effect waves-light btn modal-action modal-close"
+                    id="edit-role"
+                    onClick={this.onClick}>UPDATE</a>
+                </div>
+              </div>
               <a href="#" className="white-text">
                 <i className="fa fa-trash-o" aria-hidden="true" /> Delete Role</a>
             </div>
@@ -57,7 +103,9 @@ class RolesCard extends React.Component {
 RolesCard.propTypes = {
   id: PropTypes.number.isRequired,
   role: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired
+  getRole: PropTypes.func.isRequired,
+  currentRole: PropTypes.object.isRequired,
+  updateRole: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -66,4 +114,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(RolesCard);
+export default connect(mapStateToProps, { getRole, updateRole })(RolesCard);

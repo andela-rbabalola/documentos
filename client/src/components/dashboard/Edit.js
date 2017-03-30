@@ -125,7 +125,7 @@ Edit.propTypes = {
 };
 
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     currentDoc: state.documents.currentDoc
   };
