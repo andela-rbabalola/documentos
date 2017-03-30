@@ -10,7 +10,6 @@ export function getRolesSuccess(allRoles) {
 }
 
 export function getRoles() {
-  console.log('I got here');
   return (dispatch) => axios.get('/roles', {
     headers: {
       'x-access-token': localStorage.getItem('JWT')

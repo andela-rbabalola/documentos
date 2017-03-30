@@ -117,16 +117,10 @@ TextEditor.propTypes = {
 };
 
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     documents: state.documents
   };
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: bindActionCreators(docActions, dispatch)
-//   };
-// }
 
 export default connect(null, { createDocument })(TextEditor);

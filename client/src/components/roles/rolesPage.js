@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as rolesActions from '../../actions/rolesActions';
+import Tabs from './tabs';
 
 class RolesPage extends React.Component {
   constructor(props) {
@@ -10,12 +11,13 @@ class RolesPage extends React.Component {
   displayRoles(role, index) {
     return (
       <div className="col s4" key={index}>
-        <div id={index}>{role}</div>
+        <div id={index}>{role.title}</div>
       </div>
     );
   }
 
   componentDidMount() {
+    $('ul.tabs').tabs();
     if (this.props.isAuthenticated && this.props.isSuperAdmin) {
       this.props.dispatch(rolesActions.getRoles());
     }
@@ -24,7 +26,7 @@ class RolesPage extends React.Component {
   render() {
     return (
       <div>
-        Hello
+        <Tabs />
       </div>
     );
   }
@@ -36,11 +38,11 @@ RolesPage.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
-  console.log('state rolespage', state);
+function mapStateToProps(state) {
   return {
     isAuthenticated: state.users.isAuthenticated,
-    isSuperAdmin: state.users.isSuperAdmin
+    isSuperAdmin: state.users.isSuperAdmin,
+    roles: state.roles.allRoles
   };
 }
 
