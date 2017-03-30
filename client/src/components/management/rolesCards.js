@@ -19,14 +19,13 @@ class RolesCard extends React.Component {
     this.delete = this.delete.bind(this);
   }
 
-  editRole(event) {
+  onClick(event) {
     event.preventDefault();
     this.props.getRole(this.props.id);
-    this.setState({ title: this.props.currentRole.title });
   }
 
   onChange(event) {
-    this.setState({ title: event.target.value, roleId: this.props.currentRole.id });
+    this.setState({ title: event.target.value, roleId: this.props.role.id });
   }
 
   delete(event) {
@@ -39,13 +38,13 @@ class RolesCard extends React.Component {
       });
   }
 
-  onClick(event) {
+  editRole(event) {
     event.preventDefault();
     this.props
       .updateRole(this.state).then(() => {
         toastr.success('Role updated successfully');
       }).catch(() => {
-        toastr.error('An error occured');
+        toastr.error('An error occurred');
       });
   }
 
@@ -64,7 +63,8 @@ class RolesCard extends React.Component {
                 <a
                   id={this.props.id}
                   href="#view-modal"
-                  className="white-text">
+                  className="white-text"
+                  onClick={this.onClick}>
                   <i className="fa fa-eye" aria-hidden="true" /> View Users with this role</a>
               </span>
               <div>
@@ -77,8 +77,9 @@ class RolesCard extends React.Component {
                 id={this.props.id}
                 href="#edit-modal"
                 onClick={this.editRole}
-                className="white-text">
-                <i className="fa fa-pencil-square-o" aria-hidden="true" /> Edit Role</a>
+                className="white-text left">
+                <i className="fa fa-pencil-square-o" aria-hidden="true" /> Edit</a>
+              {/* Modal Start*/}
               <div id="edit-modal" className="modal">
                 <div className="modal-content">
                   <h5>Edit this role</h5>
@@ -97,14 +98,15 @@ class RolesCard extends React.Component {
                   <a
                     className="waves-effect waves-light btn modal-action modal-close"
                     id="edit-role"
-                    onClick={this.onClick}>UPDATE</a>
+                    onClick={this.editRole}>UPDATE</a>
                 </div>
               </div>
+              {/* Modal end*/}
               <a
                 href="#"
-                className="white-text"
+                className="white-text right"
                 onClick={this.delete}>
-                <i className="fa fa-trash-o" aria-hidden="true" /> Delete Role</a>
+                <i className="fa fa-trash-o" aria-hidden="true" /> Delete</a>
             </div>
           </div>
         </div>
