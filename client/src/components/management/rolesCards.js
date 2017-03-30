@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import toastr from 'toastr';
 import UserRoleModal from './UsersRoleModal';
 // import * as roleActions from '../../actions/rolesActions';
-import { updateRole, getRole } from '../../actions/rolesActions';
+import { updateRole, getRole, deleteRole } from '../../actions/rolesActions';
 
 class RolesCard extends React.Component {
   constructor(props) {
@@ -16,6 +16,7 @@ class RolesCard extends React.Component {
     this.onClick = this.onClick.bind(this);
     this.editRole = this.editRole.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   editRole(event) {
@@ -26,6 +27,16 @@ class RolesCard extends React.Component {
 
   onChange(event) {
     this.setState({ title: event.target.value, roleId: this.props.currentRole.id });
+  }
+
+  delete(event) {
+    event.preventDefault();
+    this.props
+      .deleteRole(this.props.role.id).then(() => {
+        toastr.success('Document successfully deleted');
+      }).catch(() => {
+        toastr.error('Unable to delete');
+      });
   }
 
   onClick(event) {
@@ -53,8 +64,7 @@ class RolesCard extends React.Component {
                 <a
                   id={this.props.id}
                   href="#view-modal"
-                  className="white-text"
-                  onClick={this.onClick}>
+                  className="white-text">
                   <i className="fa fa-eye" aria-hidden="true" /> View Users with this role</a>
               </span>
               <div>
@@ -90,7 +100,10 @@ class RolesCard extends React.Component {
                     onClick={this.onClick}>UPDATE</a>
                 </div>
               </div>
-              <a href="#" className="white-text">
+              <a
+                href="#"
+                className="white-text"
+                onClick={this.delete}>
                 <i className="fa fa-trash-o" aria-hidden="true" /> Delete Role</a>
             </div>
           </div>
@@ -105,7 +118,8 @@ RolesCard.propTypes = {
   role: PropTypes.object.isRequired,
   getRole: PropTypes.func.isRequired,
   currentRole: PropTypes.object.isRequired,
-  updateRole: PropTypes.func.isRequired
+  updateRole: PropTypes.func.isRequired,
+  deleteRole: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -114,4 +128,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { getRole, updateRole })(RolesCard);
+export default connect(mapStateToProps, { getRole, updateRole, deleteRole })(RolesCard);

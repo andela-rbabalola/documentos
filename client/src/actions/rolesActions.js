@@ -33,3 +33,11 @@ export function updateRole(updatedRole) {
     throw (err);
   });
 }
+
+export function deleteRole(id) {
+  return dispatch => axios.delete(`/roles/${id}`).then(() => {
+    dispatch(getRoles());
+  }).catch((err) => {
+    throw (err);
+  });
+}
