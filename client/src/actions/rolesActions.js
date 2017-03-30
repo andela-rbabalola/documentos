@@ -9,6 +9,13 @@ export function getRolesSuccess(allRoles) {
   };
 }
 
+export function getRole(index) {
+  return {
+    type: types.GET_A_ROLE_SUCCESS,
+    index
+  };
+}
+
 export function getRoles() {
   return (dispatch) => axios.get('/roles', {
     headers: {

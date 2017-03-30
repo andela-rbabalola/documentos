@@ -59,3 +59,7 @@ img {
 .show-docs {
   position: relative !important;
 }
+
+.view-user-modal {
+  color: black;
+}

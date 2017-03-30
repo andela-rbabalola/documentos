@@ -5,7 +5,8 @@ export default {
   },
   documents: { allDocuments: [] },
   manageRoles: {
-    allRoles: []
+    allRoles: [],
+    currentRole: []
   }
 };
 
