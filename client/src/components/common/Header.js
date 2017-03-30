@@ -25,7 +25,7 @@ class Header extends React.Component {
   }
 
   redirectToRoles() {
-    browserHistory.push('/roles');
+    browserHistory.push('/rolesPage');
   }
 
   render() {
@@ -37,7 +37,7 @@ class Header extends React.Component {
     );
 
     const rolesLink = (
-      <li><a onClick={this.redirectToRoles}>Manage Roles</a></li>
+      <li><a onClick={this.redirectToRoles}>Manage</a></li>
     );
 
     return (
