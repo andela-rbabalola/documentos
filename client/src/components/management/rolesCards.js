@@ -25,7 +25,7 @@ class RolesCard extends React.Component {
   }
 
   onChange(event) {
-    this.setState({ title: event.target.value, roleId: this.props.role.id });
+    this.setState({ title: event.target.value, roleId: this.props.currentRole.id });
   }
 
   delete(event) {
@@ -40,9 +40,6 @@ class RolesCard extends React.Component {
 
   editRole(event) {
     event.preventDefault();
-    const newRole = {};
-    newRole.title = this.state.title;
-    newRole.roleId = this.props.role.id;
     this.props
       .updateRole(this.state).then(() => {
         toastr.success('Role updated successfully');
@@ -79,7 +76,7 @@ class RolesCard extends React.Component {
               <a
                 id={this.props.id}
                 href="#edit-modal"
-                onClick={this.editRole}
+                onClick={this.onClick}
                 className="white-text left">
                 <i className="fa fa-pencil-square-o" aria-hidden="true" /> Edit</a>
               {/* Modal Start*/}
