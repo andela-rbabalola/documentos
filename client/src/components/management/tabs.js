@@ -1,8 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import ManageRoles from './manageRolesPage';
+import ManageRolesTab from './manageRolesTab';
 
-class Tabs extends React.Component {
+class ManagementTabs extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -18,7 +17,7 @@ class Tabs extends React.Component {
             </ul>
           </div>
           <div id="roles" className="col s12">
-            <ManageRoles />
+            <ManageRolesTab />
           </div>
           <div id="users" className="col s12">Put user manager here</div>
         </div>
@@ -27,10 +26,4 @@ class Tabs extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    allRoles: state.roles.allRoles
-  };
-}
-
-export default connect(mapStateToProps)(Tabs);
+export default ManagementTabs;
