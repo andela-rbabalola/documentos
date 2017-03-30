@@ -40,6 +40,9 @@ class RolesCard extends React.Component {
 
   editRole(event) {
     event.preventDefault();
+    const newRole = {};
+    newRole.title = this.state.title;
+    newRole.roleId = this.props.role.id;
     this.props
       .updateRole(this.state).then(() => {
         toastr.success('Role updated successfully');
