@@ -34,7 +34,7 @@ class UserRoleModal extends React.Component {
     return (
       <div>
         <div id="view-modal" className="modal view-user-modal">
-          <h4 className="center">Users with Role</h4>
+          <h4 className="center">Users with this Role</h4>
           <div className="modal-content">
             <ReactTable data={data} columns={columns} />
             <div className="modal-footer">

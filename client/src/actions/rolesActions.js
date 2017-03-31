@@ -16,6 +16,13 @@ export function getRole(index) {
   };
 }
 
+export function getUsersSuccess(allUsers) {
+  return {
+    type: types.GET_ALL_USERS_SUCCESS,
+    allUsers
+  };
+}
+
 export function getRoles() {
   return (dispatch) => axios.get('/roles', {
     headers: {
@@ -23,6 +30,16 @@ export function getRoles() {
     }
   }).then((res) => {
     dispatch(getRolesSuccess(res.data));
+  });
+}
+
+export function getUsers() {
+  return (dispatch) => axios.get('/users', {
+    headers: {
+      'x-access-token': localStorage.getItem('JWT')
+    }
+  }).then((res) => {
+    dispatch(getUsersSuccess(res.data));
   });
 }
 

@@ -22,7 +22,6 @@ class ManageRolesTab extends React.Component {
 
   onClick(event) {
     event.preventDefault();
-    console.log('hhhhjbk');
   }
 
   // dispatch get roles action when this component mounts

@@ -1,5 +1,6 @@
 import React from 'react';
 import ManageRolesTab from './manageRolesTab';
+import ManageUsersTabs from './manageUsersTab';
 
 class ManagementTabs extends React.Component {
   constructor(props) {
@@ -20,7 +21,7 @@ class ManagementTabs extends React.Component {
             <ManageRolesTab />
           </div>
           <div id="users" className="col s12">
-            Put user manager here
+            <ManageUsersTabs />
           </div>
         </div>
       </div>
