@@ -12,12 +12,22 @@ class Header extends React.Component {
     super(props);
     this.logout = this.logout.bind(this);
     this.redirectToHomePage = this.redirectToHomePage.bind(this);
+    this.onClick = this.onClick.bind(this);
+
+    this.state = {
+      foo: false
+    };
   }
 
   logout(event) {
     event.preventDefault();
     this.props.logout();
     this.redirectToHomePage();
+  }
+
+  onClick(event) {
+    event.preventDefault();
+    this.setState({ foo: true });
   }
 
   redirectToHomePage() {
@@ -40,12 +50,41 @@ class Header extends React.Component {
       <li><a onClick={this.redirectToRoles}>Manage</a></li>
     );
 
+    const searchLink = (
+      <li>
+        <a href="#search-modal">
+          <i className="fa fa-search prefix" aria-hidden="true" /> &nbsp;Search
+        </a>
+        <div id="search-modal" className="modal view-user-modal">
+          <div className="modal-content">
+            <h5>Enter search query</h5>
+            <input
+              id="new-role"
+              type="text"
+              name="new-role"
+              className="validate"
+              onChange="" />
+            <a
+              className="modal-action waves-effect waves-green btn-flat"
+              onClick={this.onClick}> Search</a>
+            {this.state.foo ? <div>Hello there</div> : null}
+          </div>
+          <div className="modal-footer">
+            <a
+              className="modal-action modal-close waves-effect waves-green btn-flat"
+              onClick=""> Close</a>
+          </div>
+        </div>
+      </li>
+    );
+
     return (
       <nav >
         <div className="nav-wrapper">
           <IndexLink to="/dashboard" className="brand-logo">Documentos</IndexLink>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
-            <li><Link to="/about">About</Link></li>
+            <li><Link to="/about"> About </Link></li>
+            {auth ? searchLink : null}
             {isSuperAdmin ? rolesLink : null}
             {auth ? logoutLink : null}
           </ul>
