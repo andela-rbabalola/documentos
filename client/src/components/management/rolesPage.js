@@ -7,10 +7,6 @@ class RolesPage extends React.Component {
     super(props);
   }
 
-  componentDidMount() {
-    $('ul.tabs').tabs();
-  }
-
   render() {
     return (
       <div>

@@ -77,13 +77,21 @@ export function login(user) {
   };
 }
 
+export function setUserInState(token) {
+  return (dispatch) => {
+    dispatch(setUserSuccess(jwt.decode(token)));
+  };
+}
+
 // isSuperAdmin is a boolean indicating if the user is a superadmin or not
 export function reauthenticate(isSuperAdmin) {
   return (dispatch) => {
     if (isSuperAdmin === undefined) {
       dispatch(reauthenticateUser());
+      dispatch(setUserInState(localStorage.getItem('JWT')));
     } else {
       dispatch(reauthenticateUser(isSuperAdmin));
+      dispatch(setUserInState(localStorage.getItem('JWT')));
     }
   };
 }
@@ -101,12 +109,6 @@ export function signup(newUser) {
         email: res.data.newUser.email
       }));
     });
-  };
-}
-
-export function setUserInState(token) {
-  return (dispatch) => {
-    dispatch(setUserSuccess(jwt.decode(token)));
   };
 }
 

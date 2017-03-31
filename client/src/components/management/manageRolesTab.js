@@ -47,15 +47,7 @@ class ManageRolesTab extends React.Component {
             <i className="fa fa-plus" aria-hidden="true" />
           </a>
           {/* Modal Start */}
-          <div id="modal2" className="modal">
-            <div className="modal-content">
-              <h4>Modal Header</h4>
-              <p>A bunch of text</p>
-            </div>
-            <div className="modal-footer">
-              <a className="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
-            </div>
-          </div>
+
           {/* Modal end */}
         </div>
         <div className="row">

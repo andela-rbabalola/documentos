@@ -46,8 +46,8 @@ class Header extends React.Component {
           <IndexLink to="/dashboard" className="brand-logo">Documentos</IndexLink>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li><Link to="/about">About</Link></li>
-            {auth ? logoutLink : null}
             {isSuperAdmin ? rolesLink : null}
+            {auth ? logoutLink : null}
           </ul>
         </div>
       </nav >
