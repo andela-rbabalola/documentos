@@ -26,7 +26,9 @@ class Edit extends React.Component {
   componentDidMount() {
     $('select').material_select();
     $('#selectMe-edit').on('change', this.handleChange);
-    $('.modal').modal();
+    $('.modal').modal({
+      dismissible: false
+    });
     $('#doc-content').froalaEditor('html.set', 'My custom paragraph.');
   }
 

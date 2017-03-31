@@ -40,7 +40,10 @@ class DocumentsController {
         .catch(error => res.status(400)
           .send(error));
     } else {
-      // If user is not an admin show only public documents
+      /**
+       * If user is not an admin show only public documents
+       * and their own documents
+       */
       model.Document.findAll({
         where: {
           access: 'public'

@@ -13,9 +13,12 @@ class Header extends React.Component {
     this.logout = this.logout.bind(this);
     this.redirectToHomePage = this.redirectToHomePage.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.onClose = this.onClose.bind(this);
 
     this.state = {
-      foo: false
+      foo: false,
+      query: ''
     };
   }
 
@@ -27,7 +30,20 @@ class Header extends React.Component {
 
   onClick(event) {
     event.preventDefault();
-    this.setState({ foo: true });
+    if (this.state.query.length > 0) {
+      this.setState({ foo: !this.state.foo });
+    }
+  }
+
+  onChange(event) {
+    event.preventDefault();
+    // set foo back to false when user types in query
+    this.setState({ foo: false, query: event.target.value });
+  }
+
+  onClose(event) {
+    event.preventDefault();
+    this.setState({ foo: false, query: '' });
   }
 
   redirectToHomePage() {
@@ -62,17 +78,18 @@ class Header extends React.Component {
               id="new-role"
               type="text"
               name="new-role"
+              value={this.state.query}
               className="validate"
-              onChange="" />
+              onChange={this.onChange} />
             <a
               className="modal-action waves-effect waves-green btn-flat"
               onClick={this.onClick}> Search</a>
-            {this.state.foo ? <div>Hello there</div> : null}
+            {this.state.foo ? <div>{this.state.query}</div> : null}
           </div>
           <div className="modal-footer">
             <a
               className="modal-action modal-close waves-effect waves-green btn-flat"
-              onClick=""> Close</a>
+              onClick={this.onClose}> Close</a>
           </div>
         </div>
       </li>

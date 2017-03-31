@@ -10,8 +10,9 @@ class UserRoleModal extends React.Component {
   }
 
   componentDidMount() {
-    $('.modal').modal();
-    // this.props.dispatch(roleActions.getRole(1));
+    $('.modal').modal({
+      dismissible: false
+    });
   }
 
   render() {
