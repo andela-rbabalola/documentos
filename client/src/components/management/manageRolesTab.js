@@ -46,9 +46,6 @@ class ManageRolesTab extends React.Component {
             href="#modal2">
             <i className="fa fa-plus" aria-hidden="true" />
           </a>
-          {/* Modal Start */}
-
-          {/* Modal end */}
         </div>
         <div className="row">
           {this.props.roles.map(this.displayRoles)}

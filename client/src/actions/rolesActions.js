@@ -33,6 +33,17 @@ export function getRoles() {
   });
 }
 
+export function createRole(newRole) {
+  console.log('new role', newRole);
+  return (dispatch) => axios.post('/roles', newRole).then(() => {
+    // dispatch get roles function
+    dispatch(getRoles());
+    console.log('I got here bitch');
+  }).catch((err) => {
+    throw (err);
+  });
+}
+
 export function getUsers() {
   return (dispatch) => axios.get('/users', {
     headers: {

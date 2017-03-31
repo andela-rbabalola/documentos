@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import toastr from 'toastr';
 import ManageRolesTab from './manageRolesTab';
 import ManageUsersTabs from './manageUsersTab';
+import * as rolesActions from '../../actions/rolesActions';
 
 class ManagementTabs extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      title: ''
+    };
 
     this.onClick = this.onClick.bind(this);
+    this.onChange = this.onChange.bind(this);
   }
 
   componentDidMount() {
@@ -16,12 +23,25 @@ class ManagementTabs extends React.Component {
 
   onClick(event) {
     event.preventDefault();
+    // console.log('props', this.props);
+    // dispatch action to create a role
+    // const newRole = event.target.value;
+    // console.log(newRole);
+    // console.log('state now', this.state);
+    this.props.dispatch(rolesActions.createRole(this.state)).then(() => {
+      toastr.success('Roles successfully fetched');
+    }).catch(() => {
+      toastr.error('An error occurred getting the roles');
+    });
+  }
+
+  onChange(event) {
+    this.setState({ title: event.target.value });
   }
 
   render() {
     return (
       <div>
-        {console.log('props tabs', this.props)}
         <div className="row">
           <div className="col s12">
             <ul className="tabs">
@@ -33,13 +53,19 @@ class ManagementTabs extends React.Component {
           <div id="roles" className="col s12">
             <div id="modal2" className="modal">
               <div className="modal-content">
-                <h4>Modal Header</h4>
-                <p>A bunch of text</p>
+                <h5>Enter new role name</h5>
+                <input
+                  id="new-role"
+                  type="text"
+                  name="new-role"
+                  className="validate"
+                  placeholder="New role"
+                  onChange={this.onChange} />
               </div>
               <div className="modal-footer">
                 <a
                   className="modal-action modal-close waves-effect waves-green btn-flat"
-                  onClick={this.onClick}>Agree</a>
+                  onClick={this.onClick}>Add role</a>
               </div>
             </div>
             {/* Modal End */}
@@ -54,4 +80,8 @@ class ManagementTabs extends React.Component {
   }
 }
 
-export default ManagementTabs;
+ManagementTabs.propTypes = {
+  dispatch: PropTypes.func.isRequired
+};
+
+export default connect(null)(ManagementTabs);

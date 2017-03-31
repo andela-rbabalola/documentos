@@ -67,3 +67,7 @@ img {
 .my-modal {
   z-index: 10000
 }
+
+#new-role{
+  width: 400px;
+}
