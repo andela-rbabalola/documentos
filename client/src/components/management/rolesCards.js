@@ -31,7 +31,7 @@ class RolesCard extends React.Component {
   delete(event) {
     event.preventDefault();
     // Check if users already have this role and prevent deletion
-    if (this.props.role.users) {
+    if (this.props.role.users.length) {
       toastr.error('This role can not be deleted');
     } else {
       this.props

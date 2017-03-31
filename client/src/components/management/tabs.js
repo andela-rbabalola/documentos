@@ -23,15 +23,10 @@ class ManagementTabs extends React.Component {
 
   onClick(event) {
     event.preventDefault();
-    // console.log('props', this.props);
-    // dispatch action to create a role
-    // const newRole = event.target.value;
-    // console.log(newRole);
-    // console.log('state now', this.state);
     this.props.dispatch(rolesActions.createRole(this.state)).then(() => {
-      toastr.success('Roles successfully fetched');
+      toastr.success('New role successfully created');
     }).catch(() => {
-      toastr.error('An error occurred getting the roles');
+      toastr.error('An error occurred creating the role');
     });
   }
 
