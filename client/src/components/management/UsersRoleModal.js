@@ -51,7 +51,6 @@ class UserRoleModal extends React.Component {
 
 UserRoleModal.propTypes = {
   currentRole: React.PropTypes.object.isRequired,
-  dispatch: React.PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

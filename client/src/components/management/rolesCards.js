@@ -30,12 +30,17 @@ class RolesCard extends React.Component {
 
   delete(event) {
     event.preventDefault();
-    this.props
+    // Check if users already have this role and prevent deletion
+    if (this.props.role.users) {
+      toastr.error('This role can not be deleted');
+    } else {
+      this.props
       .deleteRole(this.props.role.id).then(() => {
-        toastr.success('Document successfully deleted');
+        toastr.success('Role successfully deleted');
       }).catch(() => {
         toastr.error('Unable to delete');
       });
+    }
   }
 
   editRole(event) {
@@ -90,7 +95,7 @@ class RolesCard extends React.Component {
                       type="text"
                       name="title"
                       className="validate"
-                      defaultValue=""
+                      defaultValue={this.state.title}
                       onChange={this.onChange} />
                   </div>
                 </div>

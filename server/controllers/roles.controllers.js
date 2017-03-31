@@ -95,7 +95,9 @@ class RolesController {
         }
         foundRole.destroy()
           .then(res.status(201)
-            .send({ message: 'Role successfully deleted' }));
+            .send({ message: 'Role successfully deleted' }))
+          .catch(error => res.status(400)
+            .send(error));
       });
   }
 

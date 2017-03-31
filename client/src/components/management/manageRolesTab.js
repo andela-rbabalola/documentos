@@ -8,23 +8,31 @@ import RolesCard from './rolesCards';
 class ManageRolesTab extends React.Component {
   constructor(props) {
     super(props);
+    this.onClick = this.onClick.bind(this);
   }
 
   // this will be cards that will show all the roles
   displayRoles(role, index) {
     return (
       <div className="col s4" key={index}>
-        {/* Create a roles card that will show all roles here*/}
         <RolesCard role={role} id={index} />
       </div>
     );
   }
 
+  onClick(event) {
+    event.preventDefault();
+    console.log('hhhhjbk');
+  }
+
   // dispatch get roles action when this component mounts
   componentDidMount() {
     if (this.props.isAuthenticated && this.props.isSuperAdmin) {
-      this.props.dispatch(rolesActions.getRoles());
-      toastr.success('Roles successfully fetched');
+      this.props.dispatch(rolesActions.getRoles()).then(() => {
+        toastr.success('Roles successfully fetched');
+      }).catch(() => {
+        toastr.error('An error occurred getting the roles');
+      });
     }
   }
 
@@ -34,15 +42,25 @@ class ManageRolesTab extends React.Component {
         <div className="fixed-action-btn horizontal">
           <a
             className="btn-floating btn-large red"
-            onClick={this.createDoc}
-            href="#createModal">
-            <i className="fa fa-pencil-square-o" aria-hidden="true" />
+            id="create-role-button"
+            onClick={this.onClick}
+            href="#modal2">
+            <i className="fa fa-plus" aria-hidden="true" />
           </a>
+          {/* Modal Start */}
+          <div id="modal2" className="modal">
+            <div className="modal-content">
+              <h4>Modal Header</h4>
+              <p>A bunch of text</p>
+            </div>
+            <div className="modal-footer">
+              <a className="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
+            </div>
+          </div>
+          {/* Modal end */}
         </div>
         <div className="row">
-          <div className="row">
-            {this.props.roles.map(this.displayRoles)}
-          </div>
+          {this.props.roles.map(this.displayRoles)}
         </div>
       </div>
     );

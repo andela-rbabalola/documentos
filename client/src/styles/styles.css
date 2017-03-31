@@ -63,3 +63,7 @@ img {
 .view-user-modal {
   color: black;
 }
+
+.modal-overlay {
+  z-index: 1
+}
