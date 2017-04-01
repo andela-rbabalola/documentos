@@ -26,7 +26,9 @@ class TextEditor extends React.Component {
   componentDidMount() {
     $('select').material_select();
     $('#selectMe').on('change', this.handleChange);
-    $('.modal').modal();
+    $('.modal').modal({
+      dismissible: false
+    });
   }
 
   handleModelChange(docContent) {
@@ -62,7 +64,7 @@ class TextEditor extends React.Component {
     return (
       <div>
         <div id="createModal" className="modal">
-          <h4 className="center">Document</h4>
+          <h4 className="center">Create Document</h4>
           <div className="row">
             <div className="col s6">
               <form className="col s6">

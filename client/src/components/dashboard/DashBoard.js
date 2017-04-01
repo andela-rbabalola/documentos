@@ -1,7 +1,7 @@
 /* eslint require-jsdoc:0 */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
+import toastr from 'toastr';
 import 'froala-editor/js/froala_editor.pkgd.min';
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -40,7 +40,7 @@ class DashBoard extends React.Component {
             className="btn-floating btn-large red"
             onClick={this.createDoc}
             href="#createModal">
-            <i className="fa fa-pencil-square-o" aria-hidden="true" />
+            <i className="fa fa-plus" aria-hidden="true" />
           </a>
         </div>
         {/* Render the TextEditor component only when a user is signed in*/}

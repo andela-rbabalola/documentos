@@ -9,6 +9,6 @@ router.route('/users')
   .get(Authentication.decodeToken, UserController.searchForUser);
 
 router.route('/documents')
-  .get(Authentication.decodeToken, documentController.searchDoc);
+  .get(Authentication.decodeToken, documentController.searchDocuments);
 
 export default router;

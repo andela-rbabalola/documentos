@@ -30,6 +30,8 @@ export default function userReducer(state = initialState.manageUser, action) {
         isAuthenticated: action.isAuthenticated,
         isSuperAdmin: action.isSuperAdmin
       });
+    case types.SEARCH_DOCS_SUCCESS:
+      return Object.assign({}, state, { searchResults: action.results });
     default:
       return state;
   }

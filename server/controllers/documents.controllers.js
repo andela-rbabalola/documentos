@@ -40,10 +40,17 @@ class DocumentsController {
         .catch(error => res.status(400)
           .send(error));
     } else {
-      // If user is not an admin show only public documents
+      /**
+       * If user is not an admin show only public documents
+       * and their own documents
+       */
       model.Document.findAll({
         where: {
-          access: 'public'
+          $or: [{
+            access: 'public',
+          }, {
+            userId: req.decoded.UserId
+          }]
         }
       })
         .then(documents => res.status(200)
@@ -188,17 +195,18 @@ class DocumentsController {
   }
 
   /**
-   * Method that searches both title and text of documents
+   * Method that searches only the title of documents
    * Can admin search all docs??
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
    * @returns {Object} res object
    */
-  static searchDoc(req, res) {
+  static searchDocuments(req, res) {
+    console.log('req.body', req.body);
+    console.log('req.query', req.query);
     model.Document.findAll({
       where: {
-        access: 'public',
         $or: [{
           title: {
             $iLike: `%${req.query.q}%`

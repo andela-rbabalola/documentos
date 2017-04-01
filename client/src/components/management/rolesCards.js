@@ -54,7 +54,9 @@ class RolesCard extends React.Component {
   }
 
   componentDidMount() {
-    $('.modal').modal();
+    $('.modal').modal({
+      dismissible: false
+    });
   }
 
   render() {

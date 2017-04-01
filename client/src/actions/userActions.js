@@ -58,6 +58,13 @@ export function clearCurrentRole() {
   };
 }
 
+export function searchDocumentsSuccess(results) {
+  return {
+    type: types.SEARCH_DOCS_SUCCESS,
+    results
+  };
+}
+
 export function login(user) {
   return (dispatch) => {
     return axios.post('/users/signin', user).then((res) => {
@@ -73,6 +80,16 @@ export function login(user) {
         userInfo: jwt.decode(token),
         email: res.data.email
       }));
+    });
+  };
+}
+
+export function searchDocuments(query) {
+  return (dispatch) => {
+    return axios.post('/documents/search', { query }).then((res) => {
+      // console.log('query', query);
+      // console.log('results', res.data);
+      dispatch(searchDocumentsSuccess(res.data));
     });
   };
 }
@@ -124,3 +141,5 @@ export function logout() {
     dispatch(clearCurrentRole());
   };
 }
+
+
