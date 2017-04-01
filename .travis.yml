@@ -13,7 +13,7 @@ before_script:
   - npm run db:migrate:test && npm run db:test:seed
 
 script:
-  - npm test && npm run test:model
+  - npm run all:tests
 
 after_success:
   - npm run coveralls
