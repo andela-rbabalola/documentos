@@ -73,10 +73,7 @@
     "validator": "^7.0.0",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.10.0"
-    "sequelize": "^3.30.2",
-    "sequelize-cli": "^2.5.1",
-    "supertest": "^3.0.0",
+    "webpack-hot-middleware": "^2.10.0",
     "webpack": "^2.2.1"
   },
   "devDependencies": {
