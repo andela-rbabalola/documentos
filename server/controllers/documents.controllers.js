@@ -1,5 +1,7 @@
 import model from '../models';
 
+// IMPsLEMENT ROLE ACCESS
+
 /**
  * Class to handle routing logic for documents
  */
@@ -17,21 +19,23 @@ class DocumentsController {
         .send({ message: 'New document created', newDocument }))
       // catch errors
       .catch(error => res.status(400)
-        .send(error));
+        .send({ error, message: 'An error occured creating the document' }));
   }
 
   /**
    * Method to get documents
-   * Admins can see all documents while ordinary users see just public documents
+   * The SuperAdmin and Admin can see all documents
+   * while ordinary users see only public and role documents
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
    * @returns {Object} res object
    */
   static getDocuments(req, res) {
-    // check if the user is an admin - admins have a roleId of 1
-    if (req.decoded.RoleId === 1) {
-      model.Document.findAll({}).then(documents => res.status(200)
+    if (req.decoded.RoleId < 2) {
+      model.Document.findAll({
+        order: '"createdAt" DESC',
+      }).then(documents => res.status(200)
         .send(documents))
         .catch(error => res.status(400)
           .send(error));
@@ -63,11 +67,8 @@ class DocumentsController {
         // check if document exists
         if (!foundDoc) {
           return res.status(404)
-            .send({ message: `Document with id ${req.body.id} not found` });
-        } else if (foundDoc.access === 'private' && (foundDoc.userId.toString() === req.params.id)) {
-          return res.status(200)
-            .send(foundDoc);
-        } else if (foundDoc.access === 'private') {
+            .send({ message: `Document with id ${req.params.id} not found` });
+        } else if (foundDoc.access === 'private' && req.decoded.RoleId > 2) {
           return res.status(401)
             .send({ message: 'This document is private' });
         }
@@ -92,13 +93,16 @@ class DocumentsController {
         if (!foundDoc) {
           return res.status(404)
             .send({ message: 'Document to be updated not found' });
+        } else if (foundDoc.userId !== req.decoded.UserId && (req.decoded.RoleId > 2)) {
+          return res.status(401)
+            .send({ message: 'You are not authorized to update this document' });
         }
         return foundDoc
           .update({
             title: req.body.title || foundDoc.title,
             text: req.body.text || foundDoc.text
           }).then(res.status(201)
-            .send({ message: 'Document successfully updated' }))
+            .send({ message: 'Document successfully updated', foundDoc }))
           // handle errors
           .catch(error => res.status(400)
             .send(error));
@@ -119,6 +123,9 @@ class DocumentsController {
         if (!foundDoc) {
           return res.status(404)
             .send({ message: 'Unable to delete because document is not found' });
+        } else if (foundDoc.userId !== req.decoded.UserId && (req.decoded.RoleId > 2)) {
+          return res.status(401)
+            .send({ message: 'You are not authorized to delete this document' });
         }
         foundDoc.destroy()
           .then(res.status(201)
@@ -142,7 +149,7 @@ class DocumentsController {
       }
     })
       .then((documents) => {
-        if (!documents.length) {
+        if (!documents) {
           return res.status(404)
             .send({ message: 'No match found for query' });
         }
@@ -192,12 +199,8 @@ class DocumentsController {
       where: {
         access: 'public',
         $or: [{
-          docContent: {
-            $iLike: `%${req.body.query}%`
-          }
-        }, {
           title: {
-            $iLike: `%${req.body.query}%`
+            $iLike: `%${req.query.q}%`
           }
         }]
       }

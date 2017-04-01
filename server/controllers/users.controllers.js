@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt-nodejs';
 import model from '../models';
+import Helpers from '../helpers/helpers';
 
 const secret = process.env.JWT_SECRET || 'this is the secret';
 
@@ -21,13 +22,63 @@ class UserController {
   }
 
   /**
-   * Method to create a user
+   * Method to create a new admin
+   * This method is only accessible to the admin
+   * All admins must have a roleId of 2
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res object
+   */
+  static createAdmin(req, res) {
+    // Check roleId of request
+    if (Helpers.checkRoleId(req, res)) {
+      return res.status(400)
+        .send({ message: 'Admin must have a roleId of 2' });
+    }
+
+    model.User.findOne({
+      where: { email: req.body.email }
+    })
+      .then((oldUser) => {
+        /**
+         * if user already exists in the database
+         * return http status code 409
+         */
+        if (oldUser) {
+          return res.status(409)
+            .send({ message: `${req.body.email} already exists` });
+        }
+        // create admin
+        model.User.create(req.body)
+          .then((newAdmin) => {
+            const token = jwt.sign({
+              UserId: newAdmin.id,
+              RoleId: newAdmin.roleId
+            }, secret, { expiresIn: '3 days' });
+            return res.status(201)
+              .send({ message: 'New admin created', newAdmin, token, expiresIn: '3 days' });
+          })
+          .catch(error => res.status(400)
+            .send({ errorMessage: error, message: 'An error occurred creating the admin' }));
+      });
+  }
+
+  /**
+   * Ensure user can't specify a role
    *
    * @param {Object} req
    * @param {Object} res
    * @returns {Object} res object
    */
   static createUser(req, res) {
+    // ensure user cannot specify his role
+    if (Helpers.ensureNoRole(req, res)) {
+      return res.status(403).send({
+        message: 'You cannot specify your role'
+      });
+    }
+
     model.User.findOne({
       where: { email: req.body.email }
     })
@@ -51,7 +102,7 @@ class UserController {
               .send({ message: 'New user created', newUser, token, expiresIn: '3 days' });
           })
           .catch(error => res.status(400)
-            .send(error.errors));
+            .send({ errorMessage: error, message: 'An error occurred creating the user' }));
       });
   }
 
@@ -105,7 +156,6 @@ class UserController {
         }
         res.status(200)
           .send(foundUser);
-        // return res.send(foundUser);
       }).catch(error => res.status(400)
         .send(error));
   }
@@ -149,23 +199,36 @@ class UserController {
    * @returns {Object} res object
    */
   static updateUserRole(req, res) {
-    model.User.findById(req.params.id)
-      .then((foundUser) => {
-        // check if user exists
-        if (!foundUser) {
+    if (Helpers.isSuperAdmin(req, 'body', res)) {
+      return res.status(403)
+        .send({ message: 'You cannot update to the SuperAdmin Role' });
+    }
+    // first check roles table to ensure roleId in body exists
+    model.Role.findById(req.body.roleId)
+      .then((foundRole) => {
+        // check if role exists
+        if (!foundRole) {
           return res.status(404)
-            .send({ message: 'User not found' });
-        } else if (foundUser.roleId === req.body.roleId) {
-          return res.status(409)
-            .send({ message: 'New role is the same as old role' });
+            .send({ message: 'Unable to update to role that does not exist' });
         }
-        return foundUser
-          .update({
-            roleId: req.body.roleId
-          }).then(res.status(201)
-            .send({ message: 'User role successfully updated' }))
-          .catch(error => res.status(400)
-            .send(error));
+        // If role is found check for user and update accordingly
+        model.User.findById(req.params.id)
+          .then((foundUser) => {
+            if (!foundUser) {
+              return res.status(404)
+                .send({ message: 'User not found' });
+            } else if (foundUser.roleId === req.body.roleId) {
+              return res.status(400)
+                .send({ message: 'Old role is the same as new role' });
+            }
+            return foundUser
+              .update({
+                roleId: req.body.roleId
+              }).then(res.status(201)
+                .send({ message: 'User role successfully updated' }))
+              .catch(error => res.status(400)
+                .send(error));
+          });
       });
   }
 
@@ -177,6 +240,12 @@ class UserController {
    * @returns {Object} res object
    */
   static deleteUser(req, res) {
+    // Ensure the super admin can't be deleted
+    if (Helpers.isSuperAdmin(req, 'params', res)) {
+      return res.status(403)
+        .send({ message: 'The SuperAdmin cannot be deleted' });
+    }
+
     model.User.findById(req.params.id)
       .then((foundUser) => {
         // check if user exists
@@ -188,6 +257,37 @@ class UserController {
           .then(res.status(201)
             .send({ message: 'User successfully deleted' }));
       });
+  }
+
+  /**
+   * Method to search for a user
+   *
+   * @param {Object} req
+   * @param {Object} res
+   * @returns {Object} res object
+   */
+  static searchForUser(req, res) {
+    model.User.findAll({
+      where: {
+        $or: [{
+          firstName: {
+            $iLike: `%${req.query.q}%`
+          }
+        }, {
+          lastName: {
+            $iLike: `%${req.query.q}%`
+          }
+        }, {
+          email: {
+            $iLike: `%${req.query.q}%`
+          }
+        }]
+      }
+    })
+      .then(documents => res.status(200)
+        .send(documents))
+      .catch(error => res.status(400)
+        .send(error));
   }
 
   /**

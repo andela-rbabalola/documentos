@@ -29,7 +29,7 @@ module.exports = {
       },
       access: {
         defaultValue: 'public',
-        type: Sequelize.ENUM('public', 'private')
+        type: Sequelize.ENUM('public', 'private', 'role')
       },
       createdAt: {
         allowNull: false,

@@ -11,15 +11,18 @@ router.route('/')
 
 router.route('/:id')
   .get(Authentication.decodeToken, documentController.getDocById)
-  .put(Authentication.decodeToken, Authentication.validateUser, documentController.updateDoc)
-  .delete(Authentication.decodeToken, Authentication.validateUser, documentController.deleteDoc);
+  .put(Authentication.decodeToken, documentController.updateDoc)
+  .delete(Authentication.decodeToken, documentController.deleteDoc);
 
 // Route to get documents for a user
 router.route('/user/:id')
   .get(Authentication.decodeToken, Authentication.validateUser, documentController.getDocForUser);
 
+// Route to search a document
 router.route('/search')
-  .post(Authentication.decodeToken, documentController.searchDoc);
+  .post((req, res) => {
+    res.redirect(`/search/documents/?q=${req.body.query}`);
+  });
 
 // Route for a user to search their own docs
 router.route('/search/user/:id')

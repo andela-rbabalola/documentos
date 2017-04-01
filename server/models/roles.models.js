@@ -12,11 +12,6 @@ module.exports = (sequelize, Datatypes) => {
           foreignKey: 'roleId',
           as: 'users'
         });
-        Role.belongsToMany(models.Priviledge, {
-          through: 'DocPriviledge',
-          foreignKey: 'roleId',
-          as: 'roles'
-        });
       }
     }
   });

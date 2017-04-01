@@ -29,8 +29,29 @@ class RolesController {
           .then(newRole => res.status(201)
             .send({ message: 'New role created', newRole }));
       })
-      .catch(error => res.status(400)
-        .send(error.errors));
+      .catch(error => res.status(500)
+        .send({ error: error.errors, message: 'An error occurred' }));
+  }
+
+  /**
+   * Method to get a particular role
+   *
+   * @param {Object} req Object containing the request
+   * @param {Object} res Object containing the response
+   * @returns {Object} res object
+   */
+  static getRoleById(req, res) {
+    model.Role.findById(req.params.id)
+      .then((foundRole) => {
+        // check if user exists
+        if (!foundRole) {
+          return res.status(404)
+            .send({ message: `Role with id ${req.params.id} not found` });
+        }
+        res.status(200)
+          .send(foundRole);
+      }).catch(error => res.status(400)
+        .send(error));
   }
 
   /**
@@ -50,6 +71,76 @@ class RolesController {
       ]
     }).then(roles => res.status(200)
       .send(roles));
+  }
+
+  /**
+   * Method to delete a role
+   *
+   * @param {Object} req Object containing the request
+   * @param {Object} res Object containing the response
+   * @returns {Object} res object
+   */
+  static deleteRole(req, res) {
+    // Ensure admin role can't be deleted
+    if (req.params.id === '1') {
+      return res.status(403)
+        .send({ message: 'SuperAdmin role can not be deleted' });
+    }
+    model.Role.findById(req.params.id)
+      .then((foundRole) => {
+        // check if role exists before deleting
+        if (!foundRole) {
+          return res.status(404)
+            .send({ message: 'Unable to delete because role is not found' });
+        }
+        foundRole.destroy()
+          .then(res.status(201)
+            .send({ message: 'Role successfully deleted' }));
+      });
+  }
+
+  /**
+   * Method to update a role
+   *
+   * @param {Object} req Object containing the request
+   * @param {Object} res Object containing the response
+   * @returns {Object} res object
+   */
+  static updateRole(req, res) {
+    // Put all this in a helper function to ensure SRP
+    // Ensure admin role can't be updated
+    if (req.params.id === '1') {
+      return res.status(403)
+        .send({ message: 'SuperAdmin role can not be updated' });
+    }
+
+    // check that title is unique
+    model.Role.find({
+      where: {
+        title: req.body.title
+      }
+    }).then((foundTitle) => {
+      if (foundTitle) {
+        return res.status(409)
+          .send({ message: 'Role titles must be unique' });
+      }
+
+      model.Role.findById(req.params.id)
+        .then((foundRole) => {
+          // check if role exists before updating
+          if (!foundRole) {
+            return res.status(404)
+              .send({ message: `Unable to update because role ${req.params.id} is not found` });
+          }
+          return foundRole
+            .update({
+              title: req.body.title
+            }).then(res.status(201)
+              .send({ message: `Role ${req.params.id} successfully updated` }))
+            .catch(error => res.status(400)
+              .send(error));
+        });
+    });
   }
 }
 
