@@ -33,6 +33,7 @@ describe('Users Test Suite', () => {
   });
 
   describe('Authentication', () => {
+    console.log('test user', testUser);
     it('Should create a user given valid details', (done) => {
       server.post('/users')
         .set({ 'Content-Type': 'application/x-www-form-urlencoded' })
@@ -50,6 +51,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow only unique users to be created', (done) => {
+      console.log('test user again', testUser);
       server.post('/users')
         .send(testUser)
         .expect(409)
@@ -65,7 +67,6 @@ describe('Users Test Suite', () => {
         .send(testHelper.userWithRole(2))
         .expect(201)
         .end((err, res) => {
-          console.log('err fort', err);
           expect(res.body.message).to.equal('New admin created');
           expect(res.body).to.have.property('newAdmin');
           expect(res.body.newAdmin).to.have.property('roleId');
@@ -124,7 +125,6 @@ describe('Users Test Suite', () => {
         .send(testHelper.userWithoutRole())
         .expect(201)
         .end((err, res) => {
-          console.log('err now', err);
           expect(res.body.newUser).to.have.property('roleId');
           expect(res.body.newUser.roleId).to.equal(3);
           done();
@@ -202,7 +202,6 @@ describe('Users Test Suite', () => {
       server.get('/users/2')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
-          console.log('err 3', err);
           expect(res.body).to.have.property('firstName');
           expect(res.body).to.have.property('lastName');
           expect(res.body).to.have.property('email');
@@ -215,7 +214,6 @@ describe('Users Test Suite', () => {
       server.get('/users/2')
         .set({ 'x-access-token': adminDetails.token })
         .end((err, res) => {
-          console.log('err 4', err);
           expect(res.body).to.have.property('firstName');
           expect(res.body).to.have.property('lastName');
           expect(res.body).to.have.property('email');
@@ -252,7 +250,6 @@ describe('Users Test Suite', () => {
         .send({ firstName: 'updated name' })
         .expect(201)
         .end((err, res) => {
-          console.log('err 5', err);
           expect(res.body.message).to.equal('User successfully updated');
           done();
         });

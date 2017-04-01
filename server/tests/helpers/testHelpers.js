@@ -13,7 +13,7 @@ class testHelper {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: faker.internet.password()
+      password: 'password123'
     };
   }
 
@@ -39,7 +39,7 @@ class testHelper {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: 'anotherpassword',
       roleId
     };
   }
@@ -48,7 +48,7 @@ class testHelper {
     return {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: 'fakepassword',
     };
   }
 
@@ -56,7 +56,7 @@ class testHelper {
     return {
       firstName: faker.name.firstName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: 'faker.internet.password()',
     };
   }
 
@@ -64,7 +64,7 @@ class testHelper {
     return {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      password: faker.internet.password(),
+      password: 'anewday123',
     };
   }
 

@@ -53,7 +53,6 @@ describe('Documents Test Suite', () => {
               .set({ 'x-access-token': superAdminToken })
               .end((err, res) => {
                 allDocuments = res.body;
-                console.log('tokens', superAdminToken, testToken, regularToken);
                 server.post('/documents')
                   .set({ 'x-access-token': regularToken })
                   .send(testHelper.dummyDocument(regularUser.newUser.id))
@@ -100,7 +99,6 @@ describe('Documents Test Suite', () => {
         .send(testHelper.dummyDocumentNoPermission())
         .expect(201)
         .end((err, res) => {
-          console.log('error here', err);
           expect(res.body.newDocument).to.have.property('access');
           expect(res.body.newDocument.access).to.equal('public');
           done();
@@ -164,14 +162,11 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should get all documents for a specific user', (done) => {
-      console.log('regular', regularUser);
       server.get(`/documents/user/${regularUser.newUser.id}`)
         .set({ 'x-access-token': regularToken })
         .expect(200)
         .end((err, res) => {
-          console.log('error 2', err);
           expect(Array.isArray(res.body)).to.equal(true);
-          console.log('res 0 body', res.body);
           expect(res.body[0].userId).to.equal(regularUser.newUser.id);
           done();
         });
@@ -229,9 +224,8 @@ describe('Documents Test Suite', () => {
       server.put(`/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': testToken })
         .send({ title: 'Doc title updated' })
-        .expect(403)
+        .expect(401)
         .end((err, res) => {
-          console.log('err today', err);
           expect(typeof res.body).to.equal('object');
           expect(res.body.message).to.equal('You are not authorized to update this document');
           done();
