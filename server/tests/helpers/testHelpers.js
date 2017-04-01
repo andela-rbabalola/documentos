@@ -80,12 +80,12 @@ class testHelper {
    * Creates a dummy document
    * @returns {obj} - Object with dummy user details
    */
-  static dummyDocument() {
+  static dummyDocument(userId) {
     return {
       title: faker.lorem.word(),
       docContent: faker.lorem.paragraph(),
       access: 'public',
-      userId: 1
+      userId
     };
   }
 
@@ -97,7 +97,7 @@ class testHelper {
     return {
       title: faker.lorem.word(),
       docContent: faker.lorem.paragraph(),
-      userId: 4
+      userId: 2
     };
   }
 

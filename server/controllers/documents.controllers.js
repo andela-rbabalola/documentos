@@ -203,8 +203,6 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static searchDocuments(req, res) {
-    console.log('req.body', req.body);
-    console.log('req.query', req.query);
     model.Document.findAll({
       where: {
         $or: [{
