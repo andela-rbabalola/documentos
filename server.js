@@ -1,9 +1,9 @@
 import express from 'express';
 import parser from 'body-parser';
 import home from './server/routes/index';
-import userRoute from './server/routes/users';
-import roleRoute from './server/routes/roles';
-import documentRoute from './server/routes/documents';
+import userRoute from './server/routes/users.routes';
+import roleRoute from './server/routes/roles.routes';
+import documentRoute from './server/routes/documents.routes';
 
 require('dotenv').config();
 

@@ -22,18 +22,36 @@ class DocumentsController {
 
   /**
    * Method to get documents
+   * Admins can see all documents while ordinary users see just public documents
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
    * @returns {Object} res object
    */
   static getDocuments(req, res) {
-    model.Document.findAll({}).then(documents => res.status(200)
-      .send(documents));
+    // check if the user is an admin - admins have a roleId of 1
+    if (req.decoded.RoleId === 1) {
+      model.Document.findAll({}).then(documents => res.status(200)
+        .send(documents))
+        .catch(error => res.status(400)
+          .send(error));
+    } else {
+      // If user is not an admin show only public documents
+      model.Document.findAll({
+        where: {
+          access: 'public'
+        }
+      })
+        .then(documents => res.status(200)
+          .send(documents))
+        // catch errors
+        .catch(error => res.status(400)
+          .send(error));
+    }
   }
 
   /**
-   * Method to find a document by id
+   * Method to find a public (or private) document by id
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
@@ -46,6 +64,12 @@ class DocumentsController {
         if (!foundDoc) {
           return res.status(404)
             .send({ message: `Document with id ${req.body.id} not found` });
+        } else if (foundDoc.access === 'private' && (foundDoc.userId.toString() === req.params.id)) {
+          return res.status(200)
+            .send(foundDoc);
+        } else if (foundDoc.access === 'private') {
+          return res.status(401)
+            .send({ message: 'This document is private' });
         }
         res.status(200)
           .send(foundDoc);
@@ -117,25 +141,36 @@ class DocumentsController {
         userId: req.params.id
       }
     })
-      .then(documents => res.status(200)
-        .send(documents))
-      .catch(error => res.status(400)
-        .send(error));
+      .then((documents) => {
+        if (!documents.length) {
+          return res.status(404)
+            .send({ message: 'No match found for query' });
+        }
+        return res.status(200).send(documents);
+      })
+      .catch(err => res.status(400).send(err));
   }
 
   /**
-   * Search documents text
+   * Search documents belonging to a particular user
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
    * @returns {Object} res object
    */
-  static searchDocText(req, res) {
+  static searchUserDoc(req, res) {
     model.Document.findAll({
       where: {
-        docContent: {
-          $iLike: `%${req.body.query}%`
-        }
+        userId: req.params.id,
+        $or: [{
+          docContent: {
+            $iLike: `%${req.body.query}%`
+          }
+        }, {
+          title: {
+            $iLike: `%${req.body.query}%`
+          }
+        }]
       }
     })
       .then(documents => res.status(200)
@@ -145,18 +180,26 @@ class DocumentsController {
   }
 
   /**
-   * Search document title
+   * Method that searches both title and text of documents
+   * Can admin search all docs??
    *
    * @param {Object} req Object containing the request
    * @param {Object} res Object containing the response
    * @returns {Object} res object
    */
-  static searchDocTitle(req, res) {
+  static searchDoc(req, res) {
     model.Document.findAll({
       where: {
-        title: {
-          $iLike: `%${req.body.query}%`
-        }
+        access: 'public',
+        $or: [{
+          docContent: {
+            $iLike: `%${req.body.query}%`
+          }
+        }, {
+          title: {
+            $iLike: `%${req.body.query}%`
+          }
+        }]
       }
     })
       .then(documents => res.status(200)
