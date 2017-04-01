@@ -12,4 +12,4 @@ before_script:
   - psql -c 'create database documentos_test;' -U postgres
 
 script:
-  - npm test
+  - npm run coveralls
