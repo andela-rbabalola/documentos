@@ -5,11 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node server.js",
-    "all:tests": "npm test && npm run test:model",
-    "test": "NODE_ENV=test npm run db:test:seed && npm run servertest",
-    "test:model": "NODE_ENV=test npm run db:test:seed && npm run modeltest",
-    "modeltest": "NODE_ENV=test mocha ./server/tests/models/*.spec.js --timeout 20000 --compilers js:babel-register",
-    "servertest": "NODE_ENV=test mocha ./server/tests/server/*.spec.js --timeout 20000 --compilers js:babel-register",
+    "test": "NODE_ENV=test npm run db:test:seed && npm run all:tests",
+    "all:tests": "NODE_ENV=test mocha ./server/tests/**/*.spec.js --timeout 20000 --compilers js:babel-register",
     "db:migrate:test:undo": "NODE_ENV=test sequelize db:migrate:undo:all",
     "db:migrate:test": "NODE_ENV=test sequelize db:migrate",
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helpers/seedHelpers",
