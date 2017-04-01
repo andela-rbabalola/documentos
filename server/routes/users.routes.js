@@ -9,6 +9,12 @@ router.route('/')
   .get(Authentication.decodeToken, Authentication.isAdmin, UserController.getAllUsers)
   .post(UserController.createUser);
 
+// pagination for users
+router.route('/pagination')
+  .post((req, res) => {
+    res.redirect(`/pagination/users/?limit=${req.body.limit}&offset=${req.body.offset}`);
+  });
+
 // Route to search for a user
 router.route('/search')
   .post((req, res) => {

@@ -4,10 +4,16 @@ import Authentication from '../middleware/authentication';
 
 const router = express.Router();
 
-
+// pagination too
 router.route('/')
   .get(Authentication.decodeToken, documentController.getDocuments)
   .post(Authentication.decodeToken, documentController.createDocument);
+
+// pagination for documents
+router.route('/pagination')
+  .post((req, res) => {
+    res.redirect(`/pagination/documents/?limit=${req.body.limit}&offset=${req.body.offset}`);
+  });
 
 // Route to get role docs for a user
 router.route('/role')
