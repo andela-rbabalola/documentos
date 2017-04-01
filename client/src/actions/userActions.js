@@ -24,10 +24,17 @@ export function setUserSuccess(userDetails) {
   };
 }
 
-export function reauthenticateUser() {
+export function reauthenticateUser(isSuperAdmin) {
+  if (isSuperAdmin === undefined) {
+    return {
+      type: types.REAUTHENTICATE,
+      isAuthenticated: true
+    };
+  }
   return {
     type: types.REAUTHENTICATE,
-    isAuthenticated: true
+    isAuthenticated: true,
+    isSuperAdmin
   };
 }
 
@@ -45,12 +52,21 @@ export function clearUserDocs() {
   };
 }
 
+export function clearCurrentRole() {
+  return {
+    type: types.CLEAR_CURRENT_ROLE
+  };
+}
+
 export function login(user) {
   return (dispatch) => {
     return axios.post('/users/signin', user).then((res) => {
       const token = res.data.token;
       axios.defaults.headers.common['x-access-token'] = token;
       localStorage.setItem('JWT', token);
+      if (jwt.decode(token).RoleId === 1) {
+        localStorage.setItem('SuperAdmin', true);
+      }
       localStorage.setItem('isAuthenticated', true);
       axios.defaults.headers.common['x-access-token'] = localStorage.getItem('JWT');
       dispatch(loginUserSuccess({
@@ -61,9 +77,22 @@ export function login(user) {
   };
 }
 
-export function reauthenticate() {
+export function setUserInState(token) {
   return (dispatch) => {
-    dispatch(reauthenticateUser());
+    dispatch(setUserSuccess(jwt.decode(token)));
+  };
+}
+
+// isSuperAdmin is a boolean indicating if the user is a superadmin or not
+export function reauthenticate(isSuperAdmin) {
+  return (dispatch) => {
+    if (isSuperAdmin === undefined) {
+      dispatch(reauthenticateUser());
+      dispatch(setUserInState(localStorage.getItem('JWT')));
+    } else {
+      dispatch(reauthenticateUser(isSuperAdmin));
+      dispatch(setUserInState(localStorage.getItem('JWT')));
+    }
   };
 }
 
@@ -83,20 +112,15 @@ export function signup(newUser) {
   };
 }
 
-export function setUserInState(token) {
-  return (dispatch) => {
-    dispatch(setUserSuccess(jwt.decode(token)));
-  };
-}
-
 export function logout() {
   return (dispatch) => {
-    // remove token from user's system
-    localStorage.removeItem('JWT');
-    localStorage.removeItem('isAuthenticated');
+    // clear local storage
+    localStorage.clear();
     // remove user details from state
     dispatch(logoutSuccess());
     // we also need to clear docs from state too
     dispatch(clearUserDocs());
+    // clear current role
+    dispatch(clearCurrentRole());
   };
 }

@@ -59,17 +59,11 @@ DashBoard.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
   return {
     documents: state.documents.allDocuments,
     isAuthenticated: state.users.isAuthenticated
   };
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     actions: bindActionCreators(docActions, dispatch)
-//   };
-// }
 
 export default connect(mapStateToProps)(DashBoard);

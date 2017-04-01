@@ -14,14 +14,22 @@ import '../../node_modules/materialize-css/dist/css/materialize.min.css';
 import '../../node_modules/materialize-css/dist/js/materialize.min';
 import '../../node_modules/material-icons/css/material-icons.css';
 import '../../node_modules/toastr/build/toastr.min.css';
+import '../../node_modules/react-table/react-table.css';
 import './styles/styles.css';
 
 const store = configureStore();
 if ((localStorage.getItem('isAuthenticated')) === 'true') {
   // If the user is already authenticated, dispatch this action
-  store.dispatch(reauthenticate());
-  setAuthorizationToken(localStorage.getItem('JWT'));
-  axios.defaults.headers.common['x-access-token'] = localStorage.jwtToken;
+  if ((localStorage.getItem('SuperAdmin')) === 'true') {
+    const isSuperAdmin = true;
+    store.dispatch(reauthenticate(isSuperAdmin));
+    setAuthorizationToken(localStorage.getItem('JWT'));
+    axios.defaults.headers.common['x-access-token'] = localStorage.jwtToken;
+  } else {
+    store.dispatch(reauthenticate());
+    setAuthorizationToken(localStorage.getItem('JWT'));
+    axios.defaults.headers.common['x-access-token'] = localStorage.jwtToken;
+  }
 }
 
 render(

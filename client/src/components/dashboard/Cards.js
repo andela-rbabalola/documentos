@@ -27,14 +27,14 @@ class Cards extends React.Component {
       .deleteDocument(this.props.document.id)).then(() => {
         toastr.success('Document successfully deleted');
       }).catch(() => {
-        toastr.error('You cannot delete this document');
+        toastr.error('Unable to delete');
       });
   }
 
   render() {
     return (
       <div className="row">
-        <div className="col s12 m6">
+        <div className="col s12 m6 l4">
           <div className="card">
             <div className="card-image">
               <span className="card-title">{this.props.document.title}</span>
@@ -57,7 +57,7 @@ class Cards extends React.Component {
               </div>
             </div>
             <div className="card-content">
-              <p>{this.props.document.title}</p>
+              <span className="card-title grey-text text-darken-4">{this.props.document.title}</span>
             </div>
             {this.state.showEditor ? <Edit /> : null}
           </div>
