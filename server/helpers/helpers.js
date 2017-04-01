@@ -43,6 +43,22 @@ class Helpers {
     // }
     return (where === 'params') ? req.params.id === '1' : req.body.roleId === 1;
   }
+
+  /**
+   * Method to ensure the super admin can't
+   * be deleted
+   *
+   * @param {Object} userId
+   * @returns {String} - roleId of user
+   */
+  static getRoleIdFromUserId(userId) {
+    model.User.findById(userId)
+      .then((document) => {
+        // return res.status(200).send(documents);
+        // console.log('Role Id', documents.roleId);
+        return document;
+      });
+  }
 }
 
 export default Helpers;

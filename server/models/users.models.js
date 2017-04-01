@@ -1,11 +1,15 @@
-'use strict'
-
 const bcrypt = require('bcrypt-nodejs');
 
 module.exports = (sequelize, Datatypes) => {
   const User = sequelize.define('User', {
-    firstName: Datatypes.STRING,
-    lastName: Datatypes.STRING,
+    firstName: {
+      type: Datatypes.STRING,
+      allowNull: false
+    },
+    lastName: {
+      type: Datatypes.STRING,
+      allowNull: false
+    },
     email: {
       type: Datatypes.STRING,
       unique: true,
@@ -16,6 +20,7 @@ module.exports = (sequelize, Datatypes) => {
     },
     password: {
       type: Datatypes.STRING,
+      allowNull: false,
       validate: {
         min: 6
       }
@@ -34,6 +39,18 @@ module.exports = (sequelize, Datatypes) => {
         User.belongsTo(models.Role, {
           foreignKey: 'roleId'
         });
+      }
+    },
+    instanceMethods: {
+        /**
+         * Compares plain text password against hashed password
+         * @method
+         * @param {String} password
+         * @returns {Boolean} Validity of passowrd
+         */
+      verifyPassword(password) {
+        console.log('password', this.password);
+        return bcrypt.compareSync(password, this.password);
       }
     },
     hooks: {
