@@ -34,6 +34,7 @@ class Edit extends React.Component {
     this.setState({ access: event.target.value });
   }
 
+  // event handler to update the document
   onClick(event) {
     event.preventDefault();
     // this.props.dispatch(docActions.createDocument(this.state));
@@ -46,7 +47,7 @@ class Edit extends React.Component {
   }
 
   handleModelChange(model) {
-    this.setState({ model });
+    this.setState({ docContent: model });
   }
 
   render() {

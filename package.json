@@ -5,14 +5,23 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node server.js",
-    "test": "NODE_ENV=test npm run db:test:seed && npm run thetest",
-    "thetest": "NODE_ENV=test mocha ./server/tests/**/*.spec.js --timeout 20000 --compilers js:babel-register",
+    "test": "NODE_ENV=test npm run db:test:seed && npm run servertest",
+    "test:model": "NODE_ENV=test npm run db:test:seed && npm run modeltest",
+    "modeltest": "NODE_ENV=test mocha ./server/tests/models/*.spec.js --timeout 20000 --compilers js:babel-register",
+    "servertest": "NODE_ENV=test mocha ./server/tests/server/*.spec.js --timeout 20000 --compilers js:babel-register",
     "db:migrate:test:undo": "NODE_ENV=test sequelize db:migrate:undo:all",
     "db:migrate:test": "NODE_ENV=test sequelize db:migrate",
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helpers/seedHelpers",
     "cover": "babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha ./server/tests/**/*.spec.js",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andela-rbabalola/documentos.git"
+  },
+  "keywords": [
+    "documents"
+  ],
   "author": "Rotimi Babalola",
   "license": "ISC",
   "dependencies": {
@@ -65,6 +74,14 @@
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0"
+    "react": "^15.4.2",
+    "react-redux": "^5.0.3",
+    "react-router": "^4.0.0",
+    "redux": "^3.6.0",
+    "sequelize": "^3.30.2",
+    "sequelize-cli": "^2.5.1",
+    "supertest": "^3.0.0",
+    "webpack": "^2.2.1"
   },
   "devDependencies": {
     "babel-cli": "^6.23.0",

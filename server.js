@@ -9,6 +9,7 @@ import userRoute from './server/routes/users.routes';
 import roleRoute from './server/routes/roles.routes';
 import documentRoute from './server/routes/documents.routes';
 import searchRoute from './server/routes/search.routes';
+import paginationRoute from './server/routes/pagination.routes';
 
 /* eslint-disable no-console */
 
@@ -31,6 +32,7 @@ app.use('/users', userRoute);
 app.use('/roles', roleRoute);
 app.use('/documents', documentRoute);
 app.use('/search', searchRoute);
+app.use('/pagination', paginationRoute);
 
 // app.listen(port, () => {
 //   console.log(`Server listening on port ${port}`);
