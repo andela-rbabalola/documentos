@@ -1,9 +1,9 @@
 /* eslint require-jsdoc: "off" */
 import React, { PropTypes } from 'react';
+import ReactTable from 'react-table';
 import { connect } from 'react-redux';
-import { Link, IndexLink } from 'react-router';
-import { browserHistory } from 'react-router';
-import { logout } from '../../actions/userActions';
+import { Link, IndexLink, browserHistory } from 'react-router';
+import { logout, searchDocuments } from '../../actions/userActions';
 
 
 class Header extends React.Component {
@@ -17,7 +17,7 @@ class Header extends React.Component {
     this.onClose = this.onClose.bind(this);
 
     this.state = {
-      foo: false,
+      showTable: false,
       query: ''
     };
   }
@@ -31,19 +31,21 @@ class Header extends React.Component {
   onClick(event) {
     event.preventDefault();
     if (this.state.query.length > 0) {
-      this.setState({ foo: !this.state.foo });
+      this.setState({ showTable: !this.state.showTable });
     }
+    // Dispatch an action to search
+    this.props.searchDocuments(this.state.query);
   }
 
   onChange(event) {
     event.preventDefault();
-    // set foo back to false when user types in query
-    this.setState({ foo: false, query: event.target.value });
+    // set showTable back to false when user types in query
+    this.setState({ showTable: false, query: event.target.value });
   }
 
   onClose(event) {
     event.preventDefault();
-    this.setState({ foo: false, query: '' });
+    this.setState({ showTable: false, query: '' });
   }
 
   redirectToHomePage() {
@@ -58,6 +60,22 @@ class Header extends React.Component {
     const auth = this.props.isAuthenticated;
     const isSuperAdmin = this.props.isSuperAdmin;
 
+    const data = this.props.searchResults;
+    // Column definitions for the react-table
+    const columns = [{
+      header: 'id',
+      accessor: 'id'
+    }, {
+      header: 'Title',
+      accessor: 'title',
+    }, {
+      header: 'Content',
+      accessor: 'docContent'
+    }, {
+      header: 'access',
+      accessor: 'access'
+    }];
+
     const logoutLink = (
       <li><a href="#" onClick={this.logout}>Logout</a></li>
     );
@@ -69,7 +87,7 @@ class Header extends React.Component {
     const searchLink = (
       <li>
         <a href="#search-modal">
-          <i className="fa fa-search prefix" aria-hidden="true" /> &nbsp;Search
+          <i className="fa fa-search prefix" aria-hidden="true" />          &nbsp;Search
         </a>
         <div id="search-modal" className="modal view-user-modal">
           <div className="modal-content">
@@ -83,13 +101,13 @@ class Header extends React.Component {
               onChange={this.onChange} />
             <a
               className="modal-action waves-effect waves-green btn-flat"
-              onClick={this.onClick}> Search</a>
-            {this.state.foo ? <div>{this.state.query}</div> : null}
+              onClick={this.onClick}>              Search</a>
+            {this.state.showTable ? <ReactTable data={data} columns={columns} /> : null}
           </div>
           <div className="modal-footer">
             <a
-              className="modal-action modal-close waves-effect waves-green btn-flat"
-              onClick={this.onClose}> Close</a>
+              className="modal-action modal-close waves-effect waves-green center btn-flat"
+              onClick={this.onClose}>              Close</a>
           </div>
         </div>
       </li>
@@ -114,15 +132,17 @@ class Header extends React.Component {
 Header.propTypes = {
   logout: React.PropTypes.func.isRequired,
   isAuthenticated: React.PropTypes.bool.isRequired,
-  isSuperAdmin: React.PropTypes.bool.isRequired
+  isSuperAdmin: React.PropTypes.bool.isRequired,
+  searchDocuments: React.PropTypes.func.isRequired,
+  searchResults: React.PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     isAuthenticated: state.users.isAuthenticated,
-    isSuperAdmin: state.users.isSuperAdmin
+    isSuperAdmin: state.users.isSuperAdmin,
+    searchResults: state.users.searchResults
   };
 }
 
-// export default Header;
-export default connect(mapStateToProps, { logout })(Header);
+export default connect(mapStateToProps, { logout, searchDocuments })(Header);

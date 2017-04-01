@@ -22,7 +22,7 @@ router.route('/:id')
 router.route('/user/:id')
   .get(Authentication.decodeToken, Authentication.validateUser, documentController.getDocForUser);
 
-// Route to search a document
+// Route to search document
 router.route('/search')
   .post((req, res) => {
     res.redirect(`/search/documents/?q=${req.body.query}`);
