@@ -71,3 +71,17 @@ img {
 #new-role{
   width: 400px;
 }
+
+#search-modal{
+  width: 800px;
+  height: 650px;
+}
+
+.doc-card {
+  width: 250px;
+  height: 200px;
+}
+
+body {
+
+}
