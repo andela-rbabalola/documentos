@@ -15,6 +15,7 @@ class Header extends React.Component {
 
   logout(event) {
     event.preventDefault();
+    console.log('auth logout', this.props.isAuthenticated);
     this.props.logout();
     this.redirectToHomePage();
   }
@@ -24,13 +25,19 @@ class Header extends React.Component {
   }
 
   render() {
+    const auth = this.props.isAuthenticated;
+
+    const logoutLink = (
+      <li><a href="#" onClick={this.logout}>Logout</a></li>
+    );
     return (
       <nav >
+        {console.log('auth', auth)}
         <div className="nav-wrapper">
           <IndexLink to="/" className="brand-logo">Documentos</IndexLink>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li><Link to="/about">About</Link></li>
-            <li><a href="#" onClick={this.logout}>Logout</a></li>
+            {auth ? logoutLink : null}
           </ul>
         </div>
       </nav >
@@ -39,8 +46,15 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  logout: React.PropTypes.func.isRequired
+  logout: React.PropTypes.func.isRequired,
+  isAuthenticated: React.PropTypes.bool.isRequired
 };
 
+function mapStateToProps(state) {
+  return {
+    isAuthenticated: state.users.isAuthenticated
+  };
+}
+
 // export default Header;
-export default connect(null, { logout })(Header);
+export default connect(mapStateToProps, { logout })(Header);

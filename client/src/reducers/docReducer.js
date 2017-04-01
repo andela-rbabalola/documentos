@@ -7,6 +7,8 @@ export default function docReducer(state = initialState.documents, action) {
       return Object.assign({}, state, { allDocuments: action.docs });
     case types.GET_DOCUMENT:
       return Object.assign({}, state, { currentDoc: state.allDocuments[action.id] });
+    case types.CLEAR_USER_DOCS:
+      return Object.assign({}, state, { allDocuments: [], currentDoc: {} });
     default:
       return state;
   }

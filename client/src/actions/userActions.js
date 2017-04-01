@@ -5,7 +5,8 @@ import * as types from './actionTypes';
 export function loginUserSuccess(user) {
   return {
     type: types.LOGIN_SUCCESS,
-    user
+    user,
+    isSuperAdmin: jwt.decode(localStorage.getItem('JWT')).RoleId === 1
   };
 }
 
@@ -27,6 +28,20 @@ export function reauthenticateUser() {
   return {
     type: types.REAUTHENTICATE,
     isAuthenticated: true
+  };
+}
+
+export function logoutSuccess() {
+  return {
+    type: types.LOGOUT_USER,
+    isAuthenticated: false,
+    isSuperAdmin: false
+  };
+}
+
+export function clearUserDocs() {
+  return {
+    type: types.CLEAR_USER_DOCS
   };
 }
 
@@ -68,12 +83,6 @@ export function signup(newUser) {
   };
 }
 
-export function logoutSuccess() {
-  return {
-    type: types.LOGOUT_USER
-  };
-}
-
 export function setUserInState(token) {
   return (dispatch) => {
     dispatch(setUserSuccess(jwt.decode(token)));
@@ -85,6 +94,9 @@ export function logout() {
     // remove token from user's system
     localStorage.removeItem('JWT');
     localStorage.removeItem('isAuthenticated');
-    dispatch(logoutSuccess);
+    // remove user details from state
+    dispatch(logoutSuccess());
+    // we also need to clear docs from state too
+    dispatch(clearUserDocs());
   };
 }
