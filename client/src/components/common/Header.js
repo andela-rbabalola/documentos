@@ -70,7 +70,8 @@ class Header extends React.Component {
       accessor: 'title',
     }, {
       header: 'Content',
-      accessor: 'docContent'
+      accessor: 'docContent',
+      width: 400
     }, {
       header: 'access',
       accessor: 'access'

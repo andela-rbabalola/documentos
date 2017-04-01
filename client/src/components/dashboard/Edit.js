@@ -15,7 +15,7 @@ class Edit extends React.Component {
       access: Object.assign({}, props.currentDoc).access,
       docContent: Object.assign({}, props.currentDoc).docContent,
       userId: jwt.decode(localStorage.getItem('JWT')).UserId,
-      docId: props.currentDoc.id
+      docId: 10
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);

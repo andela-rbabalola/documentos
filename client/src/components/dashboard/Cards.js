@@ -34,32 +34,24 @@ class Cards extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="col s12 m6 l4">
-          <div className="card">
-            <div className="card-image">
+        <div className="col s12 m6">
+          <div className="card blue lighten-2 doc-card">
+            <div className="card-content white-text">
               <span className="card-title">{this.props.document.title}</span>
-              <div className="fixed-action-btn horizontal click-to-toggle show-docs">
-                <a className="btn-floating btn-large red">
-                  <i className="fa fa-bars" aria-hidden="true" />
-                </a>
-                <ul>
-                  <li><a
-                    href="#editModal"
-                    id={this.props.id}
-                    className="btn-floating blue"
-                    onClick={this.editDocument}>
-                    <i className="fa fa-pencil-square-o" aria-hidden="true" /></a></li>
-                  <li><a
-                    onClick={this.deleteDocument}
-                    className="btn-floating red darken-1">
-                    <i className="fa fa-trash-o" aria-hidden="true" /></a></li>
-                </ul>
-              </div>
             </div>
-            <div className="card-content">
-              <span className="card-title grey-text text-darken-4">{this.props.document.title}</span>
+            <div className="card-action">
+              <a
+                href="#editModal"
+                id={this.props.id}
+                className="white-text left"
+                onClick={this.editDocument}>
+                <i className="fa fa-pencil-square-o" aria-hidden="true" />                Edit</a>
+              {this.state.showEditor ? <Edit /> : null}
+              <a
+                onClick={this.deleteDocument}
+                className="white-text right">
+                <i className="fa fa-trash-o" aria-hidden="true" />                Delete</a>
             </div>
-            {this.state.showEditor ? <Edit /> : null}
           </div>
         </div>
       </div>
@@ -74,11 +66,9 @@ Cards.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    currentDoc: state.documents.currentDoc
-  };
-};
+const mapStateToProps = (state, ownProps) => ({
+  currentDoc: state.documents.currentDoc
+});
 
 export default connect(mapStateToProps)(Cards);
 
