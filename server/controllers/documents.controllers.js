@@ -210,6 +210,44 @@ class DocumentsController {
       .catch(error => res.status(400)
         .send(error));
   }
+
+  /**
+   * Method to get documents with role access for a user
+   *
+   * @param {Object} req Object containing the request
+   * @param {Object} res Object containing the response
+   * @returns {Object} res object
+   */
+  static getRoleDocs(req, res) {
+    // we can get the userId and roleId of user making request
+    // from the JWT
+    // first get all docs with access = role
+    const results = [];
+    const returnResults = () => {
+      res.send(results);
+    };
+    model.Document.findAll({
+      where: {
+        access: 'role'
+      }
+    })
+      .then((document) => {
+        document.forEach((doc, docIndex) => {
+          model.User.findById(document[docIndex].userId)
+            .then((user) => {
+              if ((req.decoded.roleId !== 1) && (req.decoded.RoleId !== user.roleId)) {
+                results.push('You do not have access to this document');
+              } else {
+                results.push(doc);
+              }
+              if (docIndex === document.length - 1) {
+                returnResults();
+              }
+            });
+        });
+      });
+  }
+
 }
 
 export default DocumentsController;

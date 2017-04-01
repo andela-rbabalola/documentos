@@ -9,6 +9,10 @@ router.route('/')
   .get(Authentication.decodeToken, documentController.getDocuments)
   .post(Authentication.decodeToken, documentController.createDocument);
 
+// Route to get role docs for a user
+router.route('/role')
+  .get(Authentication.decodeToken, documentController.getRoleDocs);
+
 router.route('/:id')
   .get(Authentication.decodeToken, documentController.getDocById)
   .put(Authentication.decodeToken, documentController.updateDoc)
