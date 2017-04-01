@@ -14,7 +14,7 @@ class Helpers {
    * Use parse int here and in other places
    */
   static checkRoleId(req) {
-    return req.body.roleId !== 2;
+    return req.body.roleId.toString() !== '2';
   }
 
   /**
