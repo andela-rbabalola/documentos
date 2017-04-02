@@ -8,7 +8,6 @@ const server = supertest.agent(app);
 const expect = chai.expect;
 
 let superAdminToken;
-let superAdminUser;
 let regularUser;
 let regularToken;
 let testToken;
@@ -221,6 +220,33 @@ describe('Documents Test Suite', () => {
           expect(typeof res.body).to.equal('object');
           expect(res.body).to.have.property('message');
           expect(res.body.message).to.equal('Document with id 1000 not found');
+          done();
+        });
+    });
+  });
+
+  // require token to get role documents
+  describe('Get Role documents', () => {
+    it('Should return only role documents', (done) => {
+      server.get('/documents/role')
+        .set({ 'x-access-token': superAdminToken })
+        .expect(200)
+        .end((err, res) => {
+          res.body.forEach((doc) => {
+            expect(doc.access).to.equal('role');
+          });
+          done();
+        });
+    });
+
+    it('Should deny access if a user does not have sufficient role access', (done) => {
+      server.get('/documents/role')
+        .set({ 'x-access-token': regularToken })
+        .expect(200)
+        .end((err, res) => {
+          res.body.forEach((doc) => {
+            expect(doc).to.equal('You do not have access to this document');
+          });
           done();
         });
     });

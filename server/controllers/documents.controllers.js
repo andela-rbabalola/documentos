@@ -232,9 +232,10 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static getRoleDocs(req, res) {
-    // we can get the userId and roleId of user making request
-    // from the JWT
-    // first get all docs with access = role
+    /**
+     * we can get the userId and roleId of user making request from the JWT
+     * first get all docs with access = role
+     */
     const results = [];
     const returnResults = () => {
       res.send(results);
