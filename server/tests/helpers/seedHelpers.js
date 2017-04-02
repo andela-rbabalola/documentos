@@ -62,7 +62,7 @@ class seedHelper {
       {
         userId: 1,
         title: faker.lorem.word(),
-        docContent: faker.lorem.sentence(3),
+        docContent: 'This is a test document',
         access: 'public'
       },
       {

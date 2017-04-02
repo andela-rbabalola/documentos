@@ -1,6 +1,5 @@
 import model from '../models';
 
-// IMPsLEMENT ROLE ACCESS
 
 /**
  * Class to handle routing logic for documents
@@ -205,15 +204,21 @@ class DocumentsController {
   static searchDocuments(req, res) {
     model.Document.findAll({
       where: {
-        $or: [{
-          title: {
-            $iLike: `%${req.query.q}%`
-          }
-        }]
+        title: {
+          $iLike: `%${req.query.q}%`
+        }
       }
     })
-      .then(documents => res.status(200)
-        .send(documents))
+      .then((documents) => {
+        if (documents.length <= 0) {
+          return res.status(404)
+            .send({
+              message: 'Document Not Found',
+            });
+        }
+        return res.status(200)
+          .send(documents);
+      })
       .catch(error => res.status(400)
         .send(error));
   }

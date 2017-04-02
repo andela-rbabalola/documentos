@@ -50,7 +50,6 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow only unique users to be created', (done) => {
-      console.log('test user again', testUser);
       server.post('/users')
         .send(testUser)
         .expect(409)

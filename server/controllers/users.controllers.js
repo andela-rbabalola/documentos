@@ -286,10 +286,30 @@ class UserController {
         }]
       }
     })
-      .then(documents => res.status(200)
-        .send(documents))
+      .then((user) => {
+        if (user.length <= 0) {
+          return res.status(404)
+            .send({
+              message: 'User Not Found',
+            });
+        }
+        return res.status(200)
+          .send(user);
+      })
       .catch(error => res.status(400)
         .send(error));
+  }
+
+  /**
+   * Method to logout a user
+   *
+   * @param {String} password
+   * @param {String} hashedPassword
+   * @returns {Boolean} Boolean Indicates if password matches
+   */
+  static logoutUser(req, res) {
+    return res.status(200)
+      .send({ message: 'You have logged out' });
   }
 
   /**

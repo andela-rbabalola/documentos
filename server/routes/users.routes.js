@@ -38,4 +38,7 @@ router.route('/updateRole/:id')
 router.route('/createadmin')
   .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);
 
+router.route('/logout')
+  .post(UserController.logoutUser);
+
 export default router;
