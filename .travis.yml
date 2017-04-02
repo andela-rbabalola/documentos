@@ -9,7 +9,9 @@ services:
   - postgresql
 
 before_script:
+  - psql -c 'drop database if exists documentos_test;' -U postgres
   - psql -c 'create database documentos_test;' -U postgres
+  - npm run db:migrate:test
 
 script:
   - npm test
