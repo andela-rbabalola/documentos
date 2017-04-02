@@ -10,10 +10,9 @@ services:
 
 before_script:
   - psql -c 'create database documentos_test;' -U postgres
-  - npm run db:migrate:test && npm run db:test:seed
 
 script:
-  - npm run all:tests
+  - npm test
 
 after_success:
   - npm run coveralls
