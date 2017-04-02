@@ -82,7 +82,7 @@ class DocumentsController {
           .send(foundDoc);
       })
       .catch(error => res.status(400)
-        .send(error));
+        .send({ errorMessage: error, message: 'An error occurred getting the document' }));
   }
 
   /**
@@ -138,7 +138,7 @@ class DocumentsController {
           .then(res.status(201)
             .send({ message: 'Document successfully deleted' }))
           .catch(error => res.status(400)
-            .send(error));
+            .send({ errorMessage: error, message: 'An error occurred deleting the document' }));
       });
   }
 
@@ -156,13 +156,14 @@ class DocumentsController {
       }
     })
       .then((documents) => {
-        if (!documents) {
+        if (documents.length <= 0) {
           return res.status(404)
             .send({ message: 'No match found for query' });
         }
         return res.status(200).send(documents);
       })
-      .catch(err => res.status(400).send(err));
+      .catch(err => res.status(400)
+        .send({ errorMessage: err, message: 'An error occurred getting the documents' }));
   }
 
   /**
@@ -190,7 +191,7 @@ class DocumentsController {
       .then(documents => res.status(200)
         .send(documents))
       .catch(error => res.status(400)
-        .send(error));
+        .send({ errorMessage: error, message: 'An error occurred searching the documents' }));
   }
 
   /**

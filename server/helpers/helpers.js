@@ -51,8 +51,6 @@ class Helpers {
   static getRoleIdFromUserId(userId) {
     model.User.findById(userId)
       .then((document) => {
-        // return res.status(200).send(documents);
-        // console.log('Role Id', documents.roleId);
         return document;
       });
   }

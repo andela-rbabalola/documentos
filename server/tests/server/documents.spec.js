@@ -161,6 +161,16 @@ describe('Documents Test Suite', () => {
         });
     });
 
+    it('Should fail if an invalid document id is passed', (done) => {
+      server.get('/documents/a')
+        .set({ 'x-access-token': superAdminToken })
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('An error occurred getting the document');
+          done();
+        });
+    });
+
     it('Should get all documents for a specific user', (done) => {
       server.get(`/documents/user/${regularUser.newUser.id}`)
         .set({ 'x-access-token': regularToken })
@@ -168,6 +178,26 @@ describe('Documents Test Suite', () => {
         .end((err, res) => {
           expect(Array.isArray(res.body)).to.equal(true);
           expect(res.body[0].userId).to.equal(regularUser.newUser.id);
+          done();
+        });
+    });
+
+    it('Should fail to get all documents for user if the user id is invalid', (done) => {
+      server.get('/documents/user/a')
+        .set({ 'x-access-token': superAdminToken })
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('An error occurred getting the documents');
+          done();
+        });
+    });
+
+    it('Should return not found message', (done) => {
+      server.get('/documents/user/100')
+        .set({ 'x-access-token': superAdminToken })
+        .expect(404)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('No match found for query');
           done();
         });
     });

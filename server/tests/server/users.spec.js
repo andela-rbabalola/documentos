@@ -144,8 +144,6 @@ describe('Users Test Suite', () => {
         .send(testHelper.userWithoutRole())
         .expect(201)
         .end((err, res) => {
-          console.log('error here', err);
-          console.log('res here', res);
           expect(res.body.newUser).to.have.property('roleId');
           expect(res.body.newUser.roleId).to.equal(3);
           done();

@@ -72,14 +72,33 @@ describe('Search Test', () => {
     });
 
     it('Should return document not found if query is not found', (done) => {
-      server
-        .get('/search/documents/?q=zzzzzzzzzz')
-        .set({
-          'x-access-token': superAdminDetails.token
-        })
+      server.get('/search/documents/?q=zzzzzzzzzz')
+        .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(404);
           expect(res.body.message).to.equal('Document Not Found');
+          done();
+        });
+    });
+
+    it('Should allow a user to search their own documents', (done) => {
+      server.post('/documents/search/user/1')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send({ query: 'hello' })
+        .end((err, res) => {
+          expect(res.status).to.equal(200);
+          expect(Array.isArray(res.body)).to.equal(true);
+          done();
+        });
+    });
+
+    it('Should fail to search if an invalid user is passed', (done) => {
+      server.post('/documents/search/user/a')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send({ query: 'hello' })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.equal('An error occurred searching the documents');
           done();
         });
     });
