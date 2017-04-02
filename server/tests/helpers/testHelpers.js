@@ -109,6 +109,17 @@ class testHelper {
     };
   }
 
+   /**
+   * Creates a dummy document without title
+   * @returns {obj} - Dummy document object
+   */
+  static dummyDocumentNoTitle() {
+    return {
+      docContent: faker.lorem.paragraph(),
+      userId: 2
+    };
+  }
+
   /**
    * Creates a dummy document given arguments
    * @param {String} access - string specifying access type for doc

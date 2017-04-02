@@ -49,5 +49,5 @@ describe('Role Model Test', () => {
           });
       });
     });
-  });//
+  });
 });
