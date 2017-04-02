@@ -1,5 +1,5 @@
 module.exports = {
-  up: function(queryInterface, Sequelize) {
+  up: function (queryInterface, Sequelize) {
     return queryInterface.createTable('Priviledges', {
       id: {
         allowNull: false,
@@ -20,7 +20,13 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'none@email.com',
+        allowNull: false,
+        validate: {
+          isEmail: true,
+          notEmpty: true,
+        }
       },
       createdAt: {
         allowNull: false,
@@ -32,7 +38,7 @@ module.exports = {
       }
     });
   },
-  down: function(queryInterface, Sequelize) {
+  down: function (queryInterface, Sequelize) {
     return queryInterface.dropTable('Priviledges');
   }
 };

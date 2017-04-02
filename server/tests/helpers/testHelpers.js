@@ -109,14 +109,37 @@ class testHelper {
     };
   }
 
-   /**
-   * Creates a dummy document without title
-   * @returns {obj} - Dummy document object
-   */
+  /**
+  * Creates a dummy document without title
+  * @returns {obj} - Dummy document object
+  */
   static dummyDocumentNoTitle() {
     return {
       docContent: faker.lorem.paragraph(),
       userId: 2
+    };
+  }
+
+  /**
+   * Returns a dummy entry in the shared table
+   * @returns {obj} - Dummy shared entry
+   */
+  static dummySharedEntry() {
+    return {
+      email: faker.internet.email(),
+      canEdit: true,
+    };
+  }
+
+  /**
+   * Returns a dummy entry in the shared table
+   * with no email
+   * @returns {obj} - Dummy shared entry
+   */
+  static dummySharedEntryNoEmail() {
+    return {
+      email: 'invalid email',
+      canEdit: true
     };
   }
 

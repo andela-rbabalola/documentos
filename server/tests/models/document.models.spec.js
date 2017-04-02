@@ -37,7 +37,7 @@ describe('Document Model', () => {
       expect(document.userId).to.equal(1);
     });
 
-    it('Should create a document with the data of creation', () => {
+    it('Should create a document with the date of creation', () => {
       expect(document.createdAt).to.exist;
     });
 
