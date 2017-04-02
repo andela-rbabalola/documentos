@@ -254,7 +254,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow an admin to update a user', (done) => {
-      server.put('/users/5')
+      server.put('/users/3')
         .set({ 'x-access-token': adminDetails.token })
         .send({ firstName: 'updated name' })
         .expect(201)
@@ -276,7 +276,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow the SuperAdmin to update a user\'s role', (done) => {
-      server.put('/users/updateRole/5')
+      server.put('/users/updateRole/3')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 2 })
         .expect(201)
