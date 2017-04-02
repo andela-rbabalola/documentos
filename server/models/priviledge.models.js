@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = function(sequelize, Datatypes) {
+module.exports = function (sequelize, Datatypes) {
   const Priviledge = sequelize.define('Priviledge', {
     canEdit: {
       type: Datatypes.BOOLEAN,
