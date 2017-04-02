@@ -9,6 +9,9 @@ router.route('/')
   .get(Authentication.decodeToken, Authentication.isAdmin, UserController.getAllUsers)
   .post(UserController.createUser);
 
+router.route('/createadmin')
+  .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);
+
 // pagination for users
 router.route('/pagination')
   .post((req, res) => {
@@ -34,9 +37,6 @@ router.route('/signin')
 
 router.route('/updateRole/:id')
   .put(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.updateUserRole);
-
-router.route('/createadmin')
-  .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);
 
 router.route('/logout')
   .post(UserController.logoutUser);

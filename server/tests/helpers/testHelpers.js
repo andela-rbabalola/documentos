@@ -60,6 +60,14 @@ class testHelper {
     };
   }
 
+  static invalidAdmin() {
+    return {
+      firstName: faker.name.firstName(),
+      roleId: 2,
+      password: 'faker.internet.password()',
+    };
+  }
+
   static userNoEmail() {
     return {
       firstName: faker.name.firstName(),

@@ -38,9 +38,6 @@ class Helpers {
    * @returns {Object} res object
    */
   static isSuperAdmin(req, where) {
-    // if (where === 'params') {
-    //   return req.params.id === '1';
-    // }
     return (where === 'params') ? req.params.id === '1' : req.body.roleId === 1;
   }
 
