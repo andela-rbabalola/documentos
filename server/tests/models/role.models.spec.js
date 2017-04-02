@@ -17,7 +17,10 @@ describe('Role Model Test', () => {
         });
     });
 
-    after(() => model.Role.destroy({ where: { id: role.id } }));
+    after((done) => {
+      model.Role.destroy({ where: { id: role.id } });
+      done();
+    });
 
     it('Should be able to create a new role', () => {
       expect(role).to.exist;

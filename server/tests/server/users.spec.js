@@ -33,7 +33,6 @@ describe('Users Test Suite', () => {
   });
 
   describe('Authentication', () => {
-    console.log('test user', testUser);
     it('Should create a user given valid details', (done) => {
       server.post('/users')
         .set({ 'Content-Type': 'application/x-www-form-urlencoded' })

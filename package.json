@@ -10,8 +10,8 @@
     "db:migrate:test:undo": "NODE_ENV=test sequelize db:migrate:undo:all",
     "db:migrate:test": "NODE_ENV=test sequelize db:migrate",
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helpers/seedHelpers",
-    "cover": "NODE_ENV=test babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha ./server/tests/**/*.spec.js",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+    "cover": "NODE_ENV=test istanbul cover _mocha -- server/tests/**/*.js --compilers js:babel-core/register --timeout 20000",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,7 @@
     "font-awesome": "^4.7.0",
     "froala-editor": "^2.5.1",
     "install": "^0.8.7",
+    "istanbul": "^0.4.5",
     "jsonwebtoken": "^7.3.0",
     "lodash": "^4.17.4",
     "logger": "0.0.1",
