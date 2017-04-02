@@ -23,13 +23,14 @@ app.use(parser.json());
 const compiler = webpack(config);
 
 if (process.env.NODE_ENV !== 'test') {
+  console.log('process', process.NODE_ENV);
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath
   }));
+  app.use(require('webpack-hot-middleware')(compiler));
 }
 
-app.use(require('webpack-hot-middleware')(compiler));
 
 app.use('/users', userRoute);
 app.use('/roles', roleRoute);
