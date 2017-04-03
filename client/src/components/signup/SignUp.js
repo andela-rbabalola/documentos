@@ -5,8 +5,14 @@ import toastr from 'toastr';
 import docImage from '../../images/dms.jpg';
 import { signup } from '../../actions/userActions';
 
-
-class SignUpForm extends React.Component {
+/**
+ * Class to create Signup component
+ */
+export class SignUpForm extends React.Component {
+  /**
+   *
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +24,11 @@ class SignUpForm extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
+  /**
+   *
+   * @param {*} event
+   * @returns {*} action
+   */
   onChange(event) {
     event.preventDefault();
     const inputField = event.target.name;
@@ -26,6 +37,11 @@ class SignUpForm extends React.Component {
     this.setState({ newUser });
   }
 
+  /**
+   *
+   * @param {*} event
+   * @returns {*} click action
+   */
   onClick(event) {
     event.preventDefault();
     this.props.signup(this.state.newUser).then(
@@ -34,6 +50,11 @@ class SignUpForm extends React.Component {
     );
   }
 
+  /**
+   * Renders the UserInput component
+   * @param {*} null
+   * @returns {*} rendered JSX
+   */
   render() {
     return (
       <div className="row">
