@@ -30,6 +30,10 @@ describe('UserInput Component', () => {
     expect(wrapper.find('img').length).toBe(1);
   });
 
+  it('Renders a button to signin', () => {
+    expect(wrapper.find('a').text()).toBe('SIGN IN');
+  });
+
   it('Renders a link to signup', () => {
     expect(wrapper.find('Link').length).toBe(1);
   });

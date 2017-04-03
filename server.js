@@ -37,10 +37,6 @@ app.use('/documents', documentRoute);
 app.use('/search', searchRoute);
 app.use('/pagination', paginationRoute);
 
-// app.listen(port, () => {
-//   console.log(`Server listening on port ${port}`);
-// });
-
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/src/index.html'));
 });
