@@ -22,7 +22,12 @@ describe('Users Model', () => {
         });
     });
 
-    after(() => model.User.destroy({ where: { id: user.id } }));
+    // after(() => model.User.destroy({ where: { id: user.id } }));
+
+    after((done) => {
+      model.User.destroy({ where: { id: user.id } });
+      done();
+    });
 
     it('Should be able to create a new user', () => {
       expect(user).to.exist;

@@ -144,6 +144,16 @@ describe('Roles Test Suite', () => {
         });
     });
 
+    it('Should fail if the roleId is not valid', (done) => {
+      server.get('/roles/a')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.equal('An error occurred getting the role');
+          done();
+        });
+    });
+
     it('Should fail if role does not exist', (done) => {
       server.get('/roles/100')
         .set({ 'x-access-token': superAdminDetails.token })

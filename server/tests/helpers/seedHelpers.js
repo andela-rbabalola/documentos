@@ -60,34 +60,34 @@ class seedHelper {
   static populateDocs() {
     const defaultDocs = [
       {
-        userId: 1,
         title: faker.lorem.word(),
-        docContent: faker.lorem.sentence(3),
-        access: 'public'
+        docContent: 'This is a test document',
+        access: 'public',
+        userId: 1
       },
       {
-        userId: 2,
         title: faker.lorem.word(),
         docContent: faker.lorem.sentence(3),
-        access: 'private'
+        access: 'private',
+        userId: 1
       },
       {
-        userId: 3,
         title: faker.lorem.word(),
         docContent: faker.lorem.sentence(3),
-        access: 'public'
+        access: 'public',
+        userId: 1
       },
       {
-        userId: 3,
         title: faker.lorem.word(),
         docContent: faker.lorem.sentence(3),
-        access: 'role'
+        access: 'role',
+        userId: 1
       },
       {
-        userId: 1,
         title: faker.lorem.word(),
         docContent: faker.lorem.sentence(3),
-        access: 'private'
+        access: 'private',
+        userId: 1
       }
     ];
     return model.Document.bulkCreate(defaultDocs);

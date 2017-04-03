@@ -51,7 +51,7 @@ class RolesController {
         res.status(200)
           .send(foundRole);
       }).catch(error => res.status(400)
-        .send(error));
+        .send({ errorMessage: error, message: 'An error occurred getting the role' }));
   }
 
   /**
@@ -81,7 +81,7 @@ class RolesController {
    * @returns {Object} res object
    */
   static deleteRole(req, res) {
-    // Ensure admin role can't be deleted
+    // Ensure super admin role can't be deleted
     if (req.params.id === '1') {
       return res.status(403)
         .send({ message: 'SuperAdmin role can not be deleted' });
@@ -97,7 +97,7 @@ class RolesController {
           .then(res.status(201)
             .send({ message: 'Role successfully deleted' }))
           .catch(error => res.status(400)
-            .send(error));
+            .send({ errorMessage: error, message: 'An error occurred deleting the role' }));
       });
   }
 
@@ -109,7 +109,6 @@ class RolesController {
    * @returns {Object} res object
    */
   static updateRole(req, res) {
-    // Put all this in a helper function to ensure SRP
     // Ensure admin role can't be updated
     if (req.params.id === '1') {
       return res.status(403)

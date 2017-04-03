@@ -10,7 +10,6 @@ const testUser = testHelper.user();
 let superAdminDetails;
 let adminDetails;
 let regularDetails;
-let testDetails;
 
 describe('Users Test Suite', () => {
   before((done) => {
@@ -27,18 +26,14 @@ describe('Users Test Suite', () => {
               .send(testHelper.user())
               .end((err, res) => {
                 regularDetails = res.body;
-                server.post('/users')
-                  .send(testHelper.user())
-                  .end((err, res) => {
-                    testDetails = res.body;
-                    done();
-                  });
+                done();
               });
           });
       });
   });
 
   describe('Authentication', () => {
+    const testAdmin = testHelper.userWithRole(2);
     it('Should create a user given valid details', (done) => {
       server.post('/users')
         .set({ 'Content-Type': 'application/x-www-form-urlencoded' })
@@ -68,13 +63,35 @@ describe('Users Test Suite', () => {
     it('Should allow the SuperAdmin create an admin', (done) => {
       server.post('/users/createadmin')
         .set({ 'x-access-token': superAdminDetails.token })
-        .send(testHelper.userWithRole(2))
+        .send(testAdmin)
         .expect(201)
         .end((err, res) => {
           expect(res.body.message).to.equal('New admin created');
           expect(res.body).to.have.property('newAdmin');
           expect(res.body.newAdmin).to.have.property('roleId');
           expect(res.body.newAdmin.roleId).to.equal(2);
+          done();
+        });
+    });
+
+    it('Should fail to create admin if admin already exists', (done) => {
+      server.post('/users/createadmin')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send(testAdmin)
+        .expect(409)
+        .end((err, res) => {
+          expect(res.body.message).to.equal(`${testAdmin.email} already exists`);
+          done();
+        });
+    });
+
+    it('Should fail to create admin if invalid details are passed', (done) => {
+      server.post('/users/createadmin')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send(testHelper.invalidAdmin())
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('An error occurred creating the admin');
           done();
         });
     });
@@ -112,8 +129,6 @@ describe('Users Test Suite', () => {
         });
     });
 
-    // test that update role does not update to unknown role
-
     it('Should prevent users from specifying a role', (done) => {
       server.post('/users')
         .send(testHelper.userWithRole(1))
@@ -147,54 +162,17 @@ describe('Users Test Suite', () => {
         });
     });
 
-    it('Should login user with correct details', (done) => {
-      const user = testHelper.user();
-      server.post('/users')
-        .type('form')
-        .send(user)
-        .end(() => {
-          server.post('/users/signin')
-            .send(user)
-            .expect(200)
-            .end((err, res) => {
-              expect(res.body.message).to.equal('Signin successful');
-              done();
-            });
-        });
+    it('Should login user with correct details', () => {
+      expect(adminDetails.message).to.equal('Signin successful');
     });
 
-    // problem test
-    it('Should issue a token to user on successful login', (done) => {
-      const user = testHelper.user();
-      server.post('/users')
-        .type('form')
-        .send(user)
-        .end(() => {
-          server.post('/users/signin')
-            .send(user)
-            .expect(200)
-            .end((err, res) => {
-              expect(res.body).to.have.property('token');
-              expect(res.body.token).not.to.equal(null);
-              done();
-            });
-        });
+    it('Should issue a token to user on successful login', () => {
+      expect(adminDetails).to.have.property('token');
+      expect(adminDetails.token).not.to.equal(null);
     });
 
-    it('Should not return the password on login', (done) => {
-      const user = testHelper.user();
-      server.post('/users')
-        .type('form')
-        .send(user)
-        .end(() => {
-          server.post('/users/signin')
-            .send(user)
-            .expect(200)
-            .end((err, res) => {
-              expect(res.body.password).to.equal(undefined);
-              done();
-            });
-        });
+    it('Should not return the password on login', () => {
+      expect(adminDetails.password).to.equal(undefined);
     });
 
     it('Should deny access for invalid details', (done) => {
@@ -206,9 +184,27 @@ describe('Users Test Suite', () => {
           done();
         });
     });
+
+    it('Should deny access is user is not in the database', (done) => {
+      server.post('/users/signin')
+        .send({ email: 'rotimi222@gmail.com', password: 'rotimi123' })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Signin failed! User not found');
+          done();
+        });
+    });
+
+    it('Should logout a user', (done) => {
+      server.post('/users/logout')
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('You have logged out');
+          done();
+        });
+    });
   });
 
-  // test for password length in models
   describe('Get Users', () => {
     it('Should require token to see all users', (done) => {
       server.get('/users')
@@ -240,7 +236,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow the SuperAdmin to see a specific user', (done) => {
-      server.get('/users/4')
+      server.get('/users/2')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.body).to.have.property('firstName');
@@ -251,8 +247,28 @@ describe('Users Test Suite', () => {
         });
     });
 
+    it('Should fail if the user id does not exist', (done) => {
+      server.get('/users/200')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.equal('User not found');
+          done();
+        });
+    });
+
+    it('Should fail if the user id is not valid', (done) => {
+      server.get('/users/a')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .end((err, res) => {
+          expect(res.status).to.equal(400);
+          expect(res.body.message).to.equal('An error occurred getting the user');
+          done();
+        });
+    });
+
     it('Should allow an Admin to see a specific user', (done) => {
-      server.get('/users/4')
+      server.get('/users/2')
         .set({ 'x-access-token': adminDetails.token })
         .end((err, res) => {
           expect(res.body).to.have.property('firstName');
@@ -286,7 +302,7 @@ describe('Users Test Suite', () => {
 
   describe('Updating a user', () => {
     it('Should allow the SuperAdmin to update a user', (done) => {
-      server.put('/users/4')
+      server.put('/users/3')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ firstName: 'updated name' })
         .expect(201)
@@ -297,7 +313,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow an admin to update a user', (done) => {
-      server.put('/users/5')
+      server.put('/users/3')
         .set({ 'x-access-token': adminDetails.token })
         .send({ firstName: 'updated name' })
         .expect(201)
@@ -319,7 +335,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow the SuperAdmin to update a user\'s role', (done) => {
-      server.put('/users/updateRole/5')
+      server.put('/users/updateRole/3')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 2 })
         .expect(201)
@@ -336,6 +352,28 @@ describe('Users Test Suite', () => {
         .expect(201)
         .end((err, res) => {
           expect(res.body.message).to.equal('You do not have superadmin rights');
+          done();
+        });
+    });
+
+    it('Should fail if the user to update does not exist', (done) => {
+      server.put('/users/updateRole/500')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send({ roleId: 2 })
+        .expect(404)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('User not found');
+          done();
+        });
+    });
+
+    it('Should fail id the old roleId is the same as the new roleId', (done) => {
+      server.put('/users/updateRole/3')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send({ roleId: 2 })
+        .expect(409)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('Old role is the same as new role');
           done();
         });
     });
@@ -374,6 +412,17 @@ describe('Users Test Suite', () => {
         });
     });
 
+    it('Should fail if the user id does not exist', (done) => {
+      server.put('/users/100')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .send({ firstName: 'updated name' })
+        .expect(404)
+        .end((err, res) => {
+          expect(res.body.message).to.equal('User with id 100 not found');
+          done();
+        });
+    });
+
     it('Should allow only authenticated users to have access to updating', (done) => {
       server.put(`/users/${regularDetails.newUser.id}`)
         .send({ firstName: 'updated name' })
@@ -395,7 +444,6 @@ describe('Users Test Suite', () => {
         });
     });
 
-    // problem test??
     it('Should not allow an admin to delete a user', (done) => {
       server.delete(`/users/${regularDetails.newUser.id}`)
         .set({ 'x-access-token': adminDetails.token })
@@ -410,6 +458,16 @@ describe('Users Test Suite', () => {
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.body.message).to.equal('The SuperAdmin cannot be deleted');
+          done();
+        });
+    });
+
+    it('Should fail if the user to delete does not exist', (done) => {
+      server.delete('/users/100')
+        .set({ 'x-access-token': superAdminDetails.token })
+        .end((err, res) => {
+          expect(res.status).to.equal(404);
+          expect(res.body.message).to.equal('Unable to delete because user is not found');
           done();
         });
     });

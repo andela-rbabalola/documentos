@@ -17,7 +17,10 @@ describe('Role Model Test', () => {
         });
     });
 
-    after(() => model.Role.destroy({ where: { id: role.id } }));
+    after((done) => {
+      model.Role.destroy({ where: { id: role.id } });
+      done();
+    });
 
     it('Should be able to create a new role', () => {
       expect(role).to.exist;
@@ -27,26 +30,24 @@ describe('Role Model Test', () => {
     it('Should create a role that has a title', () => {
       expect(role.title).to.equal(defaultRole.title);
     });
-  });
 
-  describe('Role Model Validations', () => {
-    it('Should ensure that the title field cannot be null', (done) => {
-      model.Role.create()
-        .catch((error) => {
-          expect(/notNull Violation/.test(error.message)).to.be.true;
-          done();
-        });
-    });
+    describe('Role Model Validations', () => {
+      it('Should ensure that the title field cannot be null', (done) => {
+        model.Role.create()
+          .catch((error) => {
+            expect(/notNull Violation/.test(error.message)).to.be.true;
+            done();
+          });
+      });
 
-    it('Should ensure a role title is unique', (done) => {
-      model.Role.create(defaultRole)
-        .then(() => {
-          model.Role.create(defaultRole)
-            .catch((error) => {
-              expect(/SequelizeUniqueConstraintError/.test(error.name)).to.be.true;
-              done();
-            });
-        });
+      it('Should ensure a role title is unique', () => {
+        model.Role.create(defaultRole)
+          .then(() => {
+          })
+          .catch((error) => {
+            expect(/UniqueConstraintError/.test(error.name)).to.be.true;
+          });
+      });
     });
   });
 });

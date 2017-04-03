@@ -38,9 +38,6 @@ class Helpers {
    * @returns {Object} res object
    */
   static isSuperAdmin(req, where) {
-    // if (where === 'params') {
-    //   return req.params.id === '1';
-    // }
     return (where === 'params') ? req.params.id === '1' : req.body.roleId === 1;
   }
 
@@ -54,8 +51,6 @@ class Helpers {
   static getRoleIdFromUserId(userId) {
     model.User.findById(userId)
       .then((document) => {
-        // return res.status(200).send(documents);
-        // console.log('Role Id', documents.roleId);
         return document;
       });
   }

@@ -159,7 +159,7 @@ class UserController {
         res.status(200)
           .send(foundUser);
       }).catch(error => res.status(400)
-        .send(error));
+        .send({ errorMessage: error, message: 'An error occurred getting the user' }));
   }
 
   /**
@@ -186,9 +186,7 @@ class UserController {
             email: req.body.email || foundUser.email,
             password: req.body.password || foundUser.password
           }).then(res.status(201)
-            .send({ message: 'User successfully updated' }))
-          .catch(error => res.status(400)
-            .send(error));
+            .send({ message: 'User successfully updated' }));
       });
   }
 
@@ -220,7 +218,7 @@ class UserController {
               return res.status(404)
                 .send({ message: 'User not found' });
             } else if (foundUser.roleId === req.body.roleId) {
-              return res.status(400)
+              return res.status(409)
                 .send({ message: 'Old role is the same as new role' });
             }
             return foundUser
@@ -286,10 +284,30 @@ class UserController {
         }]
       }
     })
-      .then(documents => res.status(200)
-        .send(documents))
+      .then((user) => {
+        if (user.length <= 0) {
+          return res.status(404)
+            .send({
+              message: 'User Not Found',
+            });
+        }
+        return res.status(200)
+          .send(user);
+      })
       .catch(error => res.status(400)
         .send(error));
+  }
+
+  /**
+   * Method to logout a user
+   *
+   * @param {String} password
+   * @param {String} hashedPassword
+   * @returns {Boolean} Boolean Indicates if password matches
+   */
+  static logoutUser(req, res) {
+    return res.status(200)
+      .send({ message: 'You have logged out' });
   }
 
   /**

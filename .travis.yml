@@ -10,6 +10,16 @@ services:
 
 before_script:
   - psql -c 'create database documentos_test;' -U postgres
+  - NODE_ENV=test npm run db:migrate:test
 
 script:
+  - npm test
+
+after_success:
+  - npm run coveralls
+
+addons:
+  postgresql: "9.3"
+
+after_failure:
   - npm run coveralls

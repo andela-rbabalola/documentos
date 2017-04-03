@@ -13,7 +13,7 @@ class testHelper {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: faker.internet.password()
+      password: 'password123'
     };
   }
 
@@ -39,7 +39,7 @@ class testHelper {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: 'anotherpassword',
       roleId
     };
   }
@@ -48,7 +48,7 @@ class testHelper {
     return {
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: 'fakepassword',
     };
   }
 
@@ -56,7 +56,15 @@ class testHelper {
     return {
       firstName: faker.name.firstName(),
       email: faker.internet.email(),
-      password: faker.internet.password(),
+      password: 'faker.internet.password()',
+    };
+  }
+
+  static invalidAdmin() {
+    return {
+      firstName: faker.name.firstName(),
+      roleId: 2,
+      password: 'faker.internet.password()',
     };
   }
 
@@ -64,7 +72,7 @@ class testHelper {
     return {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      password: faker.internet.password(),
+      password: 'anewday123',
     };
   }
 
@@ -80,12 +88,12 @@ class testHelper {
    * Creates a dummy document
    * @returns {obj} - Object with dummy user details
    */
-  static dummyDocument() {
+  static dummyDocument(userId) {
     return {
       title: faker.lorem.word(),
       docContent: faker.lorem.paragraph(),
       access: 'public',
-      userId: 1
+      userId
     };
   }
 
@@ -97,7 +105,41 @@ class testHelper {
     return {
       title: faker.lorem.word(),
       docContent: faker.lorem.paragraph(),
-      userId: 4
+      userId: 2
+    };
+  }
+
+  /**
+  * Creates a dummy document without title
+  * @returns {obj} - Dummy document object
+  */
+  static dummyDocumentNoTitle() {
+    return {
+      docContent: faker.lorem.paragraph(),
+      userId: 2
+    };
+  }
+
+  /**
+   * Returns a dummy entry in the shared table
+   * @returns {obj} - Dummy shared entry
+   */
+  static dummySharedEntry() {
+    return {
+      email: faker.internet.email(),
+      canEdit: true,
+    };
+  }
+
+  /**
+   * Returns a dummy entry in the shared table
+   * with no email
+   * @returns {obj} - Dummy shared entry
+   */
+  static dummySharedEntryNoEmail() {
+    return {
+      email: 'invalid email',
+      canEdit: true
     };
   }
 

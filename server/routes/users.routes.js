@@ -12,8 +12,13 @@ router.route('/')
 // pagination for users
 router.route('/pagination')
   .post((req, res) => {
+    console.log('req here', req.body);
     res.redirect(`/pagination/users/?limit=${req.body.limit}&offset=${req.body.offset}`);
   });
+
+router.route('/createadmin')
+  .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);
+
 
 // Route to search for a user
 router.route('/search')
@@ -35,7 +40,7 @@ router.route('/signin')
 router.route('/updateRole/:id')
   .put(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.updateUserRole);
 
-router.route('/createadmin')
-  .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);
+router.route('/logout')
+  .post(UserController.logoutUser);
 
 export default router;

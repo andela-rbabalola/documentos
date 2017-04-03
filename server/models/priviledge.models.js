@@ -1,12 +1,18 @@
-'use strict';
-
-module.exports = function(sequelize, Datatypes) {
+module.exports = function (sequelize, Datatypes) {
   const Priviledge = sequelize.define('Priviledge', {
     canEdit: {
       type: Datatypes.BOOLEAN,
       defaultValue: false
     },
-    email: Datatypes.STRING
+    email: {
+      type: Datatypes.STRING,
+      defaultValue: 'none@email.com',
+      allowNull: false,
+      validate: {
+        isEmail: true,
+        notEmpty: true
+      }
+    }
   }, {
     classMethods: {
       associate: (models) => {

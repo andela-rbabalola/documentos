@@ -1,6 +1,5 @@
 import model from '../models';
 
-// IMPsLEMENT ROLE ACCESS
 
 /**
  * Class to handle routing logic for documents
@@ -83,7 +82,7 @@ class DocumentsController {
           .send(foundDoc);
       })
       .catch(error => res.status(400)
-        .send(error));
+        .send({ errorMessage: error, message: 'An error occurred getting the document' }));
   }
 
   /**
@@ -139,7 +138,7 @@ class DocumentsController {
           .then(res.status(201)
             .send({ message: 'Document successfully deleted' }))
           .catch(error => res.status(400)
-            .send(error));
+            .send({ errorMessage: error, message: 'An error occurred deleting the document' }));
       });
   }
 
@@ -157,13 +156,14 @@ class DocumentsController {
       }
     })
       .then((documents) => {
-        if (!documents) {
+        if (documents.length <= 0) {
           return res.status(404)
             .send({ message: 'No match found for query' });
         }
         return res.status(200).send(documents);
       })
-      .catch(err => res.status(400).send(err));
+      .catch(err => res.status(400)
+        .send({ errorMessage: err, message: 'An error occurred getting the documents' }));
   }
 
   /**
@@ -191,7 +191,7 @@ class DocumentsController {
       .then(documents => res.status(200)
         .send(documents))
       .catch(error => res.status(400)
-        .send(error));
+        .send({ errorMessage: error, message: 'An error occurred searching the documents' }));
   }
 
   /**
@@ -203,19 +203,23 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static searchDocuments(req, res) {
-    console.log('req.body', req.body);
-    console.log('req.query', req.query);
     model.Document.findAll({
       where: {
-        $or: [{
-          title: {
-            $iLike: `%${req.query.q}%`
-          }
-        }]
+        title: {
+          $iLike: `%${req.query.q}%`
+        }
       }
     })
-      .then(documents => res.status(200)
-        .send(documents))
+      .then((documents) => {
+        if (documents.length <= 0) {
+          return res.status(404)
+            .send({
+              message: 'Document Not Found',
+            });
+        }
+        return res.status(200)
+          .send(documents);
+      })
       .catch(error => res.status(400)
         .send(error));
   }
@@ -228,9 +232,10 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static getRoleDocs(req, res) {
-    // we can get the userId and roleId of user making request
-    // from the JWT
-    // first get all docs with access = role
+    /**
+     * we can get the userId and roleId of user making request from the JWT
+     * first get all docs with access = role
+     */
     const results = [];
     const returnResults = () => {
       res.send(results);
