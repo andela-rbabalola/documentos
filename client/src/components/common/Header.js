@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import ReactTable from 'react-table';
 import { connect } from 'react-redux';
 import { Link, IndexLink, browserHistory } from 'react-router';

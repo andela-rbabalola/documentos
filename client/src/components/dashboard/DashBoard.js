@@ -1,7 +1,6 @@
-/* eslint require-jsdoc:0 */
+/* eslint require-jsdoc: "off"  */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import toastr from 'toastr';
 import 'froala-editor/js/froala_editor.pkgd.min';
 import 'froala-editor/css/froala_style.min.css';
 import 'froala-editor/css/froala_editor.pkgd.min.css';
@@ -11,17 +10,16 @@ import Cards from './Cards';
 import * as docActions from '../../actions/docActions';
 import * as userActions from '../../actions/userActions';
 
-class DashBoard extends React.Component {
+/**
+ * Class to create dashboard component
+ */
+export class DashBoard extends React.Component {
+  /**
+   *
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
-  }
-
-  displayDocs(document, index) {
-    return (
-      <div className="col s4" key={index}>
-        <Cards document={document} id={index} />
-      </div>
-    );
   }
 
   componentDidMount() {
@@ -32,6 +30,25 @@ class DashBoard extends React.Component {
     }
   }
 
+  /**
+   *
+   * @param {Object} document
+   * @param {Number} index
+   * @return {*} Rendered component
+   */
+  displayDocs(document, index) {
+    return (
+      <div className="col s4" key={index}>
+        <Cards document={document} id={index} />
+      </div>
+    );
+  }
+
+  /**
+   * Renders the Header component
+   * @param {*} null
+   * @returns {*} rendered JSX
+   */
   render() {
     return (
       <div>
@@ -44,7 +61,7 @@ class DashBoard extends React.Component {
           </a>
         </div>
         {/* Render the TextEditor component only when a user is signed in*/}
-        {localStorage.getItem('JWT') ? <TextEditor /> : null}
+        {this.props.isAuthenticated ? <TextEditor /> : null}
         <div className="row">
           {this.props.documents.map(this.displayDocs)}
         </div>

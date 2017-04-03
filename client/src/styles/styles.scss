@@ -80,3 +80,15 @@ img {
   width: 250px;
   height: 200px;
 }
+
+.row :hover .btn{
+  background: deepskyblue;
+}
+
+.modal :hover .btn {
+  background: deepskyblue;
+}
+
+#create-doc {
+  margin-left: 0px;
+}

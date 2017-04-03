@@ -4,11 +4,10 @@ import FroalaEditor from 'react-froala-wysiwyg';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
-// import { bindActionCreators } from 'redux';
 import { createDocument } from '../../actions/docActions';
 
 
-class TextEditor extends React.Component {
+export class TextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,13 +90,6 @@ class TextEditor extends React.Component {
                 </select>
               </div>
             </div>
-            <div className="col s4">
-              <div className="input-field col s8">
-                <select value="" id="selectMe-edit2">
-                  <option value="">Edit</option>
-                </select>
-              </div>
-            </div>
           </div>
           <div className="modal-content">
             <div className="text-editor" id="editor">
@@ -110,7 +102,11 @@ class TextEditor extends React.Component {
             </div>
             <div className="modal-footer">
               <a
-                className="waves-effect waves-light btn modal-action modal-close"
+                className="waves-effect waves-light btn modal-action left modal-close close-editor"
+                id="create-doc"
+                onClick="">CLOSE</a>
+              <a
+                className="waves-effect waves-light btn modal-action"
                 id="create-doc"
                 onClick={this.onClick}>SUBMIT</a>
             </div>
