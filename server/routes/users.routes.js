@@ -5,8 +5,12 @@ import Authentication from '../middleware/authentication';
 
 const router = express.Router();
 
+/**
+ * I removed admin authentication for this route because I need to be
+ * able to get a list of all users emails on the front end
+ */
 router.route('/')
-  .get(Authentication.decodeToken, Authentication.isAdmin, UserController.getAllUsers)
+  .get(Authentication.decodeToken, UserController.getAllUsers)
   .post(UserController.createUser);
 
 // Route to search for a user

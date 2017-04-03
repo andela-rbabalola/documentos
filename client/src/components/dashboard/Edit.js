@@ -89,7 +89,7 @@ class Edit extends React.Component {
             <div className="col s4">
               <div className="input-field col s8">
                 <select value={this.state.access} id="selectMe-edit">
-                  <option value="">Choose an access type</option>
+                  <option value="">Access</option>
                   <option value="public">Public</option>
                   <option value="private">Private</option>
                   <option value="role">Role</option>
@@ -98,7 +98,7 @@ class Edit extends React.Component {
             </div>
             <div className="col s4">
               <div className="input-field col s8">
-                <select value="" id="selectMe-edit">
+                <select value="" id="selectMe-edit2">
                   <option value="">Edit Access</option>
                 </select>
               </div>
