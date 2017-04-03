@@ -19,6 +19,7 @@ class Cards extends React.Component {
     event.preventDefault();
     this.setState({ showEditor: !this.state.showEditor });
     this.props.dispatch(docActions.getDoc(this.props.id));
+    // dispatch action to get all users emails
   }
 
   deleteDocument(event) {

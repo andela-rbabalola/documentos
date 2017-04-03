@@ -1,7 +1,8 @@
 export default {
   manageUser: {
     user: {},
-    isAuthenticated: false
+    isAuthenticated: false,
+    allUsers: []
   },
   documents: { allDocuments: [] },
   manageRoles: {

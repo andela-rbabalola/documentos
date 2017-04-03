@@ -25,7 +25,7 @@ class DashBoard extends React.Component {
   }
 
   componentDidMount() {
-   // Ensure user is authenticated before loading uer details
+    // Ensure user is authenticated before loading uer details
     if (this.props.isAuthenticated) {
       this.props.dispatch(docActions.loadDocuments());
       this.props.dispatch(userActions.setUserInState(localStorage.getItem('JWT')));
