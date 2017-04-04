@@ -115,16 +115,16 @@ export class Header extends React.Component {
     }];
 
     const logoutLink = (
-      <li><a href="#" onClick={this.logout}>Logout</a></li>
+      <li><a className="logout" href="#" onClick={this.logout}>Logout</a></li>
     );
 
     const rolesLink = (
-      <li><a onClick={this.redirectToRoles}>Manage</a></li>
+      <li><a className="manage" onClick={this.redirectToRoles}>Manage</a></li>
     );
 
     const searchLink = (
       <li>
-        <a href="#search-modal">
+        <a href="#search-modal" className="search">
           <i className="fa fa-search prefix" aria-hidden="true" />          &nbsp;Search
         </a>
         {/* Modal Start */}
