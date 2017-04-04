@@ -1,10 +1,11 @@
+/* eslint require-jsdoc: "off"  */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 import Edit from './Edit';
 import * as docActions from '../../actions/docActions';
 
-class Cards extends React.Component {
+export class Cards extends React.Component {
 
   constructor(props) {
     super(props);

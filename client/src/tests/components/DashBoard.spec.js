@@ -1,11 +1,8 @@
 /* eslint require-jsdoc: "off"  */
 import expect from 'expect';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
 import { mount } from 'enzyme';
-import $ from 'jquery';
-import { DashBoard } from '../components/dashboard/DashBoard';
+import { DashBoard } from '../../components/dashboard/DashBoard';
 
 
 describe('Dashboard component', () => {

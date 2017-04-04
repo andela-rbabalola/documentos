@@ -26,6 +26,7 @@ require.extensions['.jpg'] = function () { return null; };
 var jsdom = require('jsdom').jsdom;
 
 var exposedProperties = ['window', 'navigator', 'document'];
+var token = localStorage.setItem('JWT', process.env.jwtToken);
 
 global.document = jsdom('');
 global.window = document.defaultView;
