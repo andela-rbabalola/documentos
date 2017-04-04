@@ -123,7 +123,8 @@ export class Header extends React.Component {
     );
 
     const searchLink = (
-      <li>
+      // search icon on the nav bar
+      <li id="searchlink">
         <a href="#search-modal" className="search">
           <i className="fa fa-search prefix" aria-hidden="true" />          &nbsp;Search
         </a>
@@ -132,7 +133,7 @@ export class Header extends React.Component {
           <div className="modal-content">
             <h5>Enter search query</h5>
             <input
-              id="new-role"
+              id="search-query"
               type="text"
               name="new-role"
               value={this.state.query}
@@ -140,8 +141,8 @@ export class Header extends React.Component {
               onChange={this.onChange} />
             <a
               className="modal-action waves-effect waves-green btn-flat"
-              onClick={this.onClick}>              Search</a>
-            {this.state.showTable ? <ReactTable data={data} columns={columns} /> : null}
+              onClick={this.onClick} id="search-button">              Search</a>
+            {this.state.showTable ? <ReactTable data={data} columns={columns} id="results" /> : null}
           </div>
           <div className="modal-footer">
             <a

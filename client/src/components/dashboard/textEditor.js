@@ -65,7 +65,7 @@ export class TextEditor extends React.Component {
         <div id="createModal" className="modal">
           <h4 className="center">Create Document</h4>
           <div className="row">
-            <div className="col s4">
+            <div className="col s6">
               <form className="col s6">
                 <div className="row">
                   <div className="input-field col s12">
@@ -80,7 +80,7 @@ export class TextEditor extends React.Component {
                 </div>
               </form>
             </div>
-            <div className="col s4">
+            <div className="col s6">
               <div className="input-field col s8">
                 <select value={this.state.select} id="selectMe">
                   <option value="">Access</option>

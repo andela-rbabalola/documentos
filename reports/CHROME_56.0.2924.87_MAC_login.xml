@@ -5,25 +5,16 @@
 
   <testsuite name="login"
     errors="0" failures="0" hostname="" id="" package="login" skipped="0"
-    tests="5" time="20.34" timestamp="Tue, 04 Apr 2017 11:35:35 GMT">
+    tests="5" time="20.67" timestamp="Tue, 04 Apr 2017 13:32:19 GMT">
   
-    <testcase name="Documentos Title" classname="login" time="3.740" assertions="2">
+    <testcase name="Documentos Title" classname="login" time="4.224" assertions="2">
 
     
 
     
     </testcase>
   
-    <testcase name="Login Users" classname="login" time="4.119" assertions="3">
-
-    
-
-    
-
-    
-    </testcase>
-  
-    <testcase name="Fail for wrong password" classname="login" time="4.078" assertions="3">
+    <testcase name="Login Users" classname="login" time="4.084" assertions="3">
 
     
 
@@ -32,7 +23,16 @@
     
     </testcase>
   
-    <testcase name="Admin Login" classname="login" time="4.327" assertions="5">
+    <testcase name="Fail for wrong password" classname="login" time="4.142" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Admin Login" classname="login" time="4.142" assertions="5">
 
     
 

@@ -71,7 +71,7 @@ class Edit extends React.Component {
         <div id="editModal" className="modal">
           <h4 className="center">Edit Document</h4>
           <div className="row">
-            <div className="col s4">
+            <div className="col s6">
               <form className="col s6">
                 <div className="row">
                   <div className="input-field col s12">
@@ -86,20 +86,13 @@ class Edit extends React.Component {
                 </div>
               </form>
             </div>
-            <div className="col s4">
+            <div className="col s6">
               <div className="input-field col s8">
                 <select value={this.state.access} id="selectMe-edit">
                   <option value="">Access</option>
                   <option value="public">Public</option>
                   <option value="private">Private</option>
                   <option value="role">Role</option>
-                </select>
-              </div>
-            </div>
-            <div className="col s4">
-              <div className="input-field col s8">
-                <select value="" id="selectMe-edit2">
-                  <option value="">Edit Access</option>
                 </select>
               </div>
             </div>
