@@ -13,7 +13,7 @@ export class TextEditor extends React.Component {
     this.state = {
       title: '',
       docContent: '',
-      access: '',
+      access: 'public',
       userId: jwt.decode(localStorage.getItem('JWT')).UserId
     };
     this.handleChange = this.handleChange.bind(this);
@@ -41,7 +41,7 @@ export class TextEditor extends React.Component {
   onClick(event) {
     event.preventDefault();
     // validate first
-    if (this.state.title === '' || this.state.access === '') {
+    if (this.state.title === '') {
       toastr.error('Please enter the required fields');
     } else {
       this.props
@@ -102,11 +102,7 @@ export class TextEditor extends React.Component {
             </div>
             <div className="modal-footer">
               <a
-                className="waves-effect waves-light btn modal-action left modal-close close-editor"
-                id="create-doc"
-                onClick="">CLOSE</a>
-              <a
-                className="waves-effect waves-light btn modal-action"
+                className="waves-effect waves-light btn modal-action modal-close"
                 id="create-doc"
                 onClick={this.onClick}>SUBMIT</a>
             </div>

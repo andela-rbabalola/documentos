@@ -13,8 +13,7 @@
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helpers/seedHelpers",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "client:test": "mocha --spec progress ./client/tools/testSetup.js \"./client/src/tests/**/*.spec.js\"",
-    "client:watch": "npm run client:test -- --watch",
-    "postinstall": "node nightwatch.conf.js"
+    "client:watch": "npm run client:test -- --watch"
   },
   "repository": {
     "type": "git",

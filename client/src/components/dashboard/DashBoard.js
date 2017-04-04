@@ -56,7 +56,7 @@ export class DashBoard extends React.Component {
           <a
             className="btn-floating btn-large red"
             onClick={this.createDoc}
-            href="#createModal">
+            href="#createModal" id="create-document">
             <i className="fa fa-plus" aria-hidden="true" />
           </a>
         </div>
