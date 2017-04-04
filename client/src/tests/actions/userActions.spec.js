@@ -18,4 +18,16 @@ describe('USER ACTIONS', () => {
 
     expect(action).toEqual(expectedAction);
   });
+
+  describe('Search Success', () => {
+    const query = { query: 'query' };
+    const results = { query: 'query' };
+    const expectedAction = {
+      type: types.SEARCH_DOCS_SUCCESS,
+      results
+    };
+    const action = userActions.searchDocumentsSuccess(query);
+
+    expect(action).toEqual(expectedAction);
+  });
 });

@@ -11,7 +11,7 @@
     "db:migrate:test": "NODE_ENV=test sequelize db:migrate",
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helpers/seedHelpers",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
-    "client:test": "mocha --reporter progress ./client/tools/testSetup.js \"./client/src/tests/**/*.spec.js\"",
+    "client:test": "mocha --spec progress ./client/tools/testSetup.js \"./client/src/tests/**/*.spec.js\"",
     "client:watch": "npm run client:test -- --watch"
   },
   "repository": {
