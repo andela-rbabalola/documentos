@@ -5,7 +5,14 @@ import toastr from 'toastr';
 import docImage from '../../images/dms.jpg';
 import { login } from '../../actions/userActions';
 
-class UserInput extends React.Component {
+/**
+ * Class to create UserInput Component
+ */
+export class UserInput extends React.Component {
+  /**
+   *
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +24,11 @@ class UserInput extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-
+  /**
+   *
+   * @param {*} event
+   * @returns {*} click action
+   */
   onClick(event) {
     event.preventDefault();
     if (this.isValid()) {
@@ -29,6 +40,11 @@ class UserInput extends React.Component {
     }
   }
 
+  /**
+   *
+   * @param {*} event
+   * @returns {*} action
+   */
   onChange(event) {
     const field = event.target.name;
     const user = this.state.user;
@@ -36,6 +52,11 @@ class UserInput extends React.Component {
     this.setState({ user });
   }
 
+  /**
+   *
+   * @param {*} null
+   * @returns {Boolean} Boolean validating the form
+   */
   isValid() {
     let formIsValid = true;
     const errors = {};
@@ -47,6 +68,11 @@ class UserInput extends React.Component {
     return formIsValid;
   }
 
+  /**
+   * Renders the UserInput component
+   * @param {*} null
+   * @returns {*} rendered JSX
+   */
   render() {
     return (
       <div className="row">

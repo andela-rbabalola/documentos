@@ -34,7 +34,7 @@ export function getRoles() {
 }
 
 export function createRole(newRole) {
-  return (dispatch) => axios.post('/roles', newRole).then(() => {
+  return dispatch => axios.post('/roles', newRole).then(() => {
     // dispatch get roles function
     dispatch(getRoles());
   }).catch((err) => {

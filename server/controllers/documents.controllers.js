@@ -93,6 +93,7 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static updateDoc(req, res) {
+    console.log('req here', req.body);
     model.Document.findById(req.params.id)
       .then((foundDoc) => {
         // check if user exists
@@ -109,10 +110,10 @@ class DocumentsController {
             docContent: req.body.docContent || foundDoc.docContent,
             access: req.body.access || foundDoc.access
           }).then(res.status(201)
-            .send({ message: 'Document successfully updated', foundDoc }))
+            .send({ message: 'Document successfully updated', foundDoc }));
           // handle errors
-          .catch(error => res.status(400)
-            .send(error));
+          // .catch(error => res.status(400)
+          //   .send(error));
       });
   }
 

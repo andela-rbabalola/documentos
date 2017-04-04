@@ -15,7 +15,7 @@ import '../../node_modules/materialize-css/dist/js/materialize.min';
 import '../../node_modules/material-icons/css/material-icons.css';
 import '../../node_modules/toastr/build/toastr.min.css';
 import '../../node_modules/react-table/react-table.css';
-import './styles/styles.css';
+import './styles/styles.scss';
 
 const store = configureStore();
 if ((localStorage.getItem('isAuthenticated')) === 'true') {

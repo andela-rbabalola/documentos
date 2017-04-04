@@ -26,9 +26,7 @@ class Edit extends React.Component {
   componentDidMount() {
     $('select').material_select();
     $('#selectMe-edit').on('change', this.handleChange);
-    $('.modal').modal({
-      dismissible: false
-    });
+    $('.modal').modal();
     $('#doc-content').froalaEditor('html.set', 'My custom paragraph.');
   }
 
@@ -91,7 +89,7 @@ class Edit extends React.Component {
             <div className="col s6">
               <div className="input-field col s8">
                 <select value={this.state.access} id="selectMe-edit">
-                  <option value="">Choose an access type</option>
+                  <option value="">Access</option>
                   <option value="public">Public</option>
                   <option value="private">Private</option>
                   <option value="role">Role</option>
