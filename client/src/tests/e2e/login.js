@@ -57,6 +57,8 @@ module.exports = {
       .pause(1000)
       .assert.urlEquals('http://localhost:5000/dashboard')
       .assert.elementNotPresent('.manage')
+      .assert.containsText('.logout', 'Logout')
+      .assert.containsText('.search', ' Search')
       .end();
   }
 };
