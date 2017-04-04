@@ -6,13 +6,15 @@
   "scripts": {
     "start": "babel-node server.js",
     "all:tests": "NODE_ENV=test mocha ./server/tests/**/*.spec.js --timeout 120000 --compilers js:babel-register",
+    "e2e": "node_modules/.bin/nightwatch --config nightwatch.conf.js",
     "test": "NODE_ENV=test npm run db:test:seed && babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- -R spec server/tests/**/*.spec.js --timeout 60000",
     "db:migrate:test:undo": "NODE_ENV=test sequelize db:migrate:undo:all",
     "db:migrate:test": "NODE_ENV=test sequelize db:migrate",
     "db:test:seed": "NODE_ENV=test babel-node ./server/tests/helpers/seedHelpers",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls",
     "client:test": "mocha --spec progress ./client/tools/testSetup.js \"./client/src/tests/**/*.spec.js\"",
-    "client:watch": "npm run client:test -- --watch"
+    "client:watch": "npm run client:test -- --watch",
+    "postinstall": "node nightwatch.conf.js"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,7 @@
     "chai": "^3.5.0",
     "classnames": "^2.2.5",
     "dotenv": "^4.0.0",
+    "env2": "^2.1.1",
     "enzyme": "^2.8.0",
     "eslint-plugin-react": "^6.10.2",
     "eventsource-polyfill": "^0.9.6",
@@ -103,8 +106,10 @@
     "eslint-plugin-react": "^6.10.0",
     "file-loader": "^0.10.1",
     "mocha": "^3.2.0",
+    "nightwatch": "^0.9.14",
     "node-sass": "^4.5.2",
     "sass-loader": "^6.0.3",
+    "selenium-download": "^2.0.9",
     "style-loader": "^0.14.1"
   }
 }
