@@ -16,10 +16,7 @@ const envs = {
     dialect: 'postgres'
   },
   production: {
-    username: process.env.PD_USER,
-    password: process.env.PD_PASS,
     database: process.env.PD_NAME,
-    host: '127.0.0.1',
     dialect: 'postgres'
   }
 };
