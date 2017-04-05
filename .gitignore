@@ -1,7 +1,7 @@
 node_modules/
 .vscode
 .env
-coverage/lcov-report/
+coverage/
 .coveralls.yml
 reports/
 screenshots/
