@@ -1,3 +1,8 @@
 server/db/migrations
 server/db/seeders
 nightwatch.conf.js
+client/components
+client/tests
+bin/
+webpack.config.dev.js
+webpack.config.prod.js

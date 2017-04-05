@@ -6,7 +6,6 @@ module.exports = {
       .url('http://localhost:5000')
       .waitForElementVisible('body')
       .assert.title('Documentos')
-      .saveScreenshot(config.imgpath(browser) + 'Documentos.png')
       .end();
   },
   'Login Users': function (browser) {
