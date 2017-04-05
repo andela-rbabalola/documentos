@@ -7,7 +7,7 @@ import colors from 'colors';
 
 /* eslint-disable no-console */
 
-fs.readFile('client/index.html', 'utf8', (err, markup) => {
+fs.readFile('client/src/index.html', 'utf8', (err, markup) => {
   if (err) {
     return console.log(err);
   }

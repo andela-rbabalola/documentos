@@ -16,10 +16,10 @@
     "client:watch": "npm run client:test -- --watch",
     "clean-dist": "npm run remove-dist && mkdir dist",
     "remove-dist": "node_modules/.bin/rimraf ./dist",
-    "build:html": "babel-node client/tools/buildHtml.js",
+    "build:html": "babel-node bin/buildHtml.js",
     "prebuild": "npm-run-all clean-dist build:html",
-    "build": "babel-node client/tools/build.js",
-    "postbuild": "babel-node client/tools/distServer.js"
+    "build": "babel-node bin/build.js",
+    "postbuild": "babel-node bin/distServer.js"
   },
   "repository": {
     "type": "git",

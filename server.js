@@ -22,7 +22,7 @@ app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 const compiler = webpack(config);
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' || process.env.NODE_ENV !== 'production') {
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath

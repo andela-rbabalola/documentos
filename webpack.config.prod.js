@@ -11,17 +11,17 @@ export default {
   devtool: 'source-map',
   noInfo: false,
   entry: {
-    bundle: path.resolve(__dirname, './client/src/index'),
+    bundle: path.resolve(__dirname, 'client/src/index'),
     distServer: path.resolve(__dirname, 'bin/distServer')
   },
   target: 'web',
   output: {
     path: `${__dirname}/dist`, // Note: Physical files are only output by the production build task `npm run build`.
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   devServer: {
-    contentBase: './client/dist'
+    contentBase: path.resolve(__dirname, 'dist')
   },
   resolve: {
     alias: {
@@ -33,20 +33,23 @@ export default {
     new webpack.DefinePlugin(GLOBALS),
     new ExtractTextPlugin('styles.css'),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery',
+      Hammer: 'hammerjs/hammer'
+    }),
   ],
   module: {
     loaders: [
       { test: /\.js$/, include: path.join(__dirname, 'client/src'), loaders: ['babel'] },
       { test: /(\.css)$/, loader: ExtractTextPlugin.extract('css?sourceMap') },
+      { test: /(\.scss)$/, loader: ExtractTextPlugin.extract('css?sourceMap') },
       { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
       { test: /\.(woff|woff2)$/, loader: 'url?prefix=font/&limit=5000' },
       { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
       { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' },
-      {
-        test: /(\.scss)$/,
-        loaders: ['style', 'css', 'sass']
-      },
       {
         test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
         loader: 'url?limit=10000&mimetype=application/font-woff'
