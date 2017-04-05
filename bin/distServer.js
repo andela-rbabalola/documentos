@@ -1,4 +1,5 @@
 import express from 'express';
+import favicon from 'serve-favicon';
 import path from 'path';
 import open from 'open';
 import parser from 'body-parser';
@@ -20,7 +21,7 @@ app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
 app.use(compression());
 app.use(express.static('dist'));
-
+app.use(favicon(path.join(__dirname, '../client', 'src/images/dms.jpg')));
 app.use('/users', userRoute);
 app.use('/roles', roleRoute);
 app.use('/documents', documentRoute);
