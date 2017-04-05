@@ -1,3 +1,4 @@
+/* eslint class-methods-use-this: "off" */
 import React from 'react';
 import ReactTable from 'react-table';
 import { connect } from 'react-redux';
@@ -142,7 +143,9 @@ export class Header extends React.Component {
             <a
               className="modal-action waves-effect waves-green btn-flat"
               onClick={this.onClick} id="search-button">              Search</a>
-            {this.state.showTable ? <ReactTable data={data} columns={columns} id="results" /> : null}
+            {this.state.showTable ? <ReactTable
+              data={data}
+              columns={columns} id="results" /> : null}
           </div>
           <div className="modal-footer">
             <a
