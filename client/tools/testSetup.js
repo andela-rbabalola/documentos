@@ -1,11 +1,16 @@
+/* eslint-disable no-var*/
+/* eslint-disable func-names*/
 // Tests are placed alongside files under test.
 // This file does the following:
 // 1. Registers babel for transpiling our code for testing
 // 2. Disables Webpack-specific features that Mocha doesn't understand.
 // 3. Requires jsdom so we can test via an in-memory DOM in Node
 // 4. Sets up global vars that mimic a browser.
+// Configure JSDOM and set global variables
+// to simulate a browser environment for tests.
+var jsdom = require('jsdom').jsdom;
 
-/* eslint-disable no-var*/
+var exposedProperties = ['window', 'navigator', 'document'];
 
 // This assures the .babelrc dev config (which includes
 // hot module reloading code) doesn't apply for tests.
@@ -21,11 +26,6 @@ require.extensions['.css'] = function () { return null; };
 require.extensions['.png'] = function () { return null; };
 require.extensions['.jpg'] = function () { return null; };
 
-// Configure JSDOM and set global variables
-// to simulate a browser environment for tests.
-var jsdom = require('jsdom').jsdom;
-
-var exposedProperties = ['window', 'navigator', 'document'];
 
 global.document = jsdom('');
 global.window = document.defaultView;

@@ -93,7 +93,6 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static updateDoc(req, res) {
-    console.log('req here', req.body);
     model.Document.findById(req.params.id)
       .then((foundDoc) => {
         // check if user exists

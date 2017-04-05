@@ -67,30 +67,30 @@ img {
   z-index: 10000
 }
 
-#new-role{
+#new-role {
   width: 400px;
 }
 
-#search-query{
+#search-query {
   width: 400px;
 }
 
-#search-modal{
+#search-modal {
   width: 800px;
   height: 650px;
 }
 
 .doc-card {
-  width: 250px;
   height: 200px;
+  width: 250px;
 }
 
-.row :hover .btn{
-  background: deepskyblue;
+.row :hover .btn {
+  background: #00bfff;
 }
 
 .modal :hover .btn {
-  background: deepskyblue;
+  background: #00bfff;
 }
 
 #create-doc {
