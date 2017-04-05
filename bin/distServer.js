@@ -15,7 +15,7 @@ import paginationRoute from '../server/routes/pagination.routes';
 
 /* eslint-disable no-console */
 
-const port = process.env.PORT || 5000;
+const port = parseInt(process.env.PORT, 10) || 5000;
 const app = express();
 app.use(parser.urlencoded({ extended: true }));
 app.use(parser.json());
