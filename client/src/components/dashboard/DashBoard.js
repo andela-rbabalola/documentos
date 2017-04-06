@@ -18,12 +18,8 @@ import * as userActions from '../../actions/userActions';
  */
 export class DashBoard extends React.Component {
   componentDidMount() {
-    // Ensure user is authenticated before loading uer details
-    if (this.props.isAuthenticated) {
-      this.props.docsActions.loadDocuments();
-      this.props.usersActions.setUserInState(localStorage.getItem('JWT'));
-    }
-    toastr.success('Welcome!');
+    this.props.docsActions.loadDocuments();
+    this.props.usersActions.setUserInState(localStorage.getItem('JWT'));
   }
 
   /**

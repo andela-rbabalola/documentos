@@ -114,7 +114,7 @@ export function signup(newUser) {
     const token = res.data.token;
     axios.defaults.headers.common['x-access-token'] = token;
     localStorage.setItem('JWT', token);
-    axios.defaults.headers.common['x-access-token'] = localStorage.getItem('JWT');
+    localStorage.setItem('isAuthenticated', true);
     dispatch(signUpSuccess({
       userInfo: jwt.decode(token),
       email: res.data.newUser.email

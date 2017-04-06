@@ -19,7 +19,7 @@ class Edit extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleModelChange = this.handleModelChange.bind(this);
-    this.onClick = this.onClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -27,7 +27,6 @@ class Edit extends React.Component {
     $('select').material_select();
     $('#selectMe-edit').on('change', this.handleChange);
     $('.modal').modal();
-    $('#doc-content').froalaEditor('html.set', 'My custom paragraph.');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -46,7 +45,7 @@ class Edit extends React.Component {
   }
 
   // event handler to update the document
-  onClick(event) {
+  handleClick(event) {
     event.preventDefault();
     this.props
       .updateDocument(this.state)
@@ -110,7 +109,7 @@ class Edit extends React.Component {
               <a
                 className="waves-effect waves-light btn modal-action modal-close"
                 id="edit-doc"
-                onClick={this.onClick}>UPDATE</a>
+                onClick={this.handleClick}>UPDATE</a>
             </div>
           </div>
         </div>
@@ -121,13 +120,15 @@ class Edit extends React.Component {
 
 Edit.propTypes = {
   currentDoc: React.PropTypes.object.isRequired,
+  currentUser: React.PropTypes.object.isRequired,
   updateDocument: React.PropTypes.func.isRequired
 };
 
 
 function mapStateToProps(state) {
   return {
-    currentDoc: state.documents.currentDoc
+    currentDoc: state.documents.currentDoc,
+    currentUser: state.users.currentUser
   };
 }
 

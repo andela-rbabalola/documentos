@@ -95,8 +95,7 @@ export class Header extends React.Component {
    * @returns {*} rendered JSX
    */
   render() {
-    const auth = this.props.isAuthenticated;
-    const isSuperAdmin = this.props.isSuperAdmin;
+    const { isAuthenticated, isSuperAdmin } = this.props;
 
     const data = this.props.searchResults;
     // Column definitions for the react-table
@@ -163,9 +162,9 @@ export class Header extends React.Component {
           <IndexLink to="/dashboard" className="brand-logo">Documentos</IndexLink>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li><Link to="/about"> About </Link></li>
-            {auth ? searchLink : null}
+            {isAuthenticated ? searchLink : null}
             {isSuperAdmin ? rolesLink : null}
-            {auth ? logoutLink : null}
+            {isAuthenticated ? logoutLink : null}
           </ul>
         </div>
       </nav >

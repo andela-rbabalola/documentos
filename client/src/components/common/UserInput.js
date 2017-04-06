@@ -20,8 +20,8 @@ export class UserInput extends React.Component {
       errors: {}
     };
 
-    this.onClick = this.onClick.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   /**
@@ -29,7 +29,7 @@ export class UserInput extends React.Component {
    * @param {*} event
    * @returns {*} click action
    */
-  onClick(event) {
+  handleClick(event) {
     event.preventDefault();
     if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
@@ -45,7 +45,7 @@ export class UserInput extends React.Component {
    * @param {*} event
    * @returns {*} action
    */
-  onChange(event) {
+  handleChange(event) {
     const field = event.target.name;
     const user = this.state.user;
     user[field] = event.target.value;
@@ -91,7 +91,7 @@ export class UserInput extends React.Component {
                   type="email"
                   className="validate"
                   name="email"
-                  onChange={this.onChange} />
+                  onChange={this.handleChange} />
                 <label htmlFor="email" data-error="wrong" data-success="right" />
               </div>
               <div className="input-field col s12">
@@ -102,10 +102,10 @@ export class UserInput extends React.Component {
                   type="password"
                   className="validate"
                   name="password"
-                  onChange={this.onChange} />
+                  onChange={this.handleChange} />
               </div>
               <div className="input-field col s12">
-                <a className="waves-effect waves-light btn" onClick={this.onClick}>SIGN IN</a>
+                <a className="waves-effect waves-light btn" onClick={this.handleClick}>SIGN IN</a>
               </div>
               <div className="input-field col s12">
                 <h6 className="left small">Do not have an account yet?

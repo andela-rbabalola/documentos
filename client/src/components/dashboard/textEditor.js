@@ -3,8 +3,10 @@ import React from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import toastr from 'toastr';
-import { createDocument } from '../../actions/docActions';
+import * as userActions from '../../actions/userActions';
+import * as docActions from '../../actions/docActions';
 
 
 export class TextEditor extends React.Component {
@@ -44,7 +46,7 @@ export class TextEditor extends React.Component {
     if (this.state.title === '') {
       toastr.error('Please enter the required fields');
     } else {
-      this.props
+      this.props.docsActions
         .createDocument(this.state)
         .then(() => {
           toastr.success('Document created');
@@ -114,14 +116,24 @@ export class TextEditor extends React.Component {
 }
 
 TextEditor.propTypes = {
-  createDocument: React.PropTypes.func.isRequired
+  createDocument: React.PropTypes.func.isRequired,
+  currentUser: React.PropTypes.object.isRequired,
+  usersActions: React.PropTypes.object.isRequired,
+  docsActions: React.PropTypes.object.isRequired
 };
 
 
 function mapStateToProps(state) {
   return {
-    documents: state.documents
+    currentUser: state.users.userInfo || state.users.currentUser
   };
 }
 
-export default connect(null, { createDocument })(TextEditor);
+function mapDispatchToProps(dispatch) {
+  return {
+    usersActions: bindActionCreators(userActions, dispatch),
+    docsActions: bindActionCreators(docActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextEditor);
