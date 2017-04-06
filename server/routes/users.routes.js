@@ -16,7 +16,6 @@ router.route('/')
 // pagination for users
 router.route('/pagination')
   .post((req, res) => {
-    console.log('req here', req.body);
     res.redirect(`/pagination/users/?limit=${req.body.limit}&offset=${req.body.offset}`);
   });
 

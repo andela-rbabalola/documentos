@@ -100,7 +100,19 @@ class UserController {
               email: newUser.email
             }, secret, { expiresIn: '3 days' });
             return res.status(201)
-              .send({ message: 'New user created', newUser, token, expiresIn: '3 days' });
+              .send({
+                message: 'New user created',
+                newUser: {
+                  id: newUser.id,
+                  firstName: newUser.firstName,
+                  lastName: newUser.lastName,
+                  email: newUser.email,
+                  createdAt: newUser.createdAt,
+                  updatedAt: newUser.updatedAt
+                },
+                token,
+                expiresIn: '3 days'
+              });
           })
           .catch(error => res.status(400)
             .send({ errorMessage: error, message: 'An error occurred creating the user' }));
