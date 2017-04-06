@@ -210,7 +210,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```json
 {
   "message": "New user created",
-    {
+  "newUser": {
     "id": "3",
     "firstName": "John",
     "lastName": "Doe",
