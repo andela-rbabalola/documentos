@@ -127,8 +127,7 @@ It should be noted that the endpoints here are only available to the SuperAdmin.
 ## Example Requests and Expected Responses
 
 ### Role
-
-##### Get
+#### Create a role
 - `POST /roles`
 - Requires: SuperAdmin Authentication
 #### HTTP Response
@@ -143,6 +142,7 @@ It should be noted that the endpoints here are only available to the SuperAdmin.
 }
 ```
 
+#### Get all roles
 - `GET /roles`
 - Requires: SuperAdmin Authentication
 #### HTTP Response
@@ -176,6 +176,8 @@ It should be noted that the endpoints here are only available to the SuperAdmin.
   }
 ]
 ```
+
+#### Edit a role
 - `PUT /roles/:id`
 - Requires SuperAdmin authentication
 #### HTTP Response
