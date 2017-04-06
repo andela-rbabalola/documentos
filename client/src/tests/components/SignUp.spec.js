@@ -1,7 +1,7 @@
 import expect from 'expect';
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SignUpForm } from '../../components/signup/SignUp';
+import SignUpForm from '../../components/signup/SignUpForm';
 
 /**
  * Wrapper function for the shallow function
@@ -9,7 +9,8 @@ import { SignUpForm } from '../../components/signup/SignUp';
  */
 function setup() {
   const props = {
-    signup: () => { }
+    onChange: () => { },
+    onClick: () => { }
   };
   return shallow(<SignUpForm {...props} />);
 }

@@ -4,12 +4,20 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { DashBoard } from '../../components/dashboard/DashBoard';
 
-
 describe('Dashboard component', () => {
   it('Should render an add button', () => {
     const props = {
       createDocument: () => { },
-      dispatch: () => { }
+      dispatch: () => { },
+      docsActions: {
+        loadDocuments: () => { },
+      },
+      usersActions: {
+        setUserInState: (token) => { }
+      },
+      localStorage: {
+        //
+      }
     };
 
     const wrapper = mount(<DashBoard documents={[]} {...props} />);
