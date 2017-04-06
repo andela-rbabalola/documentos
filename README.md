@@ -126,7 +126,9 @@ It should be noted that the endpoints here are only available to the SuperAdmin.
 
 ## Example Requests and Expected Responses
 
-#### Role
+### Role
+
+##### Get
 - `POST /roles`
 - Requires: SuperAdmin Authentication
 #### HTTP Response
@@ -174,8 +176,18 @@ It should be noted that the endpoints here are only available to the SuperAdmin.
   }
 ]
 ```
+- `PUT /roles/:id`
+- Requires SuperAdmin authentication
+#### HTTP Response
+-   HTTP Status: `200: OK`
+-   JSON data
+```json
+{
+  "message": "Role 3 successfully updated"
+}
+```
 
-#### Users
+### Users
 
 #### POST HTTP Request
 -   `POST /users`

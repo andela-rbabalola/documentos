@@ -107,6 +107,7 @@ class UserController {
                   firstName: newUser.firstName,
                   lastName: newUser.lastName,
                   email: newUser.email,
+                  roleId: newUser.roleId,
                   createdAt: newUser.createdAt,
                   updatedAt: newUser.updatedAt
                 },
