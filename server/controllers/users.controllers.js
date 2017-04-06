@@ -57,7 +57,20 @@ class UserController {
               RoleId: newAdmin.roleId
             }, secret, { expiresIn: '3 days' });
             return res.status(201)
-              .send({ message: 'New admin created', newAdmin, token, expiresIn: '3 days' });
+              .send({
+                message: 'New admin created',
+                newAdmin: {
+                  id: newAdmin.id,
+                  firstName: newAdmin.firstName,
+                  lastName: newAdmin.lastName,
+                  email: newAdmin.email,
+                  roleId: newAdmin.roleId,
+                  createdAt: newAdmin.createdAt,
+                  updatedAt: newAdmin.updatedAt
+                },
+                token,
+                expiresIn: '3 days'
+              });
           })
           .catch(error => res.status(400)
             .send({ errorMessage: error, message: 'An error occurred creating the admin' }));
@@ -100,7 +113,20 @@ class UserController {
               email: newUser.email
             }, secret, { expiresIn: '3 days' });
             return res.status(201)
-              .send({ message: 'New user created', newUser, token, expiresIn: '3 days' });
+              .send({
+                message: 'New user created',
+                newUser: {
+                  id: newUser.id,
+                  firstName: newUser.firstName,
+                  lastName: newUser.lastName,
+                  email: newUser.email,
+                  roleId: newUser.roleId,
+                  createdAt: newUser.createdAt,
+                  updatedAt: newUser.updatedAt
+                },
+                token,
+                expiresIn: '3 days'
+              });
           })
           .catch(error => res.status(400)
             .send({ errorMessage: error, message: 'An error occurred creating the user' }));

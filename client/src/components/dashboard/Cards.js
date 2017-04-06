@@ -1,10 +1,12 @@
+/* eslint require-jsdoc: "off"  */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import toastr from 'toastr';
 import Edit from './Edit';
 import * as docActions from '../../actions/docActions';
 
-class Cards extends React.Component {
+export class Cards extends React.Component {
 
   constructor(props) {
     super(props);
@@ -18,13 +20,13 @@ class Cards extends React.Component {
   editDocument(event) {
     event.preventDefault();
     this.setState({ showEditor: !this.state.showEditor });
-    this.props.dispatch(docActions.getDoc(this.props.id));
+    this.props.actions.getDoc(this.props.id);
   }
 
   deleteDocument(event) {
     event.preventDefault();
-    this.props.dispatch(docActions
-      .deleteDocument(this.props.document.id)).then(() => {
+    this.props.actions.deleteDocument(this.props.document.id)
+      .then(() => {
         toastr.success('Document successfully deleted');
       }).catch(() => {
         toastr.error('Unable to delete');
@@ -34,32 +36,25 @@ class Cards extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="col s12 m6 l4">
-          <div className="card">
-            <div className="card-image">
+        <div className="col s12 m6">
+          <div className="card blue lighten-2 doc-card">
+            <div className="card-content white-text">
               <span className="card-title">{this.props.document.title}</span>
-              <div className="fixed-action-btn horizontal click-to-toggle show-docs">
-                <a className="btn-floating btn-large red">
-                  <i className="fa fa-bars" aria-hidden="true" />
-                </a>
-                <ul>
-                  <li><a
-                    href="#editModal"
-                    id={this.props.id}
-                    className="btn-floating blue"
-                    onClick={this.editDocument}>
-                    <i className="fa fa-pencil-square-o" aria-hidden="true" /></a></li>
-                  <li><a
-                    onClick={this.deleteDocument}
-                    className="btn-floating red darken-1">
-                    <i className="fa fa-trash-o" aria-hidden="true" /></a></li>
-                </ul>
-              </div>
             </div>
-            <div className="card-content">
-              <span className="card-title grey-text text-darken-4">{this.props.document.title}</span>
+            <div className="card-action">
+              <a
+                href="#editModal"
+                id={this.props.id}
+                className="white-text left"
+                onClick={this.editDocument}>
+                <i className="fa fa-pencil-square-o" aria-hidden="true" />                Edit</a>
+              {this.state.showEditor ? <Edit /> : null}
+              <a
+                href="#"
+                onClick={this.deleteDocument}
+                className="white-text right">
+                <i className="fa fa-trash-o" aria-hidden="true" />                Delete</a>
             </div>
-            {this.state.showEditor ? <Edit /> : null}
           </div>
         </div>
       </div>
@@ -71,14 +66,18 @@ class Cards extends React.Component {
 Cards.propTypes = {
   document: PropTypes.object.isRequired,
   id: PropTypes.number.isRequired,
-  dispatch: PropTypes.func.isRequired
+  actions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state, ownProps) => ({
+  currentDoc: state.documents.currentDoc
+});
+
+function mapDispatchToProps(dispatch) {
   return {
-    currentDoc: state.documents.currentDoc
+    actions: bindActionCreators(docActions, dispatch)
   };
-};
+}
 
-export default connect(mapStateToProps)(Cards);
+export default connect(mapStateToProps, mapDispatchToProps)(Cards);
 

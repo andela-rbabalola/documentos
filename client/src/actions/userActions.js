@@ -66,32 +66,27 @@ export function searchDocumentsSuccess(results) {
 }
 
 export function login(user) {
-  return (dispatch) => {
-    return axios.post('/users/signin', user).then((res) => {
-      const token = res.data.token;
+  return dispatch => axios.post('/users/signin', user)
+    .then((res) => {
+      const { token } = res.data;
       axios.defaults.headers.common['x-access-token'] = token;
       localStorage.setItem('JWT', token);
       if (jwt.decode(token).RoleId === 1) {
         localStorage.setItem('SuperAdmin', true);
       }
       localStorage.setItem('isAuthenticated', true);
-      axios.defaults.headers.common['x-access-token'] = localStorage.getItem('JWT');
       dispatch(loginUserSuccess({
         userInfo: jwt.decode(token),
         email: res.data.email
       }));
     });
-  };
 }
 
 export function searchDocuments(query) {
-  return (dispatch) => {
-    return axios.post('/documents/search', { query }).then((res) => {
-      // console.log('query', query);
-      // console.log('results', res.data);
+  return dispatch => axios.post('/documents/search', { query })
+    .then((res) => {
       dispatch(searchDocumentsSuccess(res.data));
     });
-  };
 }
 
 export function setUserInState(token) {
@@ -115,18 +110,16 @@ export function reauthenticate(isSuperAdmin) {
 
 // newUser is an object that contains the new user's details
 export function signup(newUser) {
-  return (dispatch) => {
-    return axios.post('/users', newUser).then((res) => {
-      const token = res.data.token;
-      axios.defaults.headers.common['x-access-token'] = token;
-      localStorage.setItem('JWT', token);
-      axios.defaults.headers.common['x-access-token'] = localStorage.getItem('JWT');
-      dispatch(signUpSuccess({
-        userInfo: jwt.decode(token),
-        email: res.data.newUser.email
-      }));
-    });
-  };
+  return dispatch => axios.post('/users', newUser).then((res) => {
+    const token = res.data.token;
+    axios.defaults.headers.common['x-access-token'] = token;
+    localStorage.setItem('JWT', token);
+    localStorage.setItem('isAuthenticated', true);
+    dispatch(signUpSuccess({
+      userInfo: jwt.decode(token),
+      email: res.data.newUser.email
+    }));
+  });
 }
 
 export function logout() {
@@ -141,5 +134,4 @@ export function logout() {
     dispatch(clearCurrentRole());
   };
 }
-
 

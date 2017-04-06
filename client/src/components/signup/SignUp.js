@@ -1,12 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
+import { bindActionCreators } from 'redux';
 import docImage from '../../images/dms.jpg';
-import { signup } from '../../actions/userActions';
+import * as userActions from '../../actions/userActions';
+import SignUpForm from './SignUpForm';
 
-
-class SignUpForm extends React.Component {
+/**
+ * Class to create Signup component
+ */
+export class SignUp extends React.Component {
+  /**
+   *
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
     this.state = {
@@ -14,11 +21,16 @@ class SignUpForm extends React.Component {
       errors: {}
     };
 
-    this.onClick = this.onClick.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  onChange(event) {
+  /**
+   *
+   * @param {*} event
+   * @returns {*} action
+   */
+  handleChange(event) {
     event.preventDefault();
     const inputField = event.target.name;
     const newUser = this.state.newUser;
@@ -26,85 +38,46 @@ class SignUpForm extends React.Component {
     this.setState({ newUser });
   }
 
-  onClick(event) {
-    event.preventDefault();
-    this.props.signup(this.state.newUser).then(
+  /**
+   *
+   * @param {*} event
+   * @returns {*} click action
+   */
+  handleClick(event) {
+    // event.preventDefault();
+    this.props.signup(this.state.newUser)
+      .then(
       res => this.context.router.push('/dashboard'),
       err => toastr.error('An error occured')
-    );
+      );
   }
 
+  /**
+   * Renders the UserInput component
+   * @param {*} null
+   * @returns {*} rendered JSX
+   */
   render() {
     return (
-      <div className="row">
-        <div className="col s7">
-          <img src={docImage} className="responsive-img" />
-        </div>
-        <div className="col s5">
-          <form className="col s8">
-            <h5 className="blue-text text-lighten-2 center">SIGN UP</h5>
-            <div className="row">
-              <div className="input-field col s12">
-                <i className="fa fa-user prefix" aria-hidden="true" />
-                <input
-                  id="first_name"
-                  placeholder="First Name"
-                  name="firstName"
-                  type="text"
-                  className="validate"
-                  onChange={this.onChange} />
-              </div>
-              <div className="input-field col s12">
-                <i className="fa fa-user prefix" aria-hidden="true" />
-                <input
-                  id="last_name"
-                  placeholder="Last Name"
-                  name="lastName"
-                  type="text"
-                  className="validate"
-                  onChange={this.onChange} />
-              </div>
-              <div className="input-field col s12">
-                <i className="fa fa-envelope prefix" aria-hidden="true" />
-                <input
-                  id="email"
-                  placeholder="Email"
-                  name="email"
-                  type="email"
-                  className="validate"
-                  onChange={this.onChange} />
-                <label htmlFor="email" data-error="wrong" data-success="right" />
-              </div>
-              <div className="input-field col s12">
-                <i className="fa fa-key prefix" aria-hidden="true" />
-                <input
-                  id="password"
-                  placeholder="Password"
-                  name="password"
-                  type="password"
-                  className="validate"
-                  onChange={this.onChange} />
-              </div>
-              <div className="input-field col s12">
-                <a className="waves-effect waves-light btn" onClick={this.onClick}>SIGN UP</a>
-              </div>
-              <div className="input-field col s12">
-                <h6 className="left small">Already have an account? <Link to="/">Sign In</Link></h6>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+      <SignUpForm
+        onChange={this.handleChange}
+        onClick={this.handleClick} />
     );
   }
 }
 
-SignUpForm.propTypes = {
+SignUp.propTypes = {
   signup: React.PropTypes.func.isRequired
 };
 
-SignUpForm.contextTypes = {
+SignUp.contextTypes = {
   router: React.PropTypes.object.isRequired
 };
 
-export default connect(null, { signup })(SignUpForm);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(userActions, dispatch)
+  };
+}
+
+export default connect(null, userActions)(SignUp);

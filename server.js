@@ -1,4 +1,5 @@
 import express from 'express';
+import favicon from 'serve-favicon';
 import webpack from 'webpack';
 import path from 'path';
 import open from 'open';
@@ -19,10 +20,11 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(parser.urlencoded({ extended: true }));
+app.use(favicon(path.join(__dirname, 'client', 'src/images/dms.jpg')));
 app.use(parser.json());
 const compiler = webpack(config);
 
-if (process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test' || process.env.NODE_ENV !== 'production') {
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
     publicPath: config.output.publicPath
@@ -36,10 +38,6 @@ app.use('/roles', roleRoute);
 app.use('/documents', documentRoute);
 app.use('/search', searchRoute);
 app.use('/pagination', paginationRoute);
-
-// app.listen(port, () => {
-//   console.log(`Server listening on port ${port}`);
-// });
 
 app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/src/index.html'));

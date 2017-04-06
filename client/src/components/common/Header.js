@@ -1,13 +1,18 @@
-/* eslint require-jsdoc: "off" */
-import React, { PropTypes } from 'react';
+/* eslint class-methods-use-this: "off" */
+import React from 'react';
 import ReactTable from 'react-table';
 import { connect } from 'react-redux';
 import { Link, IndexLink, browserHistory } from 'react-router';
 import { logout, searchDocuments } from '../../actions/userActions';
 
-
-class Header extends React.Component {
-
+/**
+ * Class to create UserInput Component
+ */
+export class Header extends React.Component {
+  /**
+   *
+   * @param {Object} props
+   */
   constructor(props) {
     super(props);
     this.logout = this.logout.bind(this);
@@ -22,12 +27,11 @@ class Header extends React.Component {
     };
   }
 
-  logout(event) {
-    event.preventDefault();
-    this.props.logout();
-    this.redirectToHomePage();
-  }
-
+  /**
+   *
+   * @param {*} event
+   * @returns {*} click action
+   */
   onClick(event) {
     event.preventDefault();
     if (this.state.query.length > 0) {
@@ -37,28 +41,61 @@ class Header extends React.Component {
     this.props.searchDocuments(this.state.query);
   }
 
+  /**
+   *
+   * @param {*} event
+   * @returns {*} action
+   */
   onChange(event) {
     event.preventDefault();
     // set showTable back to false when user types in query
     this.setState({ showTable: false, query: event.target.value });
   }
 
+  /**
+   *
+   * @param {*} event
+   * @returns {*} click action
+   */
   onClose(event) {
     event.preventDefault();
     this.setState({ showTable: false, query: '' });
   }
 
+  /**
+   *
+   * @param {*} event
+   * @returns {*} click action
+   */
+  logout(event) {
+    event.preventDefault();
+    this.props.logout();
+    this.redirectToHomePage();
+  }
+
+  /**
+   * Redirects to the home page
+   * @returns {*} redirect
+   */
   redirectToHomePage() {
     browserHistory.push('/');
   }
 
+  /**
+   * Redirects to the roles page
+   * @returns {*} redirect
+   */
   redirectToRoles() {
     browserHistory.push('/rolesPage');
   }
 
+  /**
+   * Renders the Header component
+   * @param {*} null
+   * @returns {*} rendered JSX
+   */
   render() {
-    const auth = this.props.isAuthenticated;
-    const isSuperAdmin = this.props.isSuperAdmin;
+    const { isAuthenticated, isSuperAdmin } = this.props;
 
     const data = this.props.searchResults;
     // Column definitions for the react-table
@@ -70,30 +107,33 @@ class Header extends React.Component {
       accessor: 'title',
     }, {
       header: 'Content',
-      accessor: 'docContent'
+      accessor: 'docContent',
+      width: 400
     }, {
       header: 'access',
       accessor: 'access'
     }];
 
     const logoutLink = (
-      <li><a href="#" onClick={this.logout}>Logout</a></li>
+      <li><a className="logout" href="#" onClick={this.logout}>Logout</a></li>
     );
 
     const rolesLink = (
-      <li><a onClick={this.redirectToRoles}>Manage</a></li>
+      <li><a className="manage" onClick={this.redirectToRoles}>Manage</a></li>
     );
 
     const searchLink = (
-      <li>
-        <a href="#search-modal">
+      // search icon on the nav bar
+      <li id="searchlink">
+        <a href="#search-modal" className="search">
           <i className="fa fa-search prefix" aria-hidden="true" />          &nbsp;Search
         </a>
+        {/* Modal Start */}
         <div id="search-modal" className="modal view-user-modal">
           <div className="modal-content">
             <h5>Enter search query</h5>
             <input
-              id="new-role"
+              id="search-query"
               type="text"
               name="new-role"
               value={this.state.query}
@@ -101,8 +141,10 @@ class Header extends React.Component {
               onChange={this.onChange} />
             <a
               className="modal-action waves-effect waves-green btn-flat"
-              onClick={this.onClick}>              Search</a>
-            {this.state.showTable ? <ReactTable data={data} columns={columns} /> : null}
+              onClick={this.onClick} id="search-button">              Search</a>
+            {this.state.showTable ? <ReactTable
+              data={data}
+              columns={columns} id="results" /> : null}
           </div>
           <div className="modal-footer">
             <a
@@ -110,6 +152,7 @@ class Header extends React.Component {
               onClick={this.onClose}>              Close</a>
           </div>
         </div>
+        {/* Modal end */}
       </li>
     );
 
@@ -119,9 +162,9 @@ class Header extends React.Component {
           <IndexLink to="/dashboard" className="brand-logo">Documentos</IndexLink>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li><Link to="/about"> About </Link></li>
-            {auth ? searchLink : null}
+            {isAuthenticated ? searchLink : null}
             {isSuperAdmin ? rolesLink : null}
-            {auth ? logoutLink : null}
+            {isAuthenticated ? logoutLink : null}
           </ul>
         </div>
       </nav >
@@ -137,6 +180,11 @@ Header.propTypes = {
   searchResults: React.PropTypes.object.isRequired
 };
 
+/**
+ *
+ * @param {*} state
+ * @returns {*} mappedState
+ */
 function mapStateToProps(state) {
   return {
     isAuthenticated: state.users.isAuthenticated,

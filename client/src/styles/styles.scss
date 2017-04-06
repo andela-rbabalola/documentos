@@ -40,8 +40,7 @@ img {
 }
 
 #text {
-  width: 200px;
-  margin-left: 30px;
+  width: 170px;
 }
 
 #create-doc {
@@ -68,6 +67,32 @@ img {
   z-index: 10000
 }
 
-#new-role{
+#new-role {
   width: 400px;
+}
+
+#search-query {
+  width: 400px;
+}
+
+#search-modal {
+  width: 800px;
+  height: 650px;
+}
+
+.doc-card {
+  height: 200px;
+  width: 250px;
+}
+
+.row :hover .btn {
+  background: #00bfff;
+}
+
+.modal :hover .btn {
+  background: #00bfff;
+}
+
+#create-doc {
+  margin-left: 0px;
 }

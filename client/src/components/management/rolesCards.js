@@ -1,11 +1,11 @@
+/* eslint require-jsdoc: "off"  */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 import UserRoleModal from './UsersRoleModal';
-// import * as roleActions from '../../actions/rolesActions';
 import { updateRole, getRole, deleteRole } from '../../actions/rolesActions';
 
-class RolesCard extends React.Component {
+export class RolesCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

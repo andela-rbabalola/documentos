@@ -45,7 +45,6 @@ describe('Users Test Suite', () => {
           expect(res.body.newUser).to.have.property('lastName');
           expect(res.body.newUser).to.have.property('email');
           expect(res.body.newUser).to.have.property('roleId');
-          expect(res.body.newUser).to.have.property('password');
           done();
         });
     });

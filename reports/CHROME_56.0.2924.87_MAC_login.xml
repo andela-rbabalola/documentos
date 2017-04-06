@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="5">
+
+  <testsuite name="login"
+    errors="0" failures="0" hostname="" id="" package="login" skipped="0"
+    tests="5" time="19.23" timestamp="Tue, 04 Apr 2017 16:38:42 GMT">
+  
+    <testcase name="Documentos Title" classname="login" time="3.444" assertions="2">
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Login Users" classname="login" time="3.949" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Fail for wrong password" classname="login" time="3.983" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Admin Login" classname="login" time="3.905" assertions="5">
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="User Login" classname="login" time="3.951" assertions="5">
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>

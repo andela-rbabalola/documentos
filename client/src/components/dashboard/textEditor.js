@@ -3,18 +3,19 @@ import React from 'react';
 import FroalaEditor from 'react-froala-wysiwyg';
 import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import toastr from 'toastr';
-// import { bindActionCreators } from 'redux';
-import { createDocument } from '../../actions/docActions';
+import * as userActions from '../../actions/userActions';
+import * as docActions from '../../actions/docActions';
 
 
-class TextEditor extends React.Component {
+export class TextEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       title: '',
       docContent: '',
-      access: '',
+      access: 'public',
       userId: jwt.decode(localStorage.getItem('JWT')).UserId
     };
     this.handleChange = this.handleChange.bind(this);
@@ -42,10 +43,10 @@ class TextEditor extends React.Component {
   onClick(event) {
     event.preventDefault();
     // validate first
-    if (this.state.title === '' || this.state.access === '') {
+    if (this.state.title === '') {
       toastr.error('Please enter the required fields');
     } else {
-      this.props
+      this.props.docsActions
         .createDocument(this.state)
         .then(() => {
           toastr.success('Document created');
@@ -84,7 +85,7 @@ class TextEditor extends React.Component {
             <div className="col s6">
               <div className="input-field col s8">
                 <select value={this.state.select} id="selectMe">
-                  <option value="">Choose an access type</option>
+                  <option value="">Access</option>
                   <option value="public">Public</option>
                   <option value="private">Private</option>
                   <option value="role">Role</option>
@@ -115,14 +116,24 @@ class TextEditor extends React.Component {
 }
 
 TextEditor.propTypes = {
-  createDocument: React.PropTypes.func.isRequired
+  createDocument: React.PropTypes.func.isRequired,
+  currentUser: React.PropTypes.object.isRequired,
+  usersActions: React.PropTypes.object.isRequired,
+  docsActions: React.PropTypes.object.isRequired
 };
 
 
 function mapStateToProps(state) {
   return {
-    documents: state.documents
+    currentUser: state.users.userInfo || state.users.currentUser
   };
 }
 
-export default connect(null, { createDocument })(TextEditor);
+function mapDispatchToProps(dispatch) {
+  return {
+    usersActions: bindActionCreators(userActions, dispatch),
+    docsActions: bindActionCreators(docActions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextEditor);

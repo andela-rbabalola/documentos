@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import Header from './common/Header';
+import HeaderComponent from './common/Header';
 import FlashMessagesList from '../components/flashMessages/flashMessagesList';
 
 
@@ -8,7 +8,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Header />
+        <HeaderComponent />
         <FlashMessagesList />
         <div className="">
           {this.props.children}
