@@ -34,9 +34,6 @@ router.route('/:id')
   .put(Authentication.decodeToken, Authentication.validateUser, UserController.updateUser)
   .delete(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.deleteUser);
 
-router.route('/:id/documents')
-  .get(Authentication.decodeToken, Authentication.validateUser, documentController.getDocForUser);
-
 router.route('/signin')
   .post(UserController.signIn);
 

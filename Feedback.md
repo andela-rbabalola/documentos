@@ -1,5 +1,5 @@
-- Remove password from all users payload
-- Change the response code from 401 to 403 where necessary
+- Remove password from all users payload: Done
+- Change the response code from 401 to 403 where necessary: Done
 401 --> Is for users that are not authorized at all
 403 --> forbidden users are not allowed to acces that resource
 - Return user details when he is updated

@@ -17,7 +17,17 @@ class UserController {
    * @returns {Object} res object
    */
   static getAllUsers(req, res) {
-    model.User.findAll().then(users => res.status(200)
+    model.User.findAll({
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'roleId',
+        'createdAt',
+        'updatedAt'
+      ]
+    }).then(users => res.status(200)
       .send(users));
   }
 
@@ -212,7 +222,7 @@ class UserController {
             email: req.body.email || foundUser.email,
             password: req.body.password || foundUser.password
           }).then(res.status(201)
-            .send({ message: 'User successfully updated' }));
+            .send({ message: 'User successfully updated', foundUser }));
       });
   }
 

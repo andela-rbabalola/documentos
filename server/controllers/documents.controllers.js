@@ -75,7 +75,7 @@ class DocumentsController {
           return res.status(404)
             .send({ message: `Document with id ${req.params.id} not found` });
         } else if (foundDoc.access === 'private' && req.decoded.RoleId > 2) {
-          return res.status(401)
+          return res.status(403)
             .send({ message: 'This document is private' });
         }
         res.status(200)
@@ -100,7 +100,7 @@ class DocumentsController {
           return res.status(404)
             .send({ message: 'Document to be updated not found' });
         } else if (foundDoc.userId !== req.decoded.UserId && (req.decoded.RoleId > 2)) {
-          return res.status(401)
+          return res.status(403)
             .send({ message: 'You are not authorized to update this document' });
         }
         return foundDoc
@@ -128,7 +128,7 @@ class DocumentsController {
           return res.status(404)
             .send({ message: 'Unable to delete because document is not found' });
         } else if (foundDoc.userId !== req.decoded.UserId && (req.decoded.RoleId > 2)) {
-          return res.status(401)
+          return res.status(403)
             .send({ message: 'You are not authorized to delete this document' });
         }
         foundDoc.destroy()
