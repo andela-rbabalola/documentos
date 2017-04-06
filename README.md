@@ -5,7 +5,7 @@
 
 Documentos is a full stack application based on a RestFUL API that allows users to create and manage documents by giving different priviledges and rights to documents they create based on user roles.
 
-## Technologies Used
+## Technologies Used for the app
 - NodeJS
 - React/Redux
 - Express
