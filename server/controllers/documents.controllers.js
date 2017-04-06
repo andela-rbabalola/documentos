@@ -110,9 +110,6 @@ class DocumentsController {
             access: req.body.access || foundDoc.access
           }).then(res.status(201)
             .send({ message: 'Document successfully updated', foundDoc }));
-          // handle errors
-          // .catch(error => res.status(400)
-          //   .send(error));
       });
   }
 
