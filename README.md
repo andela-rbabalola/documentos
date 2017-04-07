@@ -84,40 +84,40 @@ Users are issued a token when they signup or signin. This token is needed for su
 #### Users
 EndPoint                      |   Functionality
 ------------------------------|------------------------
-POST /users/signin         |   Logs in a user.
-POST /users/logout        |   Logs out a user.
-POST /users/              |   Creates a new user.
-GET /users/               |   Gets all users (available to only the SuperAdmin and Admin).
-GET /users/:id           |   Finds user by id.
-PUT /users/:id           |   Updates a user's attributes based on the id specified (available to only the SuperAdmin and Admin)
-DELETE /users/:id        |   Deletes user (available only to the SuperAdmin)
-PUT /users/updateRole/:id  | Updates a user's roleId (available only to the SuperAdmin)
-GET /users/?limit={integer}&offset={integer}| Pagination for viewing users
-POST /createadmin          | Creates an Admin user (available only to the SuperAdmin)
-POST /search/users/?q=${query} | Gets all users with first name, last name or email containing the query
+POST /api/users/signin         |   Logs in a user.
+POST /api/users/logout        |   Logs out a user.
+POST /api/users/              |   Creates a new user.
+GET /api/users/               |   Gets all users (available to only the SuperAdmin and Admin).
+GET /api/users/:id           |   Finds user by id.
+PUT /api/users/:id           |   Updates a user's attributes based on the id specified (available to only the SuperAdmin and Admin)
+DELETE /api/users/:id        |   Deletes user (available only to the SuperAdmin)
+PUT /api/users/updateRole/:id  | Updates a user's roleId (available only to the SuperAdmin)
+GET /api/users/?limit={integer}&offset={integer}| Pagination for viewing users
+POST /api/createadmin          | Creates an Admin user (available only to the SuperAdmin)
+POST /api/search/users/?q=${query} | Gets all users with first name, last name or email containing the query
 
 #### Documents
 EndPoint                      |   Functionality
 ------------------------------|------------------------
-POST /documents/          |   Creates a new document instance.
-GET /documents/           |   Gets all documents.
-GET /documents/:id       |   Find document by id.
-PUT /documents/:id       |   Updates a document attributes.
-GET /documents/user/:id            | Gets all documents for a user
-DELETE /documents/:id    |   Delete document.
-GET /documents/user/:id |   Find all documents belonging to the user.
-GET /search/documents/?q=${query} | Get all documents with title containing the search query
-GET /documents/role        | Gets documents with role access
-POST /documents/search/user/:id      | Search documents belonging to a particular user
-GET /pagination/documents/?limit=${integer}&offset=${integer} | Pagination for documents
+POST /api/documents/          |   Creates a new document instance.
+GET /api/documents/           |   Gets all documents.
+GET /api/documents/:id       |   Find document by id.
+PUT /api/documents/:id       |   Updates a document attributes.
+GET /api/documents/user/:id            | Gets all documents for a user
+DELETE /api/documents/:id    |   Delete document.
+GET /api/documents/user/:id |   Find all documents belonging to the user.
+GET /api/search/documents/?q=${query} | Get all documents with title containing the search query
+GET /api/documents/role        | Gets documents with role access
+POST /api/documents/search/user/:id      | Search documents belonging to a particular user
+GET /api/pagination/documents/?limit=${integer}&offset=${integer} | Pagination for documents
 
 #### Roles
 EndPoint                      |   Functionality
 ------------------------------|------------------------
-GET /roles/               |   Get all Roles.
-POST /roles/               |   Create a Role.
-PUT /roles/:id               |   Edit a Role.
-DELETE /roles/:id               |   Delete a Role.
+GET /api/roles/               |   Get all Roles.
+POST /api/roles/               |   Create a Role.
+PUT /api/roles/:id               |   Edit a Role.
+DELETE /api/roles/:id               |   Delete a Role.
 
 It should be noted that the endpoints for roles here are only available to the SuperAdmin.
 
@@ -126,7 +126,7 @@ It should be noted that the endpoints for roles here are only available to the S
 
 ### Role
 #### Create a role
-- `POST /roles`
+- `POST /api/roles`
 - Requires: SuperAdmin Authentication
 #### HTTP Response
 -   HTTP Status: `201: created`
@@ -141,7 +141,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Get all roles
-- `GET /roles`
+- `GET /api/roles`
 - Requires: SuperAdmin Authentication
 #### HTTP Response
 -   HTTP Status: `200: OK`
@@ -176,7 +176,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Edit a role
-- `PUT /roles/:id`
+- `PUT /api/roles/:id`
 - Requires SuperAdmin authentication
 #### HTTP Response
 -   HTTP Status: `201: OK`
@@ -188,7 +188,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Delete a role
-- `DELETE /roles/:id`
+- `DELETE /api/roles/:id`
 - Requires SuperAdmin authentication
 #### HTTP Response
 - HTTP Status: `201: OK`
@@ -202,7 +202,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ### Users
 
 #### Create a user
--   `POST /users`
+-   `POST /api/users`
     #### HTTP response
 -   HTTP Status: `201: created`
 -   JSON data
@@ -223,7 +223,7 @@ It should be noted that the endpoints for roles here are only available to the S
 }
 ```
 #### Login
--   `POST /users/login`
+-   `POST /api/users/login`
     #### HTTP Response
 -   HTTP status: `200: OK`
 -   JSON Data
@@ -237,8 +237,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Get all Users
--   `GET /users`
--   Requires: SuperAdmin or Admin Authentication
+-   `GET /api/users`
     #### HTTP Response
 -   HTTP status: `200: OK`
 -   JSON Data
@@ -269,7 +268,7 @@ It should be noted that the endpoints for roles here are only available to the S
 
 ### Documents
 #### Create a document
--   `POST /documents/`
+-   `POST /api/documents/`
     #### HTTP response
 -   HTTP Status: `201: created`
 -   JSON data
@@ -286,7 +285,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Get all documents
--   `GET /documents/`
+-   `GET /api/documents/`
     #### HTTP response
 -   HTTP Status: `200: 0k`
 -   JSON data
@@ -314,7 +313,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Get a particular document
--   `GET /documents/:id`
+-   `GET /api/documents/:id`
     #### HTTP response
 -   HTTP Status: `200: 0K`
 -   JSON data
@@ -331,7 +330,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Update a document
--   `PUT /documents/:id`
+-   `PUT /api/documents/:id`
     #### HTTP response
 -   HTTP Status: `200: 0K`
 -   JSON data
@@ -342,7 +341,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Delete a document
-- `DELETE /documents/:id`
+- `DELETE /api/documents/:id`
    ####  HTTP response
 - HTTP Status: `201: OK`
 - JSON data
@@ -353,7 +352,7 @@ It should be noted that the endpoints for roles here are only available to the S
 ```
 
 #### Search Documents
-- `GET /search/documents/?q=${query}`
+- `GET /api/search/documents/?q=${query}`
   #### HTTP response
 - HTTP Status: `201 OK`
 - JSON data
