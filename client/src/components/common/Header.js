@@ -177,7 +177,7 @@ Header.propTypes = {
   isAuthenticated: React.PropTypes.bool.isRequired,
   isSuperAdmin: React.PropTypes.bool.isRequired,
   searchDocuments: React.PropTypes.func.isRequired,
-  searchResults: React.PropTypes.object.isRequired
+  searchResults: React.PropTypes.array.isRequired
 };
 
 /**

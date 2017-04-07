@@ -83,7 +83,7 @@ export function login(user) {
 }
 
 export function searchDocuments(query) {
-  return dispatch => axios.post('/api/documents/search', { query })
+  return dispatch => axios.get(`/api/search/documents/?q=${query}`)
     .then((res) => {
       dispatch(searchDocumentsSuccess(res.data));
     });

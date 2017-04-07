@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import toastr from 'toastr';
-import * as userActions from '../../actions/userActions';
 import * as docActions from '../../actions/docActions';
 
 
@@ -117,8 +116,6 @@ export class TextEditor extends React.Component {
 
 TextEditor.propTypes = {
   createDocument: React.PropTypes.func.isRequired,
-  currentUser: React.PropTypes.object.isRequired,
-  usersActions: React.PropTypes.object.isRequired,
   docsActions: React.PropTypes.object.isRequired
 };
 
@@ -131,7 +128,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    usersActions: bindActionCreators(userActions, dispatch),
     docsActions: bindActionCreators(docActions, dispatch)
   };
 }
