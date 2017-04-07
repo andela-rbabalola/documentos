@@ -44,7 +44,7 @@ class Authentication {
   static validateUser(req, res, next) {
     // We convert the UserId to string because it is a number
     if (req.params.id !== req.decoded.UserId.toString() && (req.decoded.RoleId > 2)) {
-      return res.status(401)
+      return res.status(403)
         .send({ success: false, message: 'Unauthorized access' });
     }
     next();
@@ -68,7 +68,7 @@ class Authentication {
             if (userRole.title === 'SuperAdmin') {
               next();
             } else {
-              return res.status(401)
+              return res.status(403)
                 .send({ success: false, message: 'You do not have superadmin rights' });
             }
           });
@@ -93,7 +93,7 @@ class Authentication {
             if (userRole.title === 'Admin' || userRole.title === 'SuperAdmin') {
               next();
             } else {
-              return res.status(401)
+              return res.status(403)
                 .send({ success: false, message: 'Only admins have access to this route' });
             }
           });

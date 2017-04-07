@@ -18,17 +18,17 @@ let allDocuments;
 
 describe('Documents Test Suite', () => {
   before((done) => {
-    server.post('/users/signin')
+    server.post('/api/users/signin')
       .type('form')
       .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
       .end((err, res) => {
         superAdminToken = res.body.token;
-        server.post('/users')
+        server.post('/api/users')
           .send(testHelper.user())
           .end((err, res) => {
             regularUser = res.body;
             regularToken = res.body.token;
-            server.post('/users')
+            server.post('/api/users')
               .send(testHelper.user())
               .end((err, res) => {
                 testToken = res.body.token;
@@ -39,20 +39,20 @@ describe('Documents Test Suite', () => {
   });
 
   before((done) => {
-    server.post('/documents')
+    server.post('/api/documents')
       .set({ 'x-access-token': superAdminToken })
       .send(testHelper.dummyDocumentWithArg('private', 1))
       .end((err, res) => {
         document = res.body;
-        server.get('/documents')
+        server.get('/api/documents')
           .set({ 'x-access-token': regularToken })
           .end((err, res) => {
             allPublicDocuments = res.body;
-            server.get('/documents')
+            server.get('/api/documents')
               .set({ 'x-access-token': superAdminToken })
               .end((err, res) => {
                 allDocuments = res.body;
-                server.post('/documents')
+                server.post('/api/documents')
                   .set({ 'x-access-token': regularToken })
                   .send(testHelper.dummyDocument(regularUser.newUser.id))
                   .end((err, res) => {
@@ -67,7 +67,7 @@ describe('Documents Test Suite', () => {
 
   describe('Create document', () => {
     it('Should create a document for passed valid input', (done) => {
-      server.post('/documents')
+      server.post('/api/documents')
         .set({ 'x-access-token': superAdminToken })
         .send(testHelper.dummyDocument(1))
         .expect(201)
@@ -81,7 +81,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should have the date of creation defined', (done) => {
-      server.post('/documents')
+      server.post('/api/documents')
         .set({ 'x-access-token': superAdminToken })
         .send(testHelper.dummyDocument())
         .expect(201)
@@ -93,7 +93,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should set its permission to public by default', (done) => {
-      server.post('/documents')
+      server.post('/api/documents')
         .set({ 'x-access-token': superAdminToken })
         .send(testHelper.dummyDocumentNoPermission())
         .expect(201)
@@ -105,7 +105,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should fail to create a document if invalid input is passed', (done) => {
-      server.post('/documents')
+      server.post('/api/documents')
         .set({ 'x-access-token': superAdminToken })
         .send({ title: null })
         .end((err, res) => {
@@ -139,7 +139,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should return all documents starting from the most recent', (done) => {
-      server.get('/documents')
+      server.get('/api/documents')
         .set({ 'x-access-token': superAdminToken })
         .expect(200).end((err, res) => {
           if (err) return done(err);
@@ -151,9 +151,9 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should only return a private document to its owner', (done) => {
-      server.get(`/documents/${document.newDocument.id}`)
+      server.get(`/api/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': testToken })
-        .expect(401)
+        .expect(403)
         .end((err, res) => {
           expect(res.body.message).to.equal('This document is private');
           done();
@@ -161,7 +161,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should fail if an invalid document id is passed', (done) => {
-      server.get('/documents/a')
+      server.get('/api/documents/a')
         .set({ 'x-access-token': superAdminToken })
         .expect(400)
         .end((err, res) => {
@@ -171,7 +171,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should get all documents for a specific user', (done) => {
-      server.get(`/documents/user/${regularUser.newUser.id}`)
+      server.get(`/api/documents/user/${regularUser.newUser.id}`)
         .set({ 'x-access-token': regularToken })
         .expect(200)
         .end((err, res) => {
@@ -182,7 +182,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should fail to get all documents for user if the user id is invalid', (done) => {
-      server.get('/documents/user/a')
+      server.get('/api/documents/user/a')
         .set({ 'x-access-token': superAdminToken })
         .expect(400)
         .end((err, res) => {
@@ -192,7 +192,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should return not found message', (done) => {
-      server.get('/documents/user/100')
+      server.get('/api/documents/user/100')
         .set({ 'x-access-token': superAdminToken })
         .expect(404)
         .end((err, res) => {
@@ -202,7 +202,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should return a private document to the SuperAdmin', (done) => {
-      server.get(`/documents/${document.newDocument.id}`)
+      server.get(`/api/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': superAdminToken })
         .expect(200).end((err, res) => {
           expect(typeof res.body).to.equal('object');
@@ -213,7 +213,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should fail if a document does not exist', (done) => {
-      server.get('/documents/1000')
+      server.get('/api/documents/1000')
         .set({ 'x-access-token': superAdminToken })
         .expect(404)
         .end((err, res) => {
@@ -228,7 +228,7 @@ describe('Documents Test Suite', () => {
   // require token to get role documents
   describe('Get Role documents', () => {
     it('Should return only role documents', (done) => {
-      server.get('/documents/role')
+      server.get('/api/documents/role')
         .set({ 'x-access-token': superAdminToken })
         .expect(200)
         .end((err, res) => {
@@ -240,7 +240,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should deny access if a user does not have sufficient role access', (done) => {
-      server.get('/documents/role')
+      server.get('/api/documents/role')
         .set({ 'x-access-token': regularToken })
         .expect(200)
         .end((err, res) => {
@@ -254,7 +254,7 @@ describe('Documents Test Suite', () => {
 
   describe('Update Document', () => {
     before((done) => {
-      server.post('/documents')
+      server.post('/api/documents')
         .set({ 'x-access-token': regularToken })
         .send(testHelper.dummyDocumentWithArg('private', regularUser.newUser.id))
         .end((err, res) => {
@@ -264,7 +264,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should allow the owner of a document to edit it', (done) => {
-      server.put(`/documents/${document.newDocument.id}`)
+      server.put(`/api/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': regularToken })
         .send({ title: 'New title' })
         .expect(200)
@@ -277,10 +277,10 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should not allow you to edit a document you don\'t own', (done) => {
-      server.put(`/documents/${document.newDocument.id}`)
+      server.put(`/api/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': testToken })
         .send({ title: 'Doc title updated' })
-        .expect(401)
+        .expect(403)
         .end((err, res) => {
           expect(typeof res.body).to.equal('object');
           expect(res.body.message).to.equal('You are not authorized to update this document');
@@ -289,7 +289,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should fail if the document does not exist', (done) => {
-      server.put('/documents/100')
+      server.put('/api/documents/100')
         .set({ 'x-access-token': regularToken })
         .send({ title: 'doc title updated' })
         .expect(404)
@@ -303,9 +303,9 @@ describe('Documents Test Suite', () => {
 
   describe('Delete documents', () => {
     it('Should not allow you to delete a document you don\'t own', (done) => {
-      server.delete(`/documents/${document.newDocument.id}`)
+      server.delete(`/api/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': testToken })
-        .expect(401)
+        .expect(403)
         .end((err, res) => {
           expect(typeof res.body).to.equal('object');
           expect(res.body.message).to.equal('You are not authorized to delete this document');
@@ -314,7 +314,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should fail if document does not exist', (done) => {
-      server.delete('/documents/100')
+      server.delete('/api/documents/100')
         .set({ 'x-access-token': regularToken })
         .expect(404)
         .end((err, res) => {
@@ -325,7 +325,7 @@ describe('Documents Test Suite', () => {
     });
 
     it('Should delete a document', (done) => {
-      server.delete(`/documents/${document.newDocument.id}`)
+      server.delete(`/api/documents/${document.newDocument.id}`)
         .set({ 'x-access-token': superAdminToken })
         .expect(201)
         .end((err, res) => {

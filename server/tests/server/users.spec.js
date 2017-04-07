@@ -13,16 +13,16 @@ let regularDetails;
 
 describe('Users Test Suite', () => {
   before((done) => {
-    server.post('/users/signin')
+    server.post('/api/users/signin')
       .type('form')
       .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
       .end((err, res) => {
         superAdminDetails = res.body;
-        server.post('/users/signin')
+        server.post('/api/users/signin')
           .send({ email: 'rotimi@gmail.com', password: 'rotimi123' })
           .end((err, res) => {
             adminDetails = res.body;
-            server.post('/users')
+            server.post('/api/users')
               .send(testHelper.user())
               .end((err, res) => {
                 regularDetails = res.body;
@@ -35,7 +35,7 @@ describe('Users Test Suite', () => {
   describe('Authentication', () => {
     const testAdmin = testHelper.userWithRole(2);
     it('Should create a user given valid details', (done) => {
-      server.post('/users')
+      server.post('/api/users')
         .set({ 'Content-Type': 'application/x-www-form-urlencoded' })
         .type('form')
         .send(testUser)
@@ -50,7 +50,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow only unique users to be created', (done) => {
-      server.post('/users')
+      server.post('/api/users')
         .send(testUser)
         .expect(409)
         .end((err, res) => {
@@ -60,7 +60,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow the SuperAdmin create an admin', (done) => {
-      server.post('/users/createadmin')
+      server.post('/api/users/createadmin')
         .set({ 'x-access-token': superAdminDetails.token })
         .send(testAdmin)
         .expect(201)
@@ -74,7 +74,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail to create admin if admin already exists', (done) => {
-      server.post('/users/createadmin')
+      server.post('/api/users/createadmin')
         .set({ 'x-access-token': superAdminDetails.token })
         .send(testAdmin)
         .expect(409)
@@ -85,7 +85,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail to create admin if invalid details are passed', (done) => {
-      server.post('/users/createadmin')
+      server.post('/api/users/createadmin')
         .set({ 'x-access-token': superAdminDetails.token })
         .send(testHelper.invalidAdmin())
         .expect(400)
@@ -96,10 +96,10 @@ describe('Users Test Suite', () => {
     });
 
     it('Should prevent creation of the SuperAdmin', (done) => {
-      server.post('/users/createadmin')
+      server.post('/api/users/createadmin')
         .set({ 'x-access-token': superAdminDetails.token })
         .send(testHelper.userWithRole(1))
-        .expect(201)
+        .expect(400)
         .end((err, res) => {
           expect(res.body.message).to.equal('Admin must have a roleId of 2');
           done();
@@ -107,10 +107,10 @@ describe('Users Test Suite', () => {
     });
 
     it('Should prevent an admin from creating another admin', (done) => {
-      server.post('/users/createadmin')
+      server.post('/api/users/createadmin')
         .set({ 'x-access-token': adminDetails.token })
         .send(testHelper.userWithRole(2))
-        .expect(201)
+        .expect(403)
         .end((err, res) => {
           expect(res.body.message).to.equal('You do not have superadmin rights');
           done();
@@ -118,10 +118,10 @@ describe('Users Test Suite', () => {
     });
 
     it('Should prevent a regular user from creating an admin', (done) => {
-      server.post('/users/createadmin')
+      server.post('/api/users/createadmin')
         .set({ 'x-access-token': regularDetails.token })
         .send(testHelper.userWithRole(2))
-        .expect(201)
+        .expect(403)
         .end((err, res) => {
           expect(res.body.message).to.equal('You do not have superadmin rights');
           done();
@@ -129,7 +129,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should prevent users from specifying a role', (done) => {
-      server.post('/users')
+      server.post('/api/users')
         .send(testHelper.userWithRole(1))
         .expect(403)
         .end((err, res) => {
@@ -139,7 +139,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should give new users a default role (id=3, User)', (done) => {
-      server.post('/users')
+      server.post('/api/users')
         .send(testHelper.userWithoutRole())
         .expect(201)
         .end((err, res) => {
@@ -152,7 +152,7 @@ describe('Users Test Suite', () => {
     it('Should not create a user with invalid email', (done) => {
       const user = testHelper.user();
       user.email = 'invalid';
-      server.post('/users')
+      server.post('/api/users')
         .send(user)
         .expect(400)
         .end((err, res) => {
@@ -175,7 +175,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should deny access for invalid details', (done) => {
-      server.post('/users/signin')
+      server.post('/api/users/signin')
         .send({ email: 'rotimi@gmail.com', password: 'johndoe123' })
         .expect(401)
         .end((err, res) => {
@@ -185,7 +185,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should deny access is user is not in the database', (done) => {
-      server.post('/users/signin')
+      server.post('/api/users/signin')
         .send({ email: 'rotimi222@gmail.com', password: 'rotimi123' })
         .expect(401)
         .end((err, res) => {
@@ -195,7 +195,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should logout a user', (done) => {
-      server.post('/users/logout')
+      server.post('/api/users/logout')
         .expect(200)
         .end((err, res) => {
           expect(res.body.message).to.equal('You have logged out');
@@ -206,7 +206,7 @@ describe('Users Test Suite', () => {
 
   describe('Get Users', () => {
     it('Should require token to see all users', (done) => {
-      server.get('/users')
+      server.get('/api/users')
         .end((err, res) => {
           expect(res.status).to.equal(401);
           expect(res.body.message).to.equal('Please supply a token for this route');
@@ -215,7 +215,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow the SuperAdmin to see all users', (done) => {
-      server.get('/users')
+      server.get('/api/users')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(200);
@@ -225,7 +225,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow an Admin to see all users', (done) => {
-      server.get('/users')
+      server.get('/api/users')
         .set({ 'x-access-token': adminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(200);
@@ -235,7 +235,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow the SuperAdmin to see a specific user', (done) => {
-      server.get('/users/2')
+      server.get('/api/users/2')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.body).to.have.property('firstName');
@@ -247,7 +247,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail if the user id does not exist', (done) => {
-      server.get('/users/200')
+      server.get('/api/users/200')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(404);
@@ -257,7 +257,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail if the user id is not valid', (done) => {
-      server.get('/users/a')
+      server.get('/api/users/a')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(400);
@@ -267,7 +267,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow an Admin to see a specific user', (done) => {
-      server.get('/users/2')
+      server.get('/api/users/2')
         .set({ 'x-access-token': adminDetails.token })
         .end((err, res) => {
           expect(res.body).to.have.property('firstName');
@@ -279,7 +279,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow a user to access his details', (done) => {
-      server.get(`/users/${regularDetails.newUser.id}`)
+      server.get(`/api/users/${regularDetails.newUser.id}`)
         .set({ 'x-access-token': regularDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(200);
@@ -289,10 +289,10 @@ describe('Users Test Suite', () => {
     });
 
     it('Should prevent user from accessing details of other users', (done) => {
-      server.get(`/users/${regularDetails.newUser.id + 1}`)
+      server.get(`/api/users/${regularDetails.newUser.id + 1}`)
         .set({ 'x-access-token': regularDetails.token })
         .end((err, res) => {
-          expect(res.status).to.equal(401);
+          expect(res.status).to.equal(403);
           expect(res.body.message).to.equal('Unauthorized access');
           done();
         });
@@ -301,7 +301,7 @@ describe('Users Test Suite', () => {
 
   describe('Updating a user', () => {
     it('Should allow the SuperAdmin to update a user', (done) => {
-      server.put('/users/3')
+      server.put('/api/users/3')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ firstName: 'updated name' })
         .expect(201)
@@ -312,7 +312,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow an admin to update a user', (done) => {
-      server.put('/users/3')
+      server.put('/api/users/3')
         .set({ 'x-access-token': adminDetails.token })
         .send({ firstName: 'updated name' })
         .expect(201)
@@ -323,7 +323,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should prevent updating to the SuperAdmin role', (done) => {
-      server.put('/users/updateRole/5')
+      server.put('/api/users/updateRole/5')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 1 })
         .expect(201)
@@ -334,7 +334,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow the SuperAdmin to update a user\'s role', (done) => {
-      server.put('/users/updateRole/3')
+      server.put('/api/users/updateRole/3')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 2 })
         .expect(201)
@@ -345,7 +345,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should prevent an admin from updating a user\'s role', (done) => {
-      server.put('/users/updateRole/5')
+      server.put('/api/users/updateRole/5')
         .set({ 'x-access-token': adminDetails.token })
         .send({ roleId: 2 })
         .expect(201)
@@ -356,7 +356,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail if the user to update does not exist', (done) => {
-      server.put('/users/updateRole/500')
+      server.put('/api/users/updateRole/500')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 2 })
         .expect(404)
@@ -367,7 +367,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail id the old roleId is the same as the new roleId', (done) => {
-      server.put('/users/updateRole/3')
+      server.put('/api/users/updateRole/3')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 2 })
         .expect(409)
@@ -378,7 +378,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail if role to update to does not exist', (done) => {
-      server.put('/users/updateRole/5')
+      server.put('/api/users/updateRole/5')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ roleId: 10 })
         .expect(404)
@@ -390,10 +390,10 @@ describe('Users Test Suite', () => {
 
 
     it('Should not allow a regular user to update another user', (done) => {
-      server.put(`/users/${regularDetails.newUser.id + 1}`)
+      server.put(`/api/users/${regularDetails.newUser.id + 1}`)
         .set({ 'x-access-token': regularDetails.token })
         .send({ firstName: 'updated name' })
-        .expect(401)
+        .expect(403)
         .end((err, res) => {
           expect(res.body.message).to.equal('Unauthorized access');
           done();
@@ -401,7 +401,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow a user to update her own details', (done) => {
-      server.put(`/users/${regularDetails.newUser.id}`)
+      server.put(`/api/users/${regularDetails.newUser.id}`)
         .set({ 'x-access-token': regularDetails.token })
         .send({ firstName: 'updated name' })
         .expect(201)
@@ -412,7 +412,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail if the user id does not exist', (done) => {
-      server.put('/users/100')
+      server.put('/api/users/100')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ firstName: 'updated name' })
         .expect(404)
@@ -423,7 +423,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should allow only authenticated users to have access to updating', (done) => {
-      server.put(`/users/${regularDetails.newUser.id}`)
+      server.put(`/api/users/${regularDetails.newUser.id}`)
         .send({ firstName: 'updated name' })
         .end((err, res) => {
           expect(res.status).to.equal(401);
@@ -435,7 +435,7 @@ describe('Users Test Suite', () => {
 
   describe('Deleting a user', () => {
     it('Should allow the SuperAdmin to delete a user', (done) => {
-      server.delete(`/users/${regularDetails.newUser.id}`)
+      server.delete(`/api/users/${regularDetails.newUser.id}`)
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.body.message).to.equal('User successfully deleted');
@@ -444,7 +444,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should not allow an admin to delete a user', (done) => {
-      server.delete(`/users/${regularDetails.newUser.id}`)
+      server.delete(`/api/users/${regularDetails.newUser.id}`)
         .set({ 'x-access-token': adminDetails.token })
         .end((err, res) => {
           expect(res.body.message).to.equal('You do not have superadmin rights');
@@ -453,7 +453,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should ensure SuperAdmin cannot be deleted', (done) => {
-      server.delete('/users/1')
+      server.delete('/api/users/1')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.body.message).to.equal('The SuperAdmin cannot be deleted');
@@ -462,7 +462,7 @@ describe('Users Test Suite', () => {
     });
 
     it('Should fail if the user to delete does not exist', (done) => {
-      server.delete('/users/100')
+      server.delete('/api/users/100')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(404);

@@ -1,3 +1,4 @@
+/* eslint no-unused-expressions: "off" */
 import chai from 'chai';
 import supertest from 'supertest';
 import app from '../../../server';
@@ -10,7 +11,7 @@ let superAdminDetails;
 
 describe('Search Test', () => {
   before((done) => {
-    server.post('/users/signin')
+    server.post('/api/users/signin')
       .type('form')
       .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
       .end((err, res) => {
@@ -21,7 +22,7 @@ describe('Search Test', () => {
 
   describe('User search', () => {
     it('Should require a token for search', (done) => {
-      server.get('/search/users/?q=rotimi')
+      server.get('/api/search/users/?q=rotimi')
         .end((err, res) => {
           expect(res.status).to.equal(401);
           expect(res.body.message).to.equal('Please supply a token for this route');
@@ -30,7 +31,7 @@ describe('Search Test', () => {
     });
 
     it('Should return a list of users based on search criteria', (done) => {
-      server.get('/search/users/?q=r')
+      server.get('/api/search/users/?q=r')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.body[0].firstName).to.exist;
@@ -40,7 +41,7 @@ describe('Search Test', () => {
 
     it('Should return user not found if query is not found', (done) => {
       server
-        .get('/search/users/?q=zzzzzzz')
+        .get('/api/search/users/?q=zzzzzzz')
         .set({
           'x-access-token': superAdminDetails.token
         })
@@ -54,7 +55,7 @@ describe('Search Test', () => {
 
   describe('Document Search', () => {
     it('Should require a token for search', (done) => {
-      server.get('/search/documents/?q=title')
+      server.get('/api/search/documents/?q=title')
         .end((err, res) => {
           expect(res.status).to.equal(401);
           expect(res.body.message).to.equal('Please supply a token for this route');
@@ -63,7 +64,7 @@ describe('Search Test', () => {
     });
 
     it('Should return a list of users based on search criteria', (done) => {
-      server.get('/search/documents/?q=e')
+      server.get('/api/search/documents/?q=e')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.body[0].docContent).to.exist;
@@ -72,7 +73,7 @@ describe('Search Test', () => {
     });
 
     it('Should return document not found if query is not found', (done) => {
-      server.get('/search/documents/?q=zzzzzzzzzz')
+      server.get('/api/search/documents/?q=zzzzzzzzzz')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(404);
@@ -82,7 +83,7 @@ describe('Search Test', () => {
     });
 
     it('Should allow a user to search their own documents', (done) => {
-      server.post('/documents/search/user/1')
+      server.post('/api/documents/search/user/1')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ query: 'hello' })
         .end((err, res) => {
@@ -93,7 +94,7 @@ describe('Search Test', () => {
     });
 
     it('Should fail to search if an invalid user is passed', (done) => {
-      server.post('/documents/search/user/a')
+      server.post('/api/documents/search/user/a')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ query: 'hello' })
         .end((err, res) => {

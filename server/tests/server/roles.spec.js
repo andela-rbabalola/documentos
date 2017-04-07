@@ -13,18 +13,18 @@ let regularDetails;
 
 describe('Roles Test Suite', () => {
   before((done) => {
-    server.post('/users/signin')
+    server.post('/api/users/signin')
       .set({ 'Content-Type': 'application/x-www-form-urlencoded' })
       .type('form')
       .send({ email: 'oyinda@gmail.com', password: 'oyinda123' })
       .end((err, res) => {
         superAdminDetails = res.body;
-        server.post('/users/signin')
+        server.post('/api/users/signin')
           .type('form')
           .send({ email: 'rotimi@gmail.com', password: 'rotimi123' })
           .end((err, res) => {
             adminDetails = res.body;
-            server.post('/users')
+            server.post('/api/users')
               .type('form')
               .send(testUser)
               .end((err, res) => {
@@ -38,7 +38,7 @@ describe('Roles Test Suite', () => {
   describe('Create Role', () => {
     const newRole = testHelper.defaultRole();
     it('Should ensure SuperAdmin can create a role', (done) => {
-      server.post('/roles/')
+      server.post('/api/roles/')
         .set({ 'x-access-token': superAdminDetails.token })
         .send(newRole)
         .expect(201)
@@ -50,10 +50,10 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should ensure non SuperAdmin can not create a role', (done) => {
-      server.post('/roles/')
+      server.post('/api/roles/')
         .set({ 'x-access-token': adminDetails.token })
         .send(newRole)
-        .expect(401)
+        .expect(403)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.body.message).to.equal('You do not have superadmin rights');
@@ -62,10 +62,10 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should ensure regular users can not create a role', (done) => {
-      server.post('/roles/')
+      server.post('/api/roles/')
         .set({ 'x-access-token': adminDetails.token })
         .send(newRole)
-        .expect(401)
+        .expect(403)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.body.message).to.equal('You do not have superadmin rights');
@@ -74,7 +74,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Ensure role titles should be unique', (done) => {
-      server.post('/roles/')
+      server.post('/api/roles/')
         .set({ 'x-access-token': superAdminDetails.token })
         .send(newRole)
         .expect(409)
@@ -88,7 +88,7 @@ describe('Roles Test Suite', () => {
 
   describe('Get roles', () => {
     it('Should return all roles to the SuperAdmin', (done) => {
-      server.get('/roles')
+      server.get('/api/roles')
         .set({ 'x-access-token': superAdminDetails.token })
         .expect(200)
         .end((err, res) => {
@@ -104,7 +104,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should not return all roles to an Admin', (done) => {
-      server.get('/roles')
+      server.get('/api/roles')
         .set({ 'x-access-token': adminDetails.token })
         .expect(401)
         .end((err, res) => {
@@ -114,7 +114,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should not return all roles to a regular user', (done) => {
-      server.get('/roles')
+      server.get('/api/roles')
         .set({ 'x-access-token': regularDetails.token })
         .expect(401)
         .end((err, res) => {
@@ -124,7 +124,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should return a specific role to the SuperAdmin', (done) => {
-      server.get('/roles/1')
+      server.get('/api/roles/1')
         .set({ 'x-access-token': superAdminDetails.token })
         .expect(200)
         .end((err, res) => {
@@ -135,7 +135,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should not return a specific role to an Admin', (done) => {
-      server.get('/roles/1')
+      server.get('/api/roles/1')
         .set({ 'x-access-token': adminDetails.token })
         .expect(401)
         .end((err, res) => {
@@ -145,7 +145,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should fail if the roleId is not valid', (done) => {
-      server.get('/roles/a')
+      server.get('/api/roles/a')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(400);
@@ -155,7 +155,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should fail if role does not exist', (done) => {
-      server.get('/roles/100')
+      server.get('/api/roles/100')
         .set({ 'x-access-token': superAdminDetails.token })
         .end((err, res) => {
           expect(res.status).to.equal(404);
@@ -167,7 +167,7 @@ describe('Roles Test Suite', () => {
 
   describe('Update role', () => {
     it('Should allow the SuperAdmin to edit a role', (done) => {
-      server.put('/roles/3')
+      server.put('/api/roles/3')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ title: 'updated role' })
         .expect(200)
@@ -178,7 +178,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should not allow an admin to update a role', (done) => {
-      server.put('/roles/3')
+      server.put('/api/roles/3')
         .set({ 'x-access-token': adminDetails.token })
         .send({ title: 'updated role' })
         .expect(401)
@@ -189,7 +189,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should not allow a regular user to update a role', (done) => {
-      server.put('/roles/3')
+      server.put('/api/roles/3')
         .set({ 'x-access-token': regularDetails.token })
         .send({ title: 'updated role' })
         .expect(401)
@@ -200,7 +200,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should fail if role does not exist', (done) => {
-      server.put('/roles/100')
+      server.put('/api/roles/100')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ title: 'new updated role' })
         .expect(404)
@@ -211,7 +211,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should fail if role title already exists', (done) => {
-      server.put('/roles/2')
+      server.put('/api/roles/2')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ title: 'Admin' })
         .expect(409)
@@ -222,7 +222,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should ensure SuperAdmin role can\'t be updated', (done) => {
-      server.put('/roles/1')
+      server.put('/api/roles/1')
         .set({ 'x-access-token': superAdminDetails.token })
         .send({ title: 'New SuperAdmin' })
         .expect(403)
@@ -236,7 +236,7 @@ describe('Roles Test Suite', () => {
   // avoid hard coding role id for guest here
   describe('Delete Role', () => {
     it('Should allow only the SuperAdmin to delete a role', (done) => {
-      server.delete('/roles/4')
+      server.delete('/api/roles/4')
         .set({ 'x-access-token': superAdminDetails.token })
         .expect(201)
         .end((err, res) => {
@@ -246,7 +246,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should not allow an admin to delete a role', (done) => {
-      server.delete('/roles/5')
+      server.delete('/api/roles/5')
         .set({ 'x-access-token': adminDetails.token })
         .expect(401)
         .end((err, res) => {
@@ -256,7 +256,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should fail if role does not exist', (done) => {
-      server.delete('/roles/100')
+      server.delete('/api/roles/100')
         .set({ 'x-access-token': superAdminDetails.token })
         .expect(404)
         .end((err, res) => {
@@ -266,7 +266,7 @@ describe('Roles Test Suite', () => {
     });
 
     it('Should ensure SuperAdmin role cannot be deleted', (done) => {
-      server.delete('/roles/1')
+      server.delete('/api/roles/1')
         .set({ 'x-access-token': superAdminDetails.token })
         .expect(403)
         .end((err, res) => {
