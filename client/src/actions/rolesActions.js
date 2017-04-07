@@ -24,7 +24,7 @@ export function getUsersSuccess(allUsers) {
 }
 
 export function getRoles() {
-  return (dispatch) => axios.get('/roles', {
+  return (dispatch) => axios.get('/api/roles', {
     headers: {
       'x-access-token': localStorage.getItem('JWT')
     }
@@ -34,7 +34,7 @@ export function getRoles() {
 }
 
 export function createRole(newRole) {
-  return dispatch => axios.post('/roles', newRole).then(() => {
+  return dispatch => axios.post('/api/roles', newRole).then(() => {
     // dispatch get roles function
     dispatch(getRoles());
   }).catch((err) => {
@@ -43,7 +43,7 @@ export function createRole(newRole) {
 }
 
 export function getUsers() {
-  return (dispatch) => axios.get('/users', {
+  return (dispatch) => axios.get('/api/users', {
     headers: {
       'x-access-token': localStorage.getItem('JWT')
     }
@@ -53,7 +53,7 @@ export function getUsers() {
 }
 
 export function updateRole(updatedRole) {
-  return dispatch => axios.put(`/roles/${updatedRole.roleId}`, updatedRole).then(() => {
+  return dispatch => axios.put(`/api/roles/${updatedRole.roleId}`, updatedRole).then(() => {
     dispatch(getRoles());
   }).catch((err) => {
     throw (err);
@@ -61,7 +61,7 @@ export function updateRole(updatedRole) {
 }
 
 export function deleteRole(id) {
-  return dispatch => axios.delete(`/roles/${id}`).then(() => {
+  return dispatch => axios.delete(`/api/roles/${id}`).then(() => {
     dispatch(getRoles());
   }).catch((err) => {
     throw (err);

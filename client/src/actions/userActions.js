@@ -66,7 +66,7 @@ export function searchDocumentsSuccess(results) {
 }
 
 export function login(user) {
-  return dispatch => axios.post('/users/signin', user)
+  return dispatch => axios.post('/api/users/signin', user)
     .then((res) => {
       const { token } = res.data;
       axios.defaults.headers.common['x-access-token'] = token;
@@ -83,7 +83,7 @@ export function login(user) {
 }
 
 export function searchDocuments(query) {
-  return dispatch => axios.post('/documents/search', { query })
+  return dispatch => axios.post('/api/documents/search', { query })
     .then((res) => {
       dispatch(searchDocumentsSuccess(res.data));
     });
@@ -110,7 +110,7 @@ export function reauthenticate(isSuperAdmin) {
 
 // newUser is an object that contains the new user's details
 export function signup(newUser) {
-  return dispatch => axios.post('/users', newUser).then((res) => {
+  return dispatch => axios.post('/api/users', newUser).then((res) => {
     const token = res.data.token;
     axios.defaults.headers.common['x-access-token'] = token;
     localStorage.setItem('JWT', token);

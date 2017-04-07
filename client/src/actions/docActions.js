@@ -26,7 +26,7 @@ export function updateDocumentSuccess(updated) {
 
 // create action for error handling
 export function loadDocuments() {
-  return dispatch => axios.get('/documents', {
+  return dispatch => axios.get('/api/documents', {
     headers: {
       'x-access-token': localStorage.getItem('JWT')
     }
@@ -36,7 +36,7 @@ export function loadDocuments() {
 }
 
 export function deleteDocument(id) {
-  return dispatch => axios.delete(`/documents/${id}`).then(() => {
+  return dispatch => axios.delete(`/api/documents/${id}`).then(() => {
     dispatch(loadDocuments());
   }).catch((err) => {
     throw (err);
@@ -44,7 +44,7 @@ export function deleteDocument(id) {
 }
 
 export function createDocument(document) {
-  return dispatch => axios.post('/documents', document).then(() => {
+  return dispatch => axios.post('/api/documents', document).then(() => {
     dispatch(loadDocuments());
   }).catch((err) => {
     throw (err);
@@ -52,7 +52,7 @@ export function createDocument(document) {
 }
 
 export function updateDocument(updatedDocument) {
-  return dispatch => axios.put(`/documents/${updatedDocument.docId}`, updatedDocument).then(() => {
+  return dispatch => axios.put(`/api/documents/${updatedDocument.docId}`, updatedDocument).then(() => {
     dispatch(loadDocuments());
   }).catch((err) => {
     throw (err);
