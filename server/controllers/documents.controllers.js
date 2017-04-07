@@ -147,20 +147,41 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static getDocForUser(req, res) {
-    model.Document.findAll({
-      where: {
-        userId: req.params.id
-      }
-    })
-      .then((documents) => {
-        if (documents.length <= 0) {
-          return res.status(404)
-            .send({ message: 'No match found for query' });
+    /**
+     * If the userId of the user making the request does
+     * not match the id in the req params and it's not the
+     * admin or SuperAdmin show only public documents for the user
+     */
+    if (req.decoded.UserId.toString() !== req.params.id && (req.decoded.RoleId > 2)) {
+      model.Document.findAll({
+        where: {
+          $and: {
+            access: 'public',
+            userId: req.params.id
+          }
         }
-        return res.status(200).send(documents);
       })
-      .catch(err => res.status(400)
-        .send({ errorMessage: err, message: 'An error occurred getting the documents' }));
+        .then(documents => res.status(200)
+          .send(documents))
+        // catch errors
+        .catch(error => res.status(400)
+          .send(error));
+    } else {
+      model.Document.findAll({
+        where: {
+          userId: req.params.id
+        }
+      })
+        .then((documents) => {
+          if (documents.length <= 0) {
+            return res.status(404)
+              .send({ message: 'No match found for query' });
+          }
+          return res.status(200).send(documents);
+        })
+        .catch(err => res.status(400)
+          .send({ errorMessage: err, message: 'An error occurred getting the documents' }));
+    }
   }
 
   /**
@@ -200,25 +221,54 @@ class DocumentsController {
    * @returns {Object} res object
    */
   static searchDocuments(req, res) {
-    model.Document.findAll({
-      where: {
-        title: {
-          $iLike: `%${req.query.q}%`
+    if (req.decoded.RoleId > 2) {
+      model.Document.findAll({
+        where: {
+          $and: {
+            $or: [{
+              access: 'public'
+            }, {
+              userId: req.decoded.UserId
+            }],
+            title: {
+              $iLike: `%${req.query.q}%`
+            }
+          }
         }
-      }
-    })
-      .then((documents) => {
-        if (documents.length <= 0) {
-          return res.status(404)
-            .send({
-              message: 'Document Not Found',
-            });
-        }
-        return res.status(200)
-          .send(documents);
       })
-      .catch(error => res.status(400)
-        .send(error));
+        .then((documents) => {
+          if (documents.length <= 0) {
+            return res.status(404)
+              .send({
+                message: 'Document Not Found',
+              });
+          }
+          return res.status(200)
+            .send(documents);
+        })
+        .catch(error => res.status(400)
+          .send(error));
+    } else {
+      model.Document.findAll({
+        where: {
+          title: {
+            $iLike: `%${req.query.q}%`
+          }
+        }
+      })
+        .then((documents) => {
+          if (documents.length <= 0) {
+            return res.status(404)
+              .send({
+                message: 'Document Not Found',
+              });
+          }
+          return res.status(200)
+            .send(documents);
+        })
+        .catch(error => res.status(400)
+          .send(error));
+    }
   }
 
   /**

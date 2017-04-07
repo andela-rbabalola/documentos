@@ -304,6 +304,15 @@ class UserController {
    */
   static searchForUser(req, res) {
     model.User.findAll({
+      attributes: [
+        'id',
+        'firstName',
+        'lastName',
+        'email',
+        'roleId',
+        'createdAt',
+        'updatedAt'
+      ],
       where: {
         $or: [{
           firstName: {

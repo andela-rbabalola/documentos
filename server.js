@@ -32,14 +32,13 @@ if (process.env.NODE_ENV !== 'test' || process.env.NODE_ENV !== 'production') {
   app.use(require('webpack-hot-middleware')(compiler));
 }
 
+app.use('/api/users', userRoute);
+app.use('/api/roles', roleRoute);
+app.use('/api/documents', documentRoute);
+app.use('/api/search', searchRoute);
+app.use('/api/pagination', paginationRoute);
 
-app.use('/users', userRoute);
-app.use('/roles', roleRoute);
-app.use('/documents', documentRoute);
-app.use('/search', searchRoute);
-app.use('/pagination', paginationRoute);
-
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/src/index.html'));
 });
 

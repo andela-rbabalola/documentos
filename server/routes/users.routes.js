@@ -13,21 +13,9 @@ router.route('/')
   .get(Authentication.decodeToken, UserController.getAllUsers)
   .post(UserController.createUser);
 
-// pagination for users
-router.route('/pagination')
-  .post((req, res) => {
-    res.redirect(`/pagination/users/?limit=${req.body.limit}&offset=${req.body.offset}`);
-  });
-
 router.route('/createadmin')
   .post(Authentication.decodeToken, Authentication.isSuperAdmin, UserController.createAdmin);
 
-
-// Route to search for a user
-router.route('/search')
-  .post((req, res) => {
-    res.redirect(`/search/users/?q=${req.body.query}`);
-  });
 
 router.route('/:id')
   .get(Authentication.decodeToken, Authentication.validateUser, UserController.getUserById)

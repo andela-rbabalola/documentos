@@ -91,7 +91,6 @@ GET /users/               |   Gets all users (available to only the SuperAdmin a
 GET /users/:id           |   Finds user by id.
 PUT /users/:id           |   Updates a user's attributes based on the id specified (available to only the SuperAdmin and Admin)
 DELETE /users/:id        |   Deletes user (available only to the SuperAdmin)
-GET /users/:id/documents   | Gets all documents for a particular user
 PUT /users/updateRole/:id  | Updates a user's roleId (available only to the SuperAdmin)
 GET /users/?limit={integer}&offset={integer}| Pagination for viewing users
 POST /createadmin          | Creates an Admin user (available only to the SuperAdmin)
