@@ -52,7 +52,7 @@ class Edit extends React.Component {
       .then(() => {
         toastr.success('Document successfully updated');
       }).catch(() => {
-        toastr.error('An error occured updating the document');
+        toastr.error('You are not allowed to update this document');
       });
   }
 

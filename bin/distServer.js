@@ -22,11 +22,11 @@ app.use(parser.json());
 app.use(compression());
 app.use(express.static('dist'));
 app.use(favicon(path.join(__dirname, '../client', 'src/images/dms.jpg')));
-app.use('/users', userRoute);
-app.use('/roles', roleRoute);
-app.use('/documents', documentRoute);
-app.use('/search', searchRoute);
-app.use('/pagination', paginationRoute);
+app.use('/api/users', userRoute);
+app.use('/api/roles', roleRoute);
+app.use('/api/documents', documentRoute);
+app.use('/api/search', searchRoute);
+app.use('/api/pagination', paginationRoute);
 
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
