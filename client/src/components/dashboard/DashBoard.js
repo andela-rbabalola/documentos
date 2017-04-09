@@ -10,6 +10,7 @@ import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'font-awesome/css/font-awesome.css';
 import TextEditorComponent from './textEditor';
 import CardsComponent from './Cards';
+import PublicDocsTab from './PublicDocsTab';
 import * as docActions from '../../actions/docActions';
 import * as userActions from '../../actions/userActions';
 
@@ -77,7 +78,9 @@ export class DashBoard extends React.Component {
             <li className="tab col s4"><a href="#role">Role</a></li>
           </ul>
         </div>
-        <div id="public" className="col s12">Public</div>
+        <div id="public" className="col s12">
+          <PublicDocsTab />
+        </div>
         <div id="private" className="col s12">Private</div>
         <div id="role" className="col s12">Role</div>
         {/* Tabs End */}

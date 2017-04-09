@@ -23,6 +23,13 @@ export function updateDocumentSuccess(updated) {
   };
 }
 
+export function loadPublicSuccess(publicDocs) {
+  return {
+    type: types.LOAD_PUBLIC_DOCS_SUCCESS,
+    publicDocs
+  };
+}
+
 
 // create action for error handling
 export function loadDocuments() {
@@ -31,6 +38,15 @@ export function loadDocuments() {
       'x-access-token': localStorage.getItem('JWT')
     }
   }).then((res) => {
+    // Here we filter the response to get just the public documents
+    const publicDocs = [];
+    res.data.forEach((doc) => {
+      if (doc.access === 'public') {
+        publicDocs.push(doc);
+      }
+    });
+    dispatch(loadPublicSuccess(publicDocs));
+    // filter private docs??
     dispatch(loadDocsSuccess(res.data));
   });
 }
