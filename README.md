@@ -35,7 +35,7 @@ Documentos is a full stack application based on a RestFUL API that allows users 
 This application is hosted on Heroku and can be accessed through this [link](https://documentos-app.herokuapp.com/)
 
 #### Local Installation
-Before you install the app locally, ensures you have [NodeJS](https://nodejs.org/en/#) and [PostgreSQL](https://www.postgresql.org/) installed on your computer.
+Before you install the app locally, ensure you have [NodeJS](https://nodejs.org/en/#) and [PostgreSQL](https://www.postgresql.org/) installed on your computer.
 
 ##### Procedure
 - Clone this repo from your terminal
