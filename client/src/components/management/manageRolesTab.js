@@ -1,27 +1,16 @@
+/* eslint require-jsdoc: "off"  */
+/* eslint class-methods-use-this: "off" */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import toastr from 'toastr';
 import * as rolesActions from '../../actions/rolesActions';
-import RolesCard from './rolesCards';
+import RolesCardComponent from './rolesCards';
 
 
 class ManageRolesTab extends React.Component {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
-  }
-
-  // this will be cards that will show all the roles
-  displayRoles(role, index) {
-    return (
-      <div className="col s4" key={index}>
-        <RolesCard role={role} id={index} />
-      </div>
-    );
-  }
-
-  onClick(event) {
-    event.preventDefault();
   }
 
   // dispatch get roles action when this component mounts
@@ -33,6 +22,19 @@ class ManageRolesTab extends React.Component {
         toastr.error('An error occurred getting the roles');
       });
     }
+  }
+
+  onClick(event) {
+    event.preventDefault();
+  }
+
+  // this will be cards that will show all the roles
+  displayRoles(role, index) {
+    return (
+      <div className="col s4" key={index}>
+        <RolesCardComponent role={role} id={index} />
+      </div>
+    );
   }
 
   render() {

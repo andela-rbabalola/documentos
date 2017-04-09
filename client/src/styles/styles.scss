@@ -44,8 +44,17 @@ img {
 }
 
 #create-doc {
+  margin-top: 70px;
+  margin-right: 30px;
+}
+
+#createModal {
+  width: 750px;
+  height: 750px;
+}
+
+.create-header {
   margin-top: 20px;
-  margin-left: 250px;
 }
 
 .card {
@@ -53,6 +62,11 @@ img {
   margin-left: 15px;
   width: 300px;
   height: 200px;
+}
+
+#close-doc {
+  margin-right: 420px;
+  margin-top: 70px;
 }
 
 .show-docs {
@@ -91,8 +105,4 @@ img {
 
 .modal :hover .btn {
   background: #00bfff;
-}
-
-#create-doc {
-  margin-left: 0px;
 }

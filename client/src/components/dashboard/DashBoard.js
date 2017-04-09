@@ -18,8 +18,20 @@ import * as userActions from '../../actions/userActions';
  */
 export class DashBoard extends React.Component {
   componentDidMount() {
+    $('ul.tabs').tabs();
+    $('ul.tabs').tabs('select_tab', 'public');
+    $('.modal').modal({
+      dismissible: true,
+      complete() { alert('Closed'); }
+    });
     this.props.docsActions.loadDocuments();
     this.props.usersActions.setUserInState(localStorage.getItem('JWT'));
+    this.onClick = this.onClick.bind(this);
+  }
+
+  onClick(event) {
+    event.preventDefault();
+    console.log('hello mi amor');
   }
 
   /**
@@ -43,20 +55,32 @@ export class DashBoard extends React.Component {
    */
   render() {
     return (
-      <div>
-        <div className="fixed-action-btn horizontal">
-          <a
-            className="btn-floating btn-large red"
-            onClick={this.createDoc}
-            href="#createModal" id="create-document">
-            <i className="fa fa-plus" aria-hidden="true" />
-          </a>
+      <div className="row">
+        <div className="col s12">
+          <div>
+            <div className="fixed-action-btn horizontal">
+              <a
+                className="btn-floating btn-large red"
+                href="#createModal"
+                id="create-document"
+                onClick={this.onClick}>
+                <i className="fa fa-plus" aria-hidden="true" />
+              </a>
+            </div>
+            {/* Render the TextEditor component only when a user is signed in*/}
+            {this.props.isAuthenticated ? <TextEditorComponent /> : null}
+          </div>
+          {/* Tabs Start */}
+          <ul className="tabs">
+            <li className="tab col s4"><a href="#public">Public</a></li>
+            <li className="tab col s4"><a href="#private">Private</a></li>
+            <li className="tab col s4"><a href="#role">Role</a></li>
+          </ul>
         </div>
-        {/* Render the TextEditor component only when a user is signed in*/}
-        {this.props.isAuthenticated ? <TextEditorComponent /> : null}
-        <div className="row">
-          {this.props.documents.map(this.displayDocs)}
-        </div>
+        <div id="public" className="col s12">Public</div>
+        <div id="private" className="col s12">Private</div>
+        <div id="role" className="col s12">Role</div>
+        {/* Tabs End */}
       </div>
     );
   }

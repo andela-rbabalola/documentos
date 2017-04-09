@@ -26,17 +26,6 @@ export class TextEditor extends React.Component {
   componentDidMount() {
     $('select').material_select();
     $('#selectMe').on('change', this.handleChange);
-    $('.modal').modal({
-      dismissible: false
-    });
-  }
-
-  handleModelChange(docContent) {
-    this.setState({ docContent });
-  }
-
-  handleChange(event) {
-    this.setState({ access: event.target.value });
   }
 
   onClick(event) {
@@ -60,11 +49,20 @@ export class TextEditor extends React.Component {
     this.setState({ title: event.target.value });
   }
 
+  handleChange(event) {
+    this.setState({ access: event.target.value });
+  }
+
+
+  handleModelChange(docContent) {
+    this.setState({ docContent });
+  }
+
   render() {
     return (
       <div>
         <div id="createModal" className="modal">
-          <h4 className="center">Create Document</h4>
+          <h4 className="center create-header">Create Document</h4>
           <div className="row">
             <div className="col s6">
               <form className="col s6">
@@ -103,9 +101,13 @@ export class TextEditor extends React.Component {
             </div>
             <div className="modal-footer">
               <a
-                className="waves-effect waves-light btn modal-action modal-close"
+                className="waves-effect waves-light btn modal-action"
                 id="create-doc"
                 onClick={this.onClick}>SUBMIT</a>
+              {/*<a
+                className="waves-effect waves-light btn modal-action modal-close"
+                id="close-doc"
+                onClick={this.onClick}>CLOSE</a>*/}
             </div>
           </div>
         </div>
