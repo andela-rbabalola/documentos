@@ -1,3 +1,4 @@
+/* eslint require-jsdoc: "off" */
 import axios from 'axios';
 import * as types from './actionTypes';
 

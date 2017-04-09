@@ -4,6 +4,7 @@ import ReactTable from 'react-table';
 import { connect } from 'react-redux';
 import { Link, IndexLink, browserHistory } from 'react-router';
 import { logout, searchDocuments } from '../../actions/userActions';
+import SearchLink from './SearchLink';
 
 /**
  * Class to create UserInput Component
@@ -122,47 +123,20 @@ export class Header extends React.Component {
       <li><a className="manage" onClick={this.redirectToRoles}>Manage</a></li>
     );
 
-    const searchLink = (
-      // search icon on the nav bar
-      <li id="searchlink">
-        <a href="#search-modal" className="search">
-          <i className="fa fa-search prefix" aria-hidden="true" />          &nbsp;Search
-        </a>
-        {/* Modal Start */}
-        <div id="search-modal" className="modal view-user-modal">
-          <div className="modal-content">
-            <h5>Enter search query</h5>
-            <input
-              id="search-query"
-              type="text"
-              name="new-role"
-              value={this.state.query}
-              className="validate"
-              onChange={this.onChange} />
-            <a
-              className="modal-action waves-effect waves-green btn-flat"
-              onClick={this.onClick} id="search-button">              Search</a>
-            {this.state.showTable ? <ReactTable
-              data={data}
-              columns={columns} id="results" /> : null}
-          </div>
-          <div className="modal-footer">
-            <a
-              className="modal-action modal-close waves-effect waves-green center btn-flat"
-              onClick={this.onClose}>              Close</a>
-          </div>
-        </div>
-        {/* Modal end */}
-      </li>
-    );
-
     return (
       <nav >
         <div className="nav-wrapper">
           <IndexLink to="/dashboard" className="brand-logo">Documentos</IndexLink>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li><Link to="/about"> About </Link></li>
-            {isAuthenticated ? searchLink : null}
+            {isAuthenticated ? <SearchLink
+              data={data}
+              columns={columns}
+              query={this.state.query}
+              showTable={this.state.showTable}
+              onChange={this.onChange}
+              onClick={this.onClick}
+              onClose={this.onClose} /> : null}
             {isSuperAdmin ? rolesLink : null}
             {isAuthenticated ? logoutLink : null}
           </ul>

@@ -6,7 +6,6 @@ import toastr from 'toastr';
 import { connect } from 'react-redux';
 import { updateDocument } from '../../actions/docActions';
 
-
 class Edit extends React.Component {
   constructor(props) {
     super(props);
@@ -40,8 +39,8 @@ class Edit extends React.Component {
     }
   }
 
-  handleChange(event) {
-    this.setState({ access: event.target.value });
+  onChange(event) {
+    this.setState({ title: event.target.value });
   }
 
   // event handler to update the document
@@ -56,8 +55,8 @@ class Edit extends React.Component {
       });
   }
 
-  onChange(event) {
-    this.setState({ title: event.target.value });
+  handleChange(event) {
+    this.setState({ access: event.target.value });
   }
 
   handleModelChange(docContent) {
@@ -109,7 +108,7 @@ class Edit extends React.Component {
               <a
                 className="waves-effect waves-light btn modal-action modal-close"
                 id="edit-doc"
-                onClick={this.handleClick}>UPDATE</a>
+                onClick={this.handleClick}>                UPDATE</a>
             </div>
           </div>
         </div>
